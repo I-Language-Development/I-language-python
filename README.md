@@ -15,5 +15,3 @@ output("Hello World!")
 ```
 
 That's it! It's literally so easy.
-
-Git test 12345
