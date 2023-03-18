@@ -12,7 +12,7 @@ dynamic my_dynamic = "Hello World"; //set a dynamic variable to a string
 
 
 
-class Program(){ //main Program
+class Program(){ //main Function executed on start
 	int main(){ //create a new thread called main, returns int (= Error number or 0=Program end)
 		output(my_dynamic); // print "Hello World"
 		output(string(my_int + 4)); // print "7"
