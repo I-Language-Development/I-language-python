@@ -1,0 +1,8 @@
+[
+{"END_COMMAND":";"},
+{"SEPERATOR":[" ","\t","\n"]},
+{"OPEN_BRACE":"("},
+{"CLOSE_BRACE":")"},
+{"OPEN_CURLY_BRACE":"{"},
+{"CLOSE_CURLY_BRACE":"}"}
+]
