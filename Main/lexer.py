@@ -3,7 +3,7 @@
 I Language lexer.
 Version: 0.1.3
 
-Copyright (c) 2023-present ElBe Devleopment.
+Copyright (c) 2023-present ElBe Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -29,11 +29,12 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
+import sys
 from typing import (
     Any,
+    Dict,
     List,
     Final,
-    final,
 )
 
 
@@ -43,11 +44,70 @@ from typing import (
 
 DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
+SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
+DOUBLE_MARKS: Final[Dict[str, str]] = {
+    "==": "EQUAL",
+    "===": "TYPE_EQUAL",
+    "++": "COUNT_UP",
+    "--": "COUNT_DOWN",
+}
+MARKS: Final[Dict[str, str]] = {
+    ";": "END_CMD",
+    "=": "SET",
+    "{": "BLOCK_OPEN",  # Also dicts
+    "}": "BLOCK_CLOSE",  # Also dicts
+    "(": "CLAMP_OPEN",
+    ")": "CLAMP_CLOSE",
+    "[": "INDEX_OPEN",  # Also arrays
+    "]": "INDEX_CLOSE",  # Also arrays
+    "?": "INDEFINITE",
+    ".": "SEPERATOR",
+    ":": "SLICE",
+    ">": "GREATER",
+    "<": "LESS",
+    "+": "ADD",
+    "-": "SUBTRACT",
+    "*": "MULTIPLY",
+    "/": "DIVIDE",
+    "%": "MODULO",
+    " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
+    ",": "SEPERATOR",
+}
+KEYWORDS: Final[Dict[str, str]] = {
+    "class": "CLASS",
+    "use": "USE",
+    "import": "IMPORT",
+    "if": "IF",
+    "else": "ELSE",
+    "while": "WHILE",
+    "for": "FOR",
+    "return": "RETURN",
+    "delete": "DELETE",
+    "break": "BREAK",
+    "continue": "CONTINUE",
+}
+BASE_TYPES: Final[List[str]] = [
+    "any",
+    "array",
+    "bool",
+    "complex",
+    "dict",
+    "dictionary",
+    "dynamic",
+    "float",
+    "int",
+    "integer",
+    "list",
+    "str",
+    "string",
+    "None",
+    "Null",
+]
+
 
 #################
 # LEXER HELPERS #
 #################
-
 
 class LexerToken:
     """
@@ -73,26 +133,24 @@ class LexerToken:
         return f"{self.type}: {self.value!r}"
 
 
-class LexerError(BaseException):
+class LexerError:
     """
     Represents an error while lexing.
     """
 
-    def __init__(self, description: str, line: int, column: int) -> None:
+    def __init__(self, description: str, line: int, column: int, code: int = 1) -> None:
         """Initializes a lexing error.
 
         :param description: Description of the error.
         :param line: Line the error occurred in.
         :param column: Column the error occurred in.
+        :param code: The exit code of the error.
         """
 
-        self.description = description
-        self.line = line
-        self.column = column
-
-        super().__init__(
-            f"{self.description} in line {self.line}, column {self.column}"
-        )  # TODO (ElBe): Change it to not be a subclass of BaseException
+        print(
+            f"{description} in line {line}, column {column}"
+        )
+        sys.exit(code)
 
 
 ####################
@@ -107,66 +165,6 @@ class Lexer:
 
     def __init__(self, text: str):
         self.text = text
-        self.separators = [" ", "\t", "\n"]
-        self.double_marks = {
-            "==": "EQUAL",
-            "===": "TYPE_EQUAL",
-            "++": "COUNT_UP",
-            "--": "COUNT_DOWN",
-        }
-        self.marks = {
-            ";": "END_CMD",
-            "=": "SET",
-            "{": "BLOCK_OPEN",  # Also dicts
-            "}": "BLOCK_CLOSE",  # Also dicts
-            "(": "CLAMP_OPEN",
-            ")": "CLAMP_CLOSE",
-            "[": "INDEX_OPEN",  # Also arrays
-            "]": "INDEX_CLOSE",  # Also arrays
-            "?": "INDEFINITE",
-            ".": "SEPERATOR",
-            ":": "SLICE",
-            ">": "GREATER",
-            "<": "LESS",
-            "+": "ADD",
-            "-": "SUBTRACT",
-            "*": "MULTIPLY",
-            "/": "DIVIDE",
-            "%": "MODULO",
-            " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
-            ",": "SEPERATOR",
-        }
-        self.keywords = {
-            "class": "CLASS",
-            "use": "USE",
-            "import": "IMPORT",
-            "if": "IF",
-            "else": "ELSE",
-            "while": "WHILE",
-            "for": "FOR",
-            "return": "RETURN",
-            "delete": "DELETE",
-            "break": "BREAK",
-            "continue": "CONTINUE",
-        }
-        self.base_types = [
-            "any",
-            "array",
-            "bool",
-            "complex",
-            "dict",
-            "dictionary",
-            "dynamic",
-            "float",
-            "int",
-            "integer",
-            "list",
-            "str",
-            "string",
-            "None",
-            "Null",
-        ]
-
         self.tokens = []
 
     def lex(self):
@@ -194,13 +192,13 @@ class Lexer:
             return valid
 
         def gettoken(string: str, line: int, column: int) -> LexerToken | None:
-            if string in list(self.keywords.keys()):
-                return LexerToken(self.keywords[string], string)
+            if string in list(KEYWORDS):
+                return LexerToken(KEYWORDS[string], string)
             elif len(string) > 0 and string[0] == "_":
                 return LexerToken("BUILTIN_CONST", string)
             elif string in ["true", "false", "True", "False"]:
                 return LexerToken("BOOL", string)
-            elif string in self.base_types:
+            elif string in BASE_TYPES:
                 return LexerToken("BASETYPE", string)
             elif len(string) == 0:
                 return None
@@ -213,7 +211,7 @@ class Lexer:
                 return LexerToken("NAME", string)
 
             else:
-                raise LexerError("Unrecognized Pattern: '" + string + "'", line, column)
+                LexerError("Unrecognized Pattern: '" + string + "'", line, column)
 
         line = 1
         comment = 0
@@ -243,26 +241,26 @@ class Lexer:
 
                 elif in_string:
                     buffer += self.text[index]
-                elif self.text[index] in self.separators:
+                elif self.text[index] in SEPARATORS:
                     self.tokens.append(gettoken(buffer, line, column))
                     buffer = ""
                 elif len(self.text[index:]) > 1 and self.text[
                     index : index + 2
-                ] in list(self.double_marks.keys()):
+                ] in list(DOUBLE_MARKS):
                     self.tokens.append(gettoken(buffer, line, column))
                     self.tokens.append(
                         LexerToken(
-                            self.double_marks[self.text[index : index + 2]],
+                            DOUBLE_MARKS[self.text[index : index + 2]],
                             self.text[index : index + 2],
                         )
                     )
                     buffer = ""
                     index += 1
 
-                elif self.text[index] in list(self.marks.keys()):
+                elif self.text[index] in list(MARKS):
                     self.tokens.append(gettoken(buffer, line, column))
                     self.tokens.append(
-                        LexerToken(self.marks[self.text[index]], self.text[index])
+                        LexerToken(MARKS[self.text[index]], self.text[index])
                     )
                     buffer = ""
 
@@ -275,6 +273,8 @@ class Lexer:
 
 
 if __name__ == "__main__":
+    """Only for testing purposes."""
+
     with open("../test.ilang") as test:
         data = test.read()
 
