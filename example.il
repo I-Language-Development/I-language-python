@@ -1,9 +1,30 @@
 /*
-* EXAMPLE SYNTAX
+* SYNTAX EXAMPLE
+*
+* Version: 0.0.1
 *
 * NOTE:
 * This version is a in-development version and may be changed in the future
 */
+
+/*
+* Explanation of symbols used here:
+*
+* [EXPRESSION] = Optional Expression
+*
+* NAME = Name of things
+* TYPE = Any type
+* EXPRESSION = Any expression
+* MODULE = Any module
+* THING = Something
+*
+* Everything should be self explanatory
+*/
+
+
+//////////////
+// COMMENTS //
+//////////////
 
 // Comment
 
@@ -11,44 +32,94 @@
 multiline Comment
 */
 
+
+/////////////
+// IMPORTS //
+/////////////
+
 // Imports:
-// import MODULE
+import MODULE
 // or with custom names
-// import MODULE as NAME
-// or jsut importing some things
-// import THING from MODULE [as NAME]
+import MODULE as NAME
+// or just importing some things
+import THING from MODULE [as NAME]
+
+
+///////////////
+// VARIABLES //
+///////////////
 
 // Variables:
-// var NAME = EXPRESSION // dynamic tying, also works as type "dynamic"
+var NAME = EXPRESSION // dynamic typing, also works as type "dynamic"
 // or with types assigned at start
-// TYPE NAME = EXPRESSION
+TYPE NAME = EXPRESSION
+// as object of an Type
+var NAME = new TYPE(ARGUMENTS)
 
 // Constants:
-// const [TYPE] NAME = EXPRESSION
+const [TYPE] NAME = EXPRESSION
+
+
+///////////////////////////
+// CLASSES AND FUNCTIONS //
+///////////////////////////
 
 // Classes:
-// class NAME([SUBCLASS]) {
-// CODE
-// }
-
+class NAME([SUBCLASS]) {
+CODE
+}
 
 // Functions:
-// [private] RETURN_TYPE NAME(ARGUMENT_TYPE ARGUMENT_NAME /* has to be consistent*/[= DEFAULT_VALUE]) {
-// CODE
-// }
+[private] RETURN_TYPE NAME(ARGUMENT_TYPE ARGUMENT_NAME /* has to be consistent*/[= DEFAULT_VALUE]) {
+CODE
+}
+// or for dynamic types:
+[private] func[tion] NAME(ARGUMENT_TYPE ARGUMENT_NAME [= DEFAULT_VALUE]) {
+CODE
+}
 
 // Calls to functions from a class:
-// CLASS_NAME.NAME()
+CLASS_NAME.NAME()
 
 // Calls to functions:
-// NAME(ARGUMENT)
+NAME(ARGUMENT)
 
-// Print to stdout
-// output(VALUE) // Value can be anything, it's representation will be used
 
-// Use garbage collection // I had this as USE because its a subroutine manipulating the parser and not an Object
-// import GarbageCollection
-// use GarbageCollection // This is very likely to change in the future
+///////////////////////
+// SPECIAL USE CASES //
+///////////////////////
 
-//How about the multithreading?
-// We could make the 'program' class only needed for that // Good idea, I'll add this soon
+// Usage of garbage collection:
+import GarbageCollection
+use GarbageCollection // This is very likely to change in the future
+
+// Multithreading:
+import Multithreading
+class NAME(Multithreading){
+CODE
+}
+// Normal classes will still work then
+
+
+/////////////
+// STRINGS //
+/////////////
+
+// String formatting, works with any string or variable that's a string:
+string NAME = f"Hello {PERSON}!"
+// or
+string NAME = "Hello %s!" % (PERSON)
+// or
+string NAME = "Hello {}!".format(PERSON)
+// or just simply
+string NAME = "Hello " + PERSON + "!"
+
+
+//////////
+// MATH //
+//////////
+
+// Get π:
+import Math
+float PI = Math.PI
+// 3.141592653589793238462643383279502884197
