@@ -33,7 +33,7 @@ multiline Comment
 
 
 // Functions:
-// [private] RETURN_TYPE NAME(ARGUMENT_NAME ARGUMENT_TYPE [= DEFAULT_VALUE]) {
+// [private] RETURN_TYPE NAME(ARGUMENT_TYPE ARGUMENT_NAME /* has to be consistent*/[= DEFAULT_VALUE]) {
 // CODE
 // }
 
@@ -46,6 +46,8 @@ multiline Comment
 // Print to stdout
 // output(VALUE) // Value can be anything, it's representation will be used
 
-// Use garbage collection
+// Use garbage collection // I had this as USE because its a subroutine manipulating the parser and not an Object
 // import GarbageCollection
 // GarbageCollection.init() // This is very likely to change in the future
+
+//How about the multithreading?
