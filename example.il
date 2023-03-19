@@ -51,3 +51,4 @@ multiline Comment
 // GarbageCollection.init() // This is very likely to change in the future
 
 //How about the multithreading?
+// We could make the 'program' class only needed for that
