@@ -37,6 +37,7 @@ from typing import (
     Final,
 )
 
+import Main._types
 
 #############
 # CONSTANTS #
@@ -268,7 +269,7 @@ class Lexer:
 
             index += 1
 
-        return [str(token) for token in self.tokens if token is not None]
+        return [str(token) for token in self.tokens if token is not None]  # TODO (ElBe): Change it back
 
 
 if __name__ == "__main__":
