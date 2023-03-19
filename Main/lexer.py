@@ -101,7 +101,9 @@ class Lexer:
             "-": "SUBTRACT",
             "*": "MULTIPLY",
             "/": "DIVIDE",
-            "%": "STRING_FORMATTER",
+            "%": "MODULO",
+            ".": "CHILD",
+            ",": "SEPERATOR"
         }
         self.keywords = {
             "class": "CLASS",
@@ -125,7 +127,7 @@ class Lexer:
             "dict",  # and dictionary
             "bool",
             "dynamic",
-            "None",  # CONST, can't be changed
+            "null",  # CONST, can't be changed
         ]
 
         self.tokens = []
@@ -150,18 +152,7 @@ class Lexer:
             if string[0] == "-":
                 string = string[1:]
             for char in string:
-                valid = valid and char in [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "6",
-                    "7",
-                    "8",
-                    "9",
-                ]
+                valid = valid and char in DIGITS_AS_STRINGS
 
             return valid
 
@@ -189,7 +180,7 @@ class Lexer:
             else:
                 raise LexerError("Unrecognized Pattern: '" + string + "'", line, column)
 
-        def repl(ar): # What's that?
+        def replace_none(ar): # What's that?
             n = []
             for el in ar:
                 if el is not None:
@@ -251,7 +242,7 @@ class Lexer:
                     buffer += self.text[index]
 
             index += 1
-        self.tokens = repl(self.tokens)
+        self.tokens = replace_none(self.tokens)
         return self.tokens
 
 
