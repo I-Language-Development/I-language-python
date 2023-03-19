@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 I Language lexer.
-Version: 0.1.2
+Version: 0.1.3
 
 Copyright (c) 2023-present ElBe Devleopment.
 
@@ -166,13 +166,13 @@ class Lexer:
             return valid
 
         def gettoken(
-            string: str, l, c
-        ) -> LexerToken | None:  # What's l and c, find better names
+            string: str, line: int, column: int
+        ) -> LexerToken | None:
             if string in list(self.keywords.keys()):
                 return LexerToken(self.keywords[string], string)
             elif len(string) > 0 and string[0] == "_":
                 return LexerToken("BUILTIN_CONST", string)
-            elif string == "true" or string == "false":
+            elif string in ["true", "false", "True", "False"]:
                 return LexerToken("BOOL", string)
             elif string in self.base_types:
                 return LexerToken("BASETYPE", string)
@@ -183,24 +183,13 @@ class Lexer:
                     return LexerToken("INT", string)
                 return LexerToken("FLOAT", string)
 
-            elif len(string) > 0 and string[0] not in [
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-            ]:
+            elif len(string) > 0 and string[0] not in DIGITS_AS_STRINGS:
                 return LexerToken("NAME", string)
 
             else:
-                raise LexerError("Unrecognized Pattern: '" + string + "'", l, c)
+                raise LexerError("Unrecognized Pattern: '" + string + "'", line, column)
 
-        def repl(ar):
+        def repl(ar): # What's that?
             n = []
             for el in ar:
                 if el is not None:
