@@ -1,6 +1,6 @@
 """
 I Language types.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present ElBe Development.
 

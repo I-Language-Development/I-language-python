@@ -29,7 +29,6 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-import ast
 from typing import (
     Any,
     List,
@@ -71,9 +70,7 @@ class LexerToken:
         :return: String representation of the token.
         """
 
-        return (
-            "{" + self.type + ":'" + self.value + "'}"
-        )  # TODO (ElBe): Remove manual string formatting
+        return f"{self.type}: {self.value!r}"
 
 
 class LexerError(BaseException):
@@ -111,7 +108,12 @@ class Lexer:
     def __init__(self, text: str):
         self.text = text
         self.separators = [" ", "\t", "\n"]
-        self.double_marks = {"==": "EQUAL", "++": "COUNT_UP", "--": "COUNT_DOWN"}
+        self.double_marks = {
+            "==": "EQUAL",
+            "===": "TYPE_EQUAL",
+            "++": "COUNT_UP",
+            "--": "COUNT_DOWN",
+        }
         self.marks = {
             ";": "END_CMD",
             "=": "SET",
@@ -131,7 +133,7 @@ class Lexer:
             "*": "MULTIPLY",
             "/": "DIVIDE",
             "%": "MODULO",
-            "//.": "CHILD", # Duplicate, needs escaping
+            " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
             ",": "SEPERATOR",
         }
         self.keywords = {
@@ -161,7 +163,6 @@ class Lexer:
             "list",
             "str",
             "string",
-
             "None",
             "Null",
         ]
@@ -213,13 +214,6 @@ class Lexer:
 
             else:
                 raise LexerError("Unrecognized Pattern: '" + string + "'", line, column)
-
-        def replace_none(ar):  # What's that?
-            n = []
-            for el in ar:
-                if el is not None:
-                    n.append(el)
-            return n
 
         line = 1
         comment = 0
@@ -276,8 +270,8 @@ class Lexer:
                     buffer += self.text[index]
 
             index += 1
-        self.tokens = replace_none(self.tokens)
-        return self.tokens
+
+        return [str(token) for token in self.tokens if token is not None]
 
 
 if __name__ == "__main__":
@@ -285,4 +279,4 @@ if __name__ == "__main__":
         data = test.read()
 
     lexer = Lexer(data)
-    print(lexer.lex())
+    print("\n".join(lexer.lex()))
