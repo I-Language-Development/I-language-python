@@ -36,6 +36,7 @@ import _core
 ////////////////////
 
 int randint(int minimum, int maximum) {
+
     return _core.Random.randint(minimum, maximum)
 }
 
@@ -44,8 +45,34 @@ int randint(int minimum, int maximum) {
 // CHOICES //
 /////////////
 
+/*
+* Returns a random value from a given list.
+*
+* @params
+* iterable (list): List to return a random choice from.
+* choices  (list): Choices to return form the iterable. If choices is bigger than the iterable, the remaining values will be skipped.
+*
+* @return
+* Any: Chosen object(s) from the iterable.
+*/
 function choices(list iterable, int choices = 1) {
     return _core.Random.choices(iterable, choices)
 }
 
-// TODO (ElBe): Add shuffle
+
+/////////////
+// SHUFFLE //
+/////////////
+
+/*
+* Returns a shuffled version of the given list.
+*
+* @params
+* iterable (list): List to shuffle.
+*
+* @return
+* list: Shuffled list.
+*/
+list shuffle(list iterable) {
+    return _code.Random.shuffle(iterable)
+}

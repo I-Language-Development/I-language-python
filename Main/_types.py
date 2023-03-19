@@ -1,6 +1,6 @@
 """
 I Language types.
-Version: 0.1.1
+Version: 0.1.2
 
 Copyright (c) 2023-present ElBe Development.
 
@@ -86,20 +86,6 @@ class Any(BaseType):
         """
 
         super().__init__(value, _Any)
-
-
-class Array(BaseType):
-    """
-    Array type.
-    """
-
-    def __init__(self, value: str) -> None:
-        """Initializes an array type.
-
-        :param value: Value of the object to check for array value.
-        """
-
-        super().__init__(value, builtins.list)
 
 
 @final
@@ -221,18 +207,32 @@ class Integer(Int):
 
 
 @final
-class List(Array):
+class List(BaseType):
     """
-    Array type.
+    List type.
     """
 
     def __init__(self, value: str) -> None:
-        """Initializes an array type.
+        """Initializes a list type.
 
-        :param value: Value of the object to check for array value.
+        :param value: Value of the object to check for list value.
         """
 
-        super().__init__(value)
+        super().__init__(value, builtins.list)
+
+
+class Null(BaseType):
+    """
+    None type.
+    """
+
+    def __init__(self, value: str) -> None:
+        """Initializes a none type.
+
+        :param value: Value of the object to check for none value.
+        """
+
+        super().__init__(value)  # TODO (ElBe): Find null type
 
 
 class Str(BaseType):

@@ -47,7 +47,8 @@ DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
 DOUBLE_MARKS: Final[Dict[str, str]] = {
     "==": "EQUAL",
-    "===": "TYPE_EQUAL",
+    "<=": "LESS_EQUALS",
+    ">=": "GREATER_EQUALS",
     "++": "COUNT_UP",
     "--": "COUNT_DOWN",
 }
@@ -88,7 +89,6 @@ KEYWORDS: Final[Dict[str, str]] = {
 }
 BASE_TYPES: Final[List[str]] = [
     "any",
-    "array",
     "bool",
     "complex",
     "dict",
@@ -100,8 +100,7 @@ BASE_TYPES: Final[List[str]] = [
     "list",
     "str",
     "string",
-    "None",
-    "Null",
+    "null",
 ]
 
 
