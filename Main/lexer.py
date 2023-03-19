@@ -30,59 +30,88 @@ DEALINGS IN THE SOFTWARE.
 ###########
 
 import ast
-from typing import Any, List
+from typing import (
+    Any,
+    List,
+    Final,
+    final,
+)
 
 
 #############
 # CONSTANTS #
 #############
 
-DIGITS: List[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-DIGITS_AS_STRINGS: List[str] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
 
-##############
-# MAIN LEXER #
-##############
+#################
+# LEXER HELPERS #
+#################
 
 
 class LexerToken:
+    """
+    Represents a token for the lexer.
+    """
+
     def __init__(self, token_type: Any, value: Any) -> None:
+        """Initializes a new token.
+
+        :param token_type: Type of the token.
+        :param value: Value of the token
+        """
+
         self.type = token_type
         self.value = value
 
-    def __str__(self) -> str:
-        return "{" + self.type + ":'" + self.value + "'}"
-
     def __repr__(self) -> str:
-        return "{" + self.type + ":'" + self.value + "'}"
+        """Returns the representation of the token.
+
+        :return: String representation of the token.
+        """
+
+        return (
+            "{" + self.type + ":'" + self.value + "'}"
+        )  # TODO (ElBe): Remove manual string formatting
 
 
 class LexerError(BaseException):
+    """
+    Represents an error while lexing.
+    """
+
     def __init__(self, description: str, line: int, column: int) -> None:
-        self.desc = description
+        """Initializes a lexing error.
+
+        :param description: Description of the error.
+        :param line: Line the error occurred in.
+        :param column: Column the error occurred in.
+        """
+
+        self.description = description
         self.line = line
         self.column = column
 
-    def __str__(self) -> str:
-        return (
-            str(self.desc)
-            + " in line "
-            + str(self.line)
-            + ", column "
-            + str(self.column)
-        )
+        super().__init__(
+            f"{self.description} in line {self.line}, column {self.column}"
+        )  # TODO (ElBe): Change it to not be a subclass of BaseException
+
+
+####################
+# MAIN LEXER CLASS #
+####################
 
 
 class Lexer:
+    """
+    Represents a lexer object.
+    """
+
     def __init__(self, text: str):
         self.text = text
         self.separators = [" ", "\t", "\n"]
-        self.double_marks = {
-            "==": "EQUAL",
-            "++": "COUNT_UP",
-            "--": "COUNT_DOWN"
-        }
+        self.double_marks = {"==": "EQUAL", "++": "COUNT_UP", "--": "COUNT_DOWN"}
         self.marks = {
             ";": "END_CMD",
             "=": "SET",
@@ -101,7 +130,9 @@ class Lexer:
             "-": "SUBTRACT",
             "*": "MULTIPLY",
             "/": "DIVIDE",
-            "%": "STRING_FORMATTER",
+            "%": "MODULO",
+            "//.": "CHILD", # Duplicate, needs escaping
+            ",": "SEPERATOR",
         }
         self.keywords = {
             "class": "CLASS",
@@ -117,15 +148,22 @@ class Lexer:
             "continue": "CONTINUE",
         }
         self.base_types = [
-            "string",  # and str
-            "int",  # and integer
-            "float",
-            "complex",
-            "list",  # and array
-            "dict",  # and dictionary
+            "any",
+            "array",
             "bool",
+            "complex",
+            "dict",
+            "dictionary",
             "dynamic",
-            "None",  # CONST, can't be changed
+            "float",
+            "int",
+            "integer",
+            "list",
+            "str",
+            "string",
+
+            "None",
+            "Null",
         ]
 
         self.tokens = []
@@ -150,24 +188,11 @@ class Lexer:
             if string[0] == "-":
                 string = string[1:]
             for char in string:
-                valid = valid and char in [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "6",
-                    "7",
-                    "8",
-                    "9",
-                ]
+                valid = valid and char in DIGITS_AS_STRINGS
 
             return valid
 
-        def gettoken(
-            string: str, line: int, column: int
-        ) -> LexerToken | None:
+        def gettoken(string: str, line: int, column: int) -> LexerToken | None:
             if string in list(self.keywords.keys()):
                 return LexerToken(self.keywords[string], string)
             elif len(string) > 0 and string[0] == "_":
@@ -189,7 +214,7 @@ class Lexer:
             else:
                 raise LexerError("Unrecognized Pattern: '" + string + "'", line, column)
 
-        def repl(ar): # What's that?
+        def replace_none(ar):  # What's that?
             n = []
             for el in ar:
                 if el is not None:
@@ -234,7 +259,7 @@ class Lexer:
                     self.tokens.append(
                         LexerToken(
                             self.double_marks[self.text[index : index + 2]],
-                            self.text[index: index + 2],
+                            self.text[index : index + 2],
                         )
                     )
                     buffer = ""
@@ -251,7 +276,7 @@ class Lexer:
                     buffer += self.text[index]
 
             index += 1
-        self.tokens = repl(self.tokens)
+        self.tokens = replace_none(self.tokens)
         return self.tokens
 
 
