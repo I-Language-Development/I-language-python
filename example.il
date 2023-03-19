@@ -48,7 +48,7 @@ multiline Comment
 
 // Use garbage collection // I had this as USE because its a subroutine manipulating the parser and not an Object
 // import GarbageCollection
-// GarbageCollection.init() // This is very likely to change in the future
+// use GarbageCollection // This is very likely to change in the future
 
 //How about the multithreading?
-// We could make the 'program' class only needed for that
+// We could make the 'program' class only needed for that // Good idea, I'll add this soon
