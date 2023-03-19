@@ -1,7 +1,32 @@
+# HEADER
+
+
+###########
+# IMPORTS #
+###########
+
+import ast
+from typing import (
+    Any,
+    List
+)
+
+
+#############
+# CONSTANTS #
+#############
+
+DIGITS: List[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+DIGITS_AS_STRINGS: List[str] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+
+##############
+# MAIN LEXER #
+##############
 
 class LexerToken:
-    def __init__(self, type, value) -> None:
-        self.type = type
+    def __init__(self, token_type: Any, value: Any) -> None:
+        self.type = token_type
         self.value = value
 
     def __str__(self) -> str:
@@ -12,7 +37,7 @@ class LexerToken:
 
 
 class LexerError(BaseException):
-    def __init__(self, description, line, column) -> None:
+    def __init__(self, description: str, line: int, column: int) -> None:
         self.desc = description
         self.line = line
         self.column = column
@@ -20,56 +45,98 @@ class LexerError(BaseException):
     def __str__(self) -> str:
         return str(self.desc) + " in line " + str(self.line) + ", column " + str(self.column)
 
+
 class Lexer:
-    def __init__(self, text):
+    def __init__(self, text: str):
         self.text = text
         self.separators = [" ","\t","\n"]
-        self.doublemarks = {"==":"EQUAL","++":"COUNT_UP"}
-        self.marks = {';':"END_CMD","=":"SET","{":"BLOCK_OPEN","}":"BLOCK_CLOSE",\
-            "(":"BRACKET_OPEN",")":"BRACKET_CLOSE",\
-            "[":"INDEX_OPEN","]":"INDEX_CLOSE",\
-            "?":"INDEFINITE",\
-            ".":"SEPERATOR",\
-            ":":"SLICE",\
-            ">":"GREATER",\
-            "<":"LESS"}
-            #"+":"ADD","-":"SUBTRACT","*":"MULTIPLY","/":"DIVIDE"}
-        self.keywords = {"class":"CLASS","use":"USE","import":"IMPORT",\
-            "if":"IF","else":"ELSE","while":"WHILE","for":"FOR","return":"RETURN","delete":"DELETE"}
-        self.basetypes = ["string","int","float","bool","dynamic"]
+        self.doublemarks = {
+            "==": "EQUAL",
+            "++": "COUNT_UP",
+            "--": "COUNT_DOWN"
+        }
+        self.marks = {
+            ';': "END_CMD",
+            "=": "SET",
+            "{": "BLOCK_OPEN",   # Also dicts
+            "}": "BLOCK_CLOSE",  # Also dicts
+            "(": "CLAMP_OPEN",
+            ")": "CLAMP_CLOSE",
+            "[": "INDEX_OPEN",   # Also arrays
+            "]": "INDEX_CLOSE",  # Also arrays
+            "?": "INDEFINITE",
+            ".": "SEPERATOR",
+            ":": "SLICE",
+            ">": "GREATER",
+            "<": "LESS",
+            "+": "ADD",
+            "-": "SUBTRACT",
+            "*": "MULTIPLY",
+            "/": "DIVIDE",
+            "%": "STRING_FORMATTER"
+        }
+        self.keywords = {
+            "class": "CLASS",
+            "use": "USE",
+            "import": "IMPORT",
+            "if": "IF",
+            "else": "ELSE",
+            "while": "WHILE",
+            "for": "FOR",
+            "return": "RETURN",
+            "delete": "DELETE",
+            "break": "BREAK",
+            "continue": "CONTINUE",
+        }
+        self.basetypes = [
+            "string",  # and str
+            "int",     # and integer
+            "float",
+            "complex",
+            "list",     # and array
+            "dict",     # and dictionary
+            "bool",
+            "dynamic",
+            "None"      # CONST, can't be changed
+        ]
         
         self.tokens = []
         
     def lex(self):
-        def validFLOAT(string):
+        def validate_float(string: str) -> bool:
             dot = False
             valid = True
-            if string[0] == "-": string = string[1:]
+            
+            if string[0] == "-":
+                string = string[1:]
             for char in string:
-                valid = valid and (char in ["0","1","2","3","4","5","6","7","8","9"] or (char == "." and dot == False))
-                if char == ".": dot = True
+                valid = valid and (char in DIGITS_AS_STRINGS or (char == "." and not dot))
+                if char == ".":
+                    dot = True
             return valid
-        def validINT(string):
+
+        def validate_integer(string: str) -> bool:
             valid = True
-            if string[0] == "-": string = string[1:]
+            if string[0] == "-":
+                string = string[1:]
             for char in string:
                 valid = valid and char in ["0","1","2","3","4","5","6","7","8","9"]
                 
             return valid
         
-        def gettoken(string,l,c):
+        def gettoken(string: str, l, c) -> LexerToken: # What's l and c, find better names
             if string in list(self.keywords.keys()):
                 return LexerToken(self.keywords[string],string)
             elif len(string) > 0 and string[0] == "_":
                 return LexerToken("BUILTIN_CONST",string)
             elif string == "true" or string == "false":
-                return LexerToken("BOOL",string)
+                return LexerToken("BOOL", string)
             elif string in self.basetypes:
-                return LexerToken("BASETYPE",string)
+                return LexerToken("BASETYPE", string)
             elif len(string) == 0:
                 return None
-            elif validFLOAT(string):
-                if validINT(string): return LexerToken("INT",string)
+            elif validate_float(string):
+                if validate_integer(string): return LexerToken("INT" ,string)
                 return LexerToken("FLOAT",string)
             
             elif len(string) > 0 and string[0] not in ["0","1","2","3","4","5","6","7","8","9"]:
@@ -77,6 +144,7 @@ class Lexer:
             
             else:
                 raise LexerError("Unrecognized Pattern: '" + string + "'",l,c)
+
         def repl(ar):
             n = []
             for el in ar:
@@ -132,7 +200,7 @@ class Lexer:
         return self.tokens
         
 if __name__ == "__main__":
-    f = open("arraysfile.il")
+    f = open("arraysfile.ilang")
     d = f.read()
     f.close()
     l = Lexer(d)
