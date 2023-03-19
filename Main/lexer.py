@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """
 I Language lexer.
-Version: 0.1.2
+Version: 0.1.3
 
-Copyright (c) 2023-present ElBe Devleopment.
+Copyright (c) 2023-present ElBe Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -29,105 +29,141 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-import ast
-from typing import Any, List
+import sys
+from typing import (
+    Any,
+    Dict,
+    List,
+    Final,
+)
 
 
 #############
 # CONSTANTS #
 #############
 
-DIGITS: List[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-DIGITS_AS_STRINGS: List[str] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
+DOUBLE_MARKS: Final[Dict[str, str]] = {
+    "==": "EQUAL",
+    "<=": "LESS_EQUALS",
+    ">=": "GREATER_EQUALS",
+    "++": "COUNT_UP",
+    "--": "COUNT_DOWN",
+}
+MARKS: Final[Dict[str, str]] = {
+    ";": "END_CMD",
+    "=": "SET",
+    "{": "BLOCK_OPEN",  # Also dicts
+    "}": "BLOCK_CLOSE",  # Also dicts
+    "(": "CLAMP_OPEN",
+    ")": "CLAMP_CLOSE",
+    "[": "INDEX_OPEN",  # Also arrays
+    "]": "INDEX_CLOSE",  # Also arrays
+    "?": "INDEFINITE",
+    ".": "SEPERATOR",
+    ":": "SLICE",
+    ">": "GREATER",
+    "<": "LESS",
+    "+": "ADD",
+    "-": "SUBTRACT",
+    "*": "MULTIPLY",
+    "/": "DIVIDE",
+    "%": "MODULO",
+    " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
+    ",": "SEPERATOR",
+}
+KEYWORDS: Final[Dict[str, str]] = {
+    "class": "CLASS",
+    "use": "USE",
+    "import": "IMPORT",
+    "if": "IF",
+    "else": "ELSE",
+    "while": "WHILE",
+    "for": "FOR",
+    "return": "RETURN",
+    "delete": "DELETE",
+    "break": "BREAK",
+    "continue": "CONTINUE",
+}
+BASE_TYPES: Final[List[str]] = [
+    "any",
+    "bool",
+    "complex",
+    "dict",
+    "dictionary",
+    "dynamic",
+    "float",
+    "int",
+    "integer",
+    "list",
+    "str",
+    "string",
+    "null",
+]
 
 
-##############
-# MAIN LEXER #
-##############
-
+#################
+# LEXER HELPERS #
+#################
 
 class LexerToken:
+    """
+    Represents a token for the lexer.
+    """
+
     def __init__(self, token_type: Any, value: Any) -> None:
+        """Initializes a new token.
+
+        :param token_type: Type of the token.
+        :param value: Value of the token
+        """
+
         self.type = token_type
         self.value = value
 
-    def __str__(self) -> str:
-        return "{" + self.type + ":'" + self.value + "'}"
-
     def __repr__(self) -> str:
-        return "{" + self.type + ":'" + self.value + "'}"
+        """Returns the representation of the token.
+
+        :return: String representation of the token.
+        """
+
+        return f"{self.type}: {self.value!r}"
 
 
-class LexerError(BaseException):
-    def __init__(self, description: str, line: int, column: int) -> None:
-        self.desc = description
-        self.line = line
-        self.column = column
+class LexerError:
+    """
+    Represents an error while lexing.
+    """
 
-    def __str__(self) -> str:
-        return (
-            str(self.desc)
-            + " in line "
-            + str(self.line)
-            + ", column "
-            + str(self.column)
+    def __init__(self, description: str, line: int, column: int, code: int = 1) -> None:
+        """Initializes a lexing error.
+
+        :param description: Description of the error.
+        :param line: Line the error occurred in.
+        :param column: Column the error occurred in.
+        :param code: The exit code of the error.
+        """
+
+        print(
+            f"{description} in line {line}, column {column}"
         )
+        sys.exit(code)
+
+
+####################
+# MAIN LEXER CLASS #
+####################
 
 
 class Lexer:
+    """
+    Represents a lexer object.
+    """
+
     def __init__(self, text: str):
         self.text = text
-        self.separators = [" ", "\t", "\n"]
-        self.double_marks = {
-            "==": "EQUAL",
-            "++": "COUNT_UP",
-            "--": "COUNT_DOWN"
-        }
-        self.marks = {
-            ";": "END_CMD",
-            "=": "SET",
-            "{": "BLOCK_OPEN",  # Also dicts
-            "}": "BLOCK_CLOSE",  # Also dicts
-            "(": "CLAMP_OPEN",
-            ")": "CLAMP_CLOSE",
-            "[": "INDEX_OPEN",  # Also arrays
-            "]": "INDEX_CLOSE",  # Also arrays
-            "?": "INDEFINITE",
-            ".": "SEPERATOR",
-            ":": "SLICE",
-            ">": "GREATER",
-            "<": "LESS",
-            "+": "ADD",
-            "-": "SUBTRACT",
-            "*": "MULTIPLY",
-            "/": "DIVIDE",
-            "%": "STRING_FORMATTER",
-        }
-        self.keywords = {
-            "class": "CLASS",
-            "use": "USE",
-            "import": "IMPORT",
-            "if": "IF",
-            "else": "ELSE",
-            "while": "WHILE",
-            "for": "FOR",
-            "return": "RETURN",
-            "delete": "DELETE",
-            "break": "BREAK",
-            "continue": "CONTINUE",
-        }
-        self.base_types = [
-            "string",  # and str
-            "int",  # and integer
-            "float",
-            "complex",
-            "list",  # and array
-            "dict",  # and dictionary
-            "bool",
-            "dynamic",
-            "None",  # CONST, can't be changed
-        ]
-
         self.tokens = []
 
     def lex(self):
@@ -150,31 +186,18 @@ class Lexer:
             if string[0] == "-":
                 string = string[1:]
             for char in string:
-                valid = valid and char in [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "6",
-                    "7",
-                    "8",
-                    "9",
-                ]
+                valid = valid and char in DIGITS_AS_STRINGS
 
             return valid
 
-        def gettoken(
-            string: str, l, c
-        ) -> LexerToken | None:  # What's l and c, find better names
-            if string in list(self.keywords.keys()):
-                return LexerToken(self.keywords[string], string)
+        def gettoken(string: str, line: int, column: int) -> LexerToken | None:
+            if string in list(KEYWORDS):
+                return LexerToken(KEYWORDS[string], string)
             elif len(string) > 0 and string[0] == "_":
                 return LexerToken("BUILTIN_CONST", string)
-            elif string == "true" or string == "false":
+            elif string in ["true", "false", "True", "False"]:
                 return LexerToken("BOOL", string)
-            elif string in self.base_types:
+            elif string in BASE_TYPES:
                 return LexerToken("BASETYPE", string)
             elif len(string) == 0:
                 return None
@@ -183,29 +206,11 @@ class Lexer:
                     return LexerToken("INT", string)
                 return LexerToken("FLOAT", string)
 
-            elif len(string) > 0 and string[0] not in [
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-            ]:
+            elif len(string) > 0 and string[0] not in DIGITS_AS_STRINGS:
                 return LexerToken("NAME", string)
 
             else:
-                raise LexerError("Unrecognized Pattern: '" + string + "'", l, c)
-
-        def repl(ar):
-            n = []
-            for el in ar:
-                if el is not None:
-                    n.append(el)
-            return n
+                LexerError("Unrecognized Pattern: '" + string + "'", line, column)
 
         line = 1
         comment = 0
@@ -235,26 +240,26 @@ class Lexer:
 
                 elif in_string:
                     buffer += self.text[index]
-                elif self.text[index] in self.separators:
+                elif self.text[index] in SEPARATORS:
                     self.tokens.append(gettoken(buffer, line, column))
                     buffer = ""
                 elif len(self.text[index:]) > 1 and self.text[
                     index : index + 2
-                ] in list(self.double_marks.keys()):
+                ] in list(DOUBLE_MARKS):
                     self.tokens.append(gettoken(buffer, line, column))
                     self.tokens.append(
                         LexerToken(
-                            self.double_marks[self.text[index : index + 2]],
-                            self.text[index: index + 2],
+                            DOUBLE_MARKS[self.text[index : index + 2]],
+                            self.text[index : index + 2],
                         )
                     )
                     buffer = ""
                     index += 1
 
-                elif self.text[index] in list(self.marks.keys()):
+                elif self.text[index] in list(MARKS):
                     self.tokens.append(gettoken(buffer, line, column))
                     self.tokens.append(
-                        LexerToken(self.marks[self.text[index]], self.text[index])
+                        LexerToken(MARKS[self.text[index]], self.text[index])
                     )
                     buffer = ""
 
@@ -262,13 +267,15 @@ class Lexer:
                     buffer += self.text[index]
 
             index += 1
-        self.tokens = repl(self.tokens)
-        return self.tokens
+
+        return [str(token) for token in self.tokens if token is not None]
 
 
 if __name__ == "__main__":
+    """Only for testing purposes."""
+
     with open("../test.ilang") as test:
         data = test.read()
 
     lexer = Lexer(data)
-    print(lexer.lex())
+    print("\n".join(lexer.lex()))
