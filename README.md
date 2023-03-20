@@ -1,4 +1,6 @@
 # I language
+<img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
+The I programming language is a high level programming language written in pure python. 
 
 ## About this project
 Have you been dreaming about coding in your perfect programming language?
