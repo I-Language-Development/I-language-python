@@ -35,6 +35,16 @@ import _core
 // RANDOM INTEGER //
 ////////////////////
 
+/*
+* Returns a randomly generated number.
+*
+* @params
+* minimum (int): Lowest possible value for the number generation.
+* maximum (int): Highest possible value for the number generation.
+*
+* @return
+* int: Randomly generated number.
+*/
 int randint(int minimum, int maximum) {
 
     return _core.Random.randint(minimum, maximum)
@@ -50,10 +60,10 @@ int randint(int minimum, int maximum) {
 *
 * @params
 * iterable (list): List to return a random choice from.
-* choices  (list): Choices to return form the iterable. If choices is bigger than the iterable, the remaining values will be skipped.
+* choices  (list): Number of choices to return form the iterable. If choices is bigger than the iterable, the remaining values will be skipped.
 *
 * @return
-* Any: Chosen object(s) from the iterable.
+* Any: Random value(s) from the iterable.
 */
 function choices(list iterable, int choices = 1) {
     return _core.Random.choices(iterable, choices)
