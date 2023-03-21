@@ -34,7 +34,7 @@ from typing import (
     Any as _Any,
     List as _List,
     final,
-    Self,
+    self,
     Type,
 )
 
