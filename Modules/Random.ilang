@@ -35,6 +35,20 @@ import _core
 // RANDOM INTEGER //
 ////////////////////
 
+/*
+* Returns a random integer between the given mini- and maximum.
+*
+* IMPORTANT SECURITY NOTE:
+*   Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+*   This library uses such generators.
+*
+* @params
+* minimum (int): Lowest possible value to be generated.
+* maximum (int): Highest possible value to be generated.
+*
+* @return
+* Int: Random integer.
+*/
 int randint(int minimum, int maximum) {
 
     return _core.Random.randint(minimum, maximum)
@@ -47,6 +61,11 @@ int randint(int minimum, int maximum) {
 
 /*
 * Returns a random value from a given list.
+*
+* IMPORTANT SECURITY NOTE:
+*   Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+*   This library uses such generators.
+*
 *
 * @params
 * iterable (list): List to return a random choice from.
@@ -66,6 +85,10 @@ function choices(list iterable, int choices = 1) {
 
 /*
 * Returns a shuffled version of the given list.
+*
+* IMPORTANT SECURITY NOTE:
+*   Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+*   This library uses such generators.
 *
 * @params
 * iterable (list): List to shuffle.

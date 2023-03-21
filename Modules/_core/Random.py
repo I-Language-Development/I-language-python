@@ -42,6 +42,10 @@ from typing import (
 def randint(minimum: int, maximum: int) -> int:
     """Generates a random number.
 
+    IMPORTANT SECURITY NOTE:
+     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+     This library uses such generators.
+
     :param minimum: Lowest possible value.
     :param maximum: Highest possible value.
     :return: Random number between minimum and maximum.
@@ -57,6 +61,10 @@ def randint(minimum: int, maximum: int) -> int:
 
 def choices(iterable: List, choices: int = 1) -> Any:
     """Returns a random value from a given list.
+
+    IMPORTANT SECURITY NOTE:
+     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+     This library uses such generators.
 
     :param iterable: List to return a random value from.
     :param choices: Number of choices to return form the iterable. If choices is bigger than the iterable, the remaining
@@ -76,6 +84,10 @@ def choices(iterable: List, choices: int = 1) -> Any:
 
 def shuffle(iterable: List) -> List:
     """Shuffles a list and returns it.
+
+    IMPORTANT SECURITY NOTE:
+     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+     This library uses such generators.
 
     :param iterable: List to shuffle.
     :return: Shuffled list.
