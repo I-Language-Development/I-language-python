@@ -222,6 +222,7 @@ class Lexer:
         while index < len(self.text):
             if self.text[index] == "\n":
                 self.tokens.append(gettoken(buffer, line, column))
+                self.tokens.append(LexerToken("NEWLINE","\n"))
                 line += 1
                 column = 1
                 buffer = ""
