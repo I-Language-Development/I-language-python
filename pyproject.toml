@@ -1,0 +1,39 @@
+[project]
+name = "I-Language"
+version = "0.0.5"
+authors = [
+  { name="ElBe-Plaq", email="elbe.dev.plaq@gmail.com" },
+]
+description = "The I programming language is a high level programming language written in pure python."
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10" # TODO (ElBe): Test with those versions
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "typing_extensions>=4.5.0"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/I-Language-Development/i-language"
+"Bug Tracker" = "https://github.com/I-Language-Development/i-language/issues"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pylint_runner",
+]
+docs = [
+    "mkdocstrings[python]",
+    "mkdocs-material",
+    "mkdocs-section-index",
+]

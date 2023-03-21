@@ -29,6 +29,7 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
+from dataclasses import dataclass
 import sys
 from typing import (
     Any,
@@ -108,20 +109,14 @@ BASE_TYPES: Final[List[str]] = [
 # LEXER HELPERS #
 #################
 
+@dataclass()
 class LexerToken:
     """
     Represents a token for the lexer.
     """
 
-    def __init__(self, token_type: Any, value: Any) -> None:
-        """Initializes a new token.
-
-        :param token_type: Type of the token.
-        :param value: Value of the token
-        """
-
-        self.type = token_type
-        self.value = value
+    type: Any
+    value: Any
 
     def __repr__(self) -> str:
         """Returns the representation of the token.
@@ -147,7 +142,7 @@ class LexerError:
         """
 
         print(
-            f"{description} in line {line}, column {column}"
+            f"Error: {description} in line {line}, column {column}"
         )
         sys.exit(code)
 
@@ -166,7 +161,20 @@ class Lexer:
         self.text = text
         self.tokens = []
 
-    def lex(self):
+    def lex(self, text: str = None):
+        """Lexes the specified string.
+
+        :param text: Text to lex.
+        :return: List of lexed tokens.
+        """
+
+        if text is not None:
+            self.text = text
+        else:
+            if self.text is None:
+                print("Error: No text specified for lexing.")
+                sys.exit()
+
         def validate_float(string: str) -> bool:
             dot = False
             valid = True
@@ -186,7 +194,7 @@ class Lexer:
             if string[0] == "-":
                 string = string[1:]
             for char in string:
-                valid = valid and char in DIGITS_AS_STRINGS
+                valid = valid if char in DIGITS_AS_STRINGS else False
 
             return valid
 
@@ -210,14 +218,16 @@ class Lexer:
                 return LexerToken("NAME", string)
 
             else:
-                LexerError("Unrecognized Pattern: '" + string + "'", line, column)
+                LexerError(f"Unrecognized Pattern: {string!r}", line, column)
 
         line = 1
-        comment = 0
+        comment = False
+        multiline_comment = False
         column = 1
         index = 0
         buffer = ""
         in_string = False
+
         while index < len(self.text):
             if self.text[index] == "\n":
                 self.tokens.append(gettoken(buffer, line, column))
@@ -268,14 +278,12 @@ class Lexer:
 
             index += 1
 
-        return [str(token) for token in self.tokens if token is not None]
+        return [token for token in self.tokens if token is not None]
 
 
 if __name__ == "__main__":
-    """Only for testing purposes."""
-
-    with open("../test.ilang") as test:
-        data = test.read()
+    with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
+        data = file.read()
 
     lexer = Lexer(data)
-    print("\n".join(lexer.lex()))
+    print("\n".join([str(token) for token in lexer.lex()]))
