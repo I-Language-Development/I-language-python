@@ -29,12 +29,14 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-from dataclasses import dataclass
 import sys
 from typing import (
-    Any,
     Dict,
     List,
+)
+
+from typing_extensions import (
+    Any,
     Final,
 )
 
@@ -52,6 +54,11 @@ DOUBLE_MARKS: Final[Dict[str, str]] = {
     ">=": "GREATER_EQUALS",
     "++": "COUNT_UP",
     "--": "COUNT_DOWN",
+}
+COMMENTS: Final[Dict[str, str]] = {
+    "//": "COMMENT",
+    "/*": "COMMENT_OPEN",
+    "*/": "COMMENT_CLOSE",
 }
 MARKS: Final[Dict[str, str]] = {
     ";": "END_CMD",
@@ -91,7 +98,7 @@ KEYWORDS: Final[Dict[str, str]] = {
 BASE_TYPES: Final[List[str]] = [
     "any",
     "bool",
-    "complex",
+    "complex",  # TODO (ElBe): Move to math module
     "dict",
     "dictionary",
     "dynamic",
@@ -109,14 +116,20 @@ BASE_TYPES: Final[List[str]] = [
 # LEXER HELPERS #
 #################
 
-@dataclass()
 class LexerToken:
     """
     Represents a token for the lexer.
     """
 
-    type: Any
-    value: Any
+    def __init__(self, token_type: Any, value: Any) -> None:
+        """Initializes a token object.
+
+        :param token_type: Type of the token.
+        :param value: Value of the token.
+        """
+
+        self.type = token_type
+        self.value = value
 
     def __repr__(self) -> str:
         """Returns the representation of the token.
@@ -229,7 +242,7 @@ class Lexer:
         in_string = False
 
         while index < len(self.text):
-            if self.text[index] == "\n":
+            if self.text[index] == "\n":  # TODO (ElBe): Fix multiline strings (Should work)
                 self.tokens.append(gettoken(buffer, line, column))
                 line += 1
                 column = 1
@@ -238,43 +251,52 @@ class Lexer:
                     comment = 0
             else:
                 column += 1
-            if comment < 1:
+
+            if not comment:
                 if len(self.text[index:]) > 1 and self.text[index : index + 2] == "//":
                     comment = 1
-                elif self.text[index] == "'" or self.text[index] == '"':
-                    in_string = not in_string
-                    if not in_string:
-                        self.tokens.append(LexerToken("STRING", buffer))
+                if self.text[index : index + 2] == "/*":
+                    multiline_comment = True
+                    index += 2
+                if multiline_comment and self.text[index : index + 2] == "*/":
+                    multiline_comment = False
+                    index += 2
 
+                if not multiline_comment and not comment:
+                    if self.text[index] == "'" or self.text[index] == '"':
+                        in_string = not in_string
+                        if not in_string:
+                            self.tokens.append(LexerToken("STRING", buffer))
+
+                            buffer = ""
+
+                    elif in_string:
+                        buffer += self.text[index]
+                    elif self.text[index] in SEPARATORS:
+                        self.tokens.append(gettoken(buffer, line, column))
+                        buffer = ""
+                    elif len(self.text[index:]) > 1 and self.text[
+                        index : index + 2
+                    ] in list(DOUBLE_MARKS):
+                        self.tokens.append(gettoken(buffer, line, column))
+                        self.tokens.append(
+                            LexerToken(
+                                DOUBLE_MARKS[self.text[index : index + 2]],
+                                self.text[index : index + 2],
+                            )
+                        )
+                        buffer = ""
+                        index += 1
+
+                    elif self.text[index] in list(MARKS):
+                        self.tokens.append(gettoken(buffer, line, column))
+                        self.tokens.append(
+                            LexerToken(MARKS[self.text[index]], self.text[index])
+                        )
                         buffer = ""
 
-                elif in_string:
-                    buffer += self.text[index]
-                elif self.text[index] in SEPARATORS:
-                    self.tokens.append(gettoken(buffer, line, column))
-                    buffer = ""
-                elif len(self.text[index:]) > 1 and self.text[
-                    index : index + 2
-                ] in list(DOUBLE_MARKS):
-                    self.tokens.append(gettoken(buffer, line, column))
-                    self.tokens.append(
-                        LexerToken(
-                            DOUBLE_MARKS[self.text[index : index + 2]],
-                            self.text[index : index + 2],
-                        )
-                    )
-                    buffer = ""
-                    index += 1
-
-                elif self.text[index] in list(MARKS):
-                    self.tokens.append(gettoken(buffer, line, column))
-                    self.tokens.append(
-                        LexerToken(MARKS[self.text[index]], self.text[index])
-                    )
-                    buffer = ""
-
-                else:
-                    buffer += self.text[index]
+                    else:
+                        buffer += self.text[index]
 
             index += 1
 
@@ -282,8 +304,14 @@ class Lexer:
 
 
 if __name__ == "__main__":
+    import time
+
     with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
         data = file.read()
 
+    #start = time.perf_counter()
+
     lexer = Lexer(data)
+    #lexer.lex()
     print("\n".join([str(token) for token in lexer.lex()]))
+    #print(f"Took {time.perf_counter() - start:.2f}s")
