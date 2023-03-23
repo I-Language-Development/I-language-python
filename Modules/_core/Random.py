@@ -29,8 +29,11 @@ DEALINGS IN THE SOFTWARE.
 
 import random
 from typing import (
-    Any,
     List,
+)
+
+from typing_extensions import (
+    Any,
 )
 
 

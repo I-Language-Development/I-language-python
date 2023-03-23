@@ -40,14 +40,16 @@ class Error:
     Represents a base error object.
     """
 
-    def __init__(self, text: str, exit_code: int = 1) -> None:
+    def __init__(self, text: str, line: int = 0, column: int = 0, exit_code: int = 1) -> None:
         """Initializes a new type.
 
         :param text: Error text
+        :param line: Line the error occurred on.
+        :param column: Column the error occurred on.
         :param exit_code: Code to use when exiting. If code is 0, there won't be an exit.
         """
 
-        print(f"Error: {text}")
+        print(f"Error: {text}, in line {line} column {column}.")
         sys.exit(exit_code)
 
 
@@ -55,4 +57,17 @@ class Error:
 # ERRORS #
 ##########
 
-class
+class Unspecified(Error):
+    """
+    Represents a unspecified error.
+    """
+
+    def __init__(self, description: str, line: int = 0, column: int = 0) -> None:
+        """Initialize a new unspecified error.
+
+        :param description: Description of the error.
+        :param line: Line the error occurred on.
+        :param column: Column the error occurred on.
+        """
+
+        super().__init__(description, line, column)
