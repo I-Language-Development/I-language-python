@@ -1,4 +1,5 @@
 # I language
+[![CodeFactor](https://www.codefactor.io/repository/github/i-language-development/i-language/badge)](https://www.codefactor.io/repository/github/i-language-development/i-language)
 <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
 
 The I programming language is a high level programming language written in pure python. 
