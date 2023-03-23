@@ -242,8 +242,8 @@ class Lexer:
         in_string = False
 
         while index < len(self.text):
-            if self.text[index] == "\n":  # TODO (ElBe): Fix multiline strings (Should work)
-                self.tokens.append(gettoken(buffer, line, column))
+            if self.text[index] == "\n":
+                self.tokens.append(LexerToken("NEWLINE", "\n"))
                 line += 1
                 column = 1
                 buffer = ""
