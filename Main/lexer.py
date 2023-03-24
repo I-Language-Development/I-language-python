@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 I Language lexer.
-Version: 0.1.3
+Version: 0.1.4
 
 Copyright (c) 2023-present ElBe Development.
 
@@ -23,6 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+
+
+#########
+# SETUP #
+#########
+
+__author__  = "I-language Development"
+__version__ = "0.1.4"
 
 
 ###########
@@ -363,14 +371,71 @@ class Lexer:
 
 
 if __name__ == "__main__":
+    options: Dict[str, bool] = {
+        "types": False,
+        "values": False,
+        "no-split": False,
+    }
+
     if len(sys.argv[1:]) > 0:
+        for argument in sys.argv[1:]:
+            valid_argument = False
+
+            if argument.lower() in ["-h", "--help"]:
+                valid_argument = True
+
+                print("Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]")
+                print("Lexer of the I-programming language.")
+                print("Options:")
+                print("    -h, --help             Shows this help and exits.")
+                print("    -v, --version          Shows the version of the lexer and exits.")
+                print("    --types                Only print the types of the tokens.")
+                print("    --values               Only print the values of the tokens.")
+                print("    --no-split             Prints the tokens in a list.")
+                exit(0)
+
+            elif argument.lower() in ["-v", "--version"]:
+                valid_argument = True
+
+                print(f"Version: {__version__}")
+                exit(0)
+
+            elif argument.lower() == "--types":
+                valid_argument = True
+                options["types"] = True
+
+            elif argument.lower() == "--values":
+                valid_argument = True
+                options["values"] = True
+
+            elif argument.lower() == "--no-split":
+                valid_argument = True
+                options["no-split"] = True
+
+            else:
+                if not valid_argument:
+                    print(f"Error: Invalid argument: {argument!r}")  # TODO (ElBe): Add errors
+                    exit(1)
+
+    try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
             data = file.read()
-    else:
+    except (IndexError, FileNotFoundError):
         data = """
         int i   = 1234
         float f = 12.34
-        """
+        """  # This is test data and will be updated often
 
     lexer = Lexer(data)
-    print("\n".join([str(token) for token in lexer.lex()]))
+
+    if options["types"] and not options["values"]:
+        result = [str(token.type) for token in lexer.lex()]
+    elif options["values"] and not options["types"]:
+        result = [str(token.value) for token in lexer.lex()]
+    else:
+        result = [str(token) for token in lexer.lex()]
+
+    if not options["no-split"]:
+        result = "\n".join(result)
+
+    print(result)
