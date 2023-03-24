@@ -138,62 +138,8 @@ class LexerToken:
         :param value: Value of the token.
         """
 
-        self._type = token_type
-        self._value = value
-
-    @property
-    def type(self) -> Any:
-        """Returns the type of the token.
-
-        :return: Type of the token.
-        """
-
-        return self._type
-
-    @type.setter
-    def type(self, value: Any) -> None:
-        """Sets the type of the token.
-
-        :param value: Type of the token.
-        """
-
-        self._type = value
-
-    @type.getter
-    def type(self) -> Any:
-        """Returns the type of the token.
-
-        :return: Type of the token.
-        """
-
-        return self._type
-
-    @property
-    def value(self) -> Any:
-        """Returns the value of the token.
-
-        :return: Value of the token.
-        """
-
-        return self._value
-
-    @value.setter
-    def value(self, value: Any) -> None:
-        """Sets the value of the token.
-
-        :param value: Value of the token.
-        """
-
-        self._value = value
-
-    @value.getter
-    def value(self) -> Any:
-        """Returns the value of the token.
-
-        :return: Value of the token.
-        """
-
-        return self._value
+        self.type = token_type
+        self.value = value
 
     def __repr__(self) -> str:
         """Returns the representation of the token.
@@ -201,7 +147,7 @@ class LexerToken:
         :return: String representation of the token.
         """
 
-        return f"{self._type}: {self._value!r}"
+        return f"{self.type}: {self.value!r}"
 
 
 class LexerError:
