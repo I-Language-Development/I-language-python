@@ -27,14 +27,12 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-import os
+import io
 from typing import (
     Dict,
     List,
     Set,
     Tuple,
-
-    NewType,
 )
 
 # from ...Main import _errors
@@ -68,12 +66,7 @@ class Table:
         self.bottom_right_junction_char = "┘"
         self.bottom_junction_char = "┴"
 
-        if (
-            isinstance(data, Dict)
-            or isinstance(data, List)
-            or isinstance(data, Set)
-            or isinstance(data, Tuple)
-        ):
+        if isinstance(data, (Dict, List, Set, Tuple)):
             self.data = data
         else:
             pass  # TODO (ElBe): Add errors
@@ -84,61 +77,78 @@ class Table:
         :return: The string representation of the table.
         """
 
-        result = ""
+        with io.StringIO() as result:
+            if isinstance(self.data, Dict):
+                length = 5, 7
 
-        if isinstance(self.data, Dict):
-            length = 5, 7
+                for key, value in self.data.items():
+                    if len(str(key)) > length[0]:
+                        length = len(str(key)), length[1]
+                    if len(str(value)) > length[1]:
+                        length = length[0], len(str(value))
 
-            for key, value in self.data.items():
-                if len(str(key)) > length[0]:
-                    length = len(str(key)), length[1]
-                if len(str(value)) > length[1]:
-                    length = length[0], len(str(value))
+                result.write(
+                    f"{self.top_left_junction_char}{self.horizontal_char * (length[0] + 2)}"
+                    + f"{self.top_junction_char}{self.horizontal_char * (length[1] + 2)}"
+                    + f"{self.top_right_junction_char}\n"
+                )
+                result.write(
+                    f"{self.vertical_char} {'Key'.center(length[0])} {self.vertical_char} "
+                    + f"{'Value'.center(length[1])} {self.vertical_char}\n"
+                )
+                result.write(
+                    f"{self.left_junction_char}{self.horizontal_char * (length[0] + 2)}{self.junction_char}"
+                    + f"{self.horizontal_char * (length[1] + 2)}{self.right_junction_char}\n"
+                )
 
-            result += f"{self.top_left_junction_char}{self.horizontal_char * (length[0] + 2)}" + \
-                      f"{self.top_junction_char}{self.horizontal_char * (length[1] + 2)}" + \
-                      f"{self.top_right_junction_char}\n"
-            result += f"{self.vertical_char} {'Key'.center(length[0])} {self.vertical_char} " + \
-                      f"{'Value'.center(length[1])} {self.vertical_char}\n"
-            result += f"{self.left_junction_char}{self.horizontal_char * (length[0] + 2)}{self.junction_char}" + \
-                      f"{self.horizontal_char * (length[1] + 2)}{self.right_junction_char}\n"
+                for key, value in self.data.items():
+                    result.write(
+                        f"{self.vertical_char} {str(key).center(length[0])} {self.vertical_char}"
+                        + f"{str(value).center(length[1])} {self.vertical_char}\n"
+                    )
 
-            for key, value in self.data.items():
-                result += f"{self.vertical_char} {str(key).center(length[0])} {self.vertical_char}" + \
-                          f"{str(value).center(length[1])} {self.vertical_char}\n"
+                result.write(
+                    f"{self.bottom_left_junction_char}{self.horizontal_char * (length[0] + 2)}"
+                    + f"{self.bottom_junction_char}{self.horizontal_char * (length[1] + 2)}"
+                    + f"{self.bottom_right_junction_char}\n"
+                )
 
-            result += f"{self.bottom_left_junction_char}{self.horizontal_char * (length[0] + 2)}" + \
-                      f"{self.bottom_junction_char}{self.horizontal_char * (length[1] + 2)}" + \
-                      f"{self.bottom_right_junction_char}\n"
+            elif isinstance(self.data, (List, Set, Tuple)):
+                length = 7, 7
 
-        elif (
-            isinstance(self.data, List)
-            or isinstance(self.data, Set)
-            or isinstance(self.data, Tuple)
-        ):
-            length = 7, 7
+                for index, value in enumerate(self.data):
+                    if len(str(index)) > length[0]:
+                        length = len(str(index)), length[1]
+                    if len(str(value)) > length[1]:
+                        length = length[0], len(str(value))
 
-            for index, value in enumerate(self.data):
-                if len(str(index)) > length[0]:
-                    length = len(str(index)), length[1]
-                if len(str(value)) > length[1]:
-                    length = length[0], len(str(value))
+                result.write(
+                    f"{self.top_left_junction_char}{self.horizontal_char * (length[0] + 2)}"
+                    + f"{self.top_junction_char}{self.horizontal_char * (length[1] + 2)}"
+                    + f"{self.top_right_junction_char}\n"
+                )
+                result.write(
+                    f"{self.vertical_char} {'Index'.center(length[0])} {self.vertical_char} "
+                    + f"{'Value'.center(length[1])} {self.vertical_char}\n"
+                )
+                result.write(
+                    f"{self.left_junction_char}{self.horizontal_char * (length[0] + 2)}{self.junction_char}"
+                    + f"{self.horizontal_char * (length[1] + 2)}{self.right_junction_char}\n"
+                )
 
-            result += f"{self.top_left_junction_char}{self.horizontal_char * (length[0] + 2)}" + \
-                      f"{self.top_junction_char}{self.horizontal_char * (length[1] + 2)}" + \
-                      f"{self.top_right_junction_char}\n"
-            result += f"{self.vertical_char} {'Index'.center(length[0])} {self.vertical_char} " + \
-                      f"{'Value'.center(length[1])} {self.vertical_char}\n"
-            result += f"{self.left_junction_char}{self.horizontal_char * (length[0] + 2)}{self.junction_char}" + \
-                      f"{self.horizontal_char * (length[1] + 2)}{self.right_junction_char}\n"
+                for index, value in enumerate(self.data):
+                    result.write(
+                        f"{self.vertical_char} {str(index).center(length[0])} {self.vertical_char} "
+                        + f"{str(value).center(length[1])} {self.vertical_char}\n"
+                    )
 
-            for index, value in enumerate(self.data):
-                result += f"{self.vertical_char} {str(index).center(length[0])} {self.vertical_char} " + \
-                          f"{str(value).center(length[1])} {self.vertical_char}\n"
+                result.write(
+                    f"{self.bottom_left_junction_char}{self.horizontal_char * (length[0] + 2)}"
+                    + f"{self.bottom_junction_char}{self.horizontal_char * (length[1] + 2)}"
+                    + f"{self.bottom_right_junction_char}\n"
+                )
 
-            result += f"{self.bottom_left_junction_char}{self.horizontal_char * (length[0] + 2)}" + \
-                      f"{self.bottom_junction_char}{self.horizontal_char * (length[1] + 2)}" + \
-                      f"{self.bottom_right_junction_char}\n"
+            result = result.getvalue()
 
         return result
 

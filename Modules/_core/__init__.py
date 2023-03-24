@@ -27,7 +27,8 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-from Modules._core import (
+from . import (
+    Console,
     Math,
     Random,
 )
