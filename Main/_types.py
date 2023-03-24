@@ -46,6 +46,7 @@ from typing_extensions import (
 # BASE TYPE #
 #############
 
+
 class BaseType:
     """
     Represents a base type object.
@@ -76,6 +77,7 @@ class BaseType:
 #########
 # TYPES #
 #########
+
 
 class Any(BaseType):
     """

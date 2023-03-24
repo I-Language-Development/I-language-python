@@ -35,12 +35,15 @@ import sys
 # ERROR #
 #########
 
+
 class Error:
     """
     Represents a base error object.
     """
 
-    def __init__(self, text: str, line: int = 0, column: int = 0, exit_code: int = 1) -> None:
+    def __init__(
+        self, text: str, line: int = 0, column: int = 0, exit_code: int = 1
+    ) -> None:
         """Initializes a new type.
 
         :param text: Error text
@@ -56,6 +59,7 @@ class Error:
 ##########
 # ERRORS #
 ##########
+
 
 class Unspecified(Error):
     """
