@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 I Language lexer.
-Version: 0.1.4
+Version: 0.1.5
 
 Copyright (c) 2023-present ElBe Development.
 
@@ -29,8 +29,8 @@ DEALINGS IN THE SOFTWARE.
 # SETUP #
 #########
 
-__author__  = "I-language Development"
-__version__ = "0.1.4"
+__author__ = "I-language Development"
+__version__ = "0.1.5"
 
 
 ###########
@@ -222,6 +222,66 @@ class LexerError:
         sys.exit(code)
 
 
+def validate_float(string: str) -> bool:
+    dot = False
+    valid = True
+
+    if string[0] == "-":
+        string = string[1:]
+    for char in string:
+        valid = valid and (char in DIGITS_AS_STRINGS or (char == "." and not dot))
+        if char == ".":
+            dot = True
+    return valid
+
+
+def validate_integer(string: str) -> bool:
+    valid = True
+    if string[0] == "-":
+        string = string[1:]
+    for char in string:
+        valid = valid if char in DIGITS_AS_STRINGS else False
+
+    return valid
+
+
+def gettoken(string: str, line: int, column: int) -> LexerToken | None:
+    """Returns a token from the specified string.
+
+    :param string: String to get token from.
+    :param line: Line number of the string.
+    :param column: Column number of the token.
+    :return: Token from the specified string.
+    """
+
+    result = None
+    already_tokenized = False
+
+    if string in list(KEYWORDS) and not already_tokenized:
+        result = LexerToken(KEYWORDS[string], string)
+    elif (len(string) > 0 and string[0] == "_") and not already_tokenized:
+        result = LexerToken("BUILTIN_CONST", string)
+    elif string in ["true", "false"] and not already_tokenized:
+        result = LexerToken("BOOL", string)
+    elif string in BASE_TYPES and not already_tokenized:
+        result = LexerToken("BASETYPE", string)
+    elif len(string) == 0 and not already_tokenized:
+        result = None
+    elif validate_float(string) and not already_tokenized:
+        if validate_integer(string):
+            result = LexerToken("INT", string)  # TODO (ElBe): Fix integers
+        result = LexerToken("FLOAT", string)
+
+    elif (
+        len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
+    ) and not already_tokenized:
+        result = LexerToken("NAME", string)
+    else:
+        LexerError(f"Unrecognized Pattern: {string!r}", line, column)
+
+    return result
+
+
 ####################
 # MAIN LEXER CLASS #
 ####################
@@ -249,51 +309,6 @@ class Lexer:
             if self.text is None:
                 print("Error: No text specified for lexing.")
                 sys.exit()
-
-        def validate_float(string: str) -> bool:
-            dot = False
-            valid = True
-
-            if string[0] == "-":
-                string = string[1:]
-            for char in string:
-                valid = valid and (
-                    char in DIGITS_AS_STRINGS or (char == "." and not dot)
-                )
-                if char == ".":
-                    dot = True
-            return valid
-
-        def validate_integer(string: str) -> bool:
-            valid = True
-            if string[0] == "-":
-                string = string[1:]
-            for char in string:
-                valid = valid if char in DIGITS_AS_STRINGS else False
-
-            return valid
-
-        def gettoken(string: str, line: int, column: int) -> LexerToken | None:
-            if string in list(KEYWORDS):
-                return LexerToken(KEYWORDS[string], string)
-            elif len(string) > 0 and string[0] == "_":
-                return LexerToken("BUILTIN_CONST", string)
-            elif string in ["true", "false", "True", "False"]:
-                return LexerToken("BOOL", string)
-            elif string in BASE_TYPES:
-                return LexerToken("BASETYPE", string)
-            elif len(string) == 0:
-                return None
-            elif validate_float(string):
-                if validate_integer(string):
-                    return LexerToken("INT", string)
-                return LexerToken("FLOAT", string)
-
-            elif len(string) > 0 and string[0] not in DIGITS_AS_STRINGS:
-                return LexerToken("NAME", string)
-
-            else:
-                LexerError(f"Unrecognized Pattern: {string!r}", line, column)
 
         line = 1
         comment = False
@@ -384,21 +399,25 @@ if __name__ == "__main__":
             if argument.lower() in ["-h", "--help"]:
                 valid_argument = True
 
-                print("Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]")
+                print(
+                    "Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]"
+                )
                 print("Lexer of the I-programming language.")
                 print("Options:")
                 print("    -h, --help             Shows this help and exits.")
-                print("    -v, --version          Shows the version of the lexer and exits.")
+                print(
+                    "    -v, --version          Shows the version of the lexer and exits."
+                )
                 print("    --types                Only print the types of the tokens.")
                 print("    --values               Only print the values of the tokens.")
                 print("    --no-split             Prints the tokens in a list.")
-                exit(0)
+                sys.exit(0)
 
             elif argument.lower() in ["-v", "--version"]:
                 valid_argument = True
 
                 print(f"Version: {__version__}")
-                exit(0)
+                sys.exit(0)
 
             elif argument.lower() == "--types":
                 valid_argument = True
@@ -414,8 +433,10 @@ if __name__ == "__main__":
 
             else:
                 if not valid_argument:
-                    print(f"Error: Invalid argument: {argument!r}")  # TODO (ElBe): Add errors
-                    exit(1)
+                    print(
+                        f"Error: Invalid argument: {argument!r}"
+                    )  # TODO (ElBe): Add errors
+                    sys.exit(1)
 
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
