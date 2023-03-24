@@ -70,7 +70,7 @@ MARKS: Final[Dict[str, str]] = {
     "[": "INDEX_OPEN",  # Also arrays
     "]": "INDEX_CLOSE",  # Also arrays
     "?": "INDEFINITE",
-    ".": "SEPERATOR",
+    ".": "FLOAT_SEPARATOR",
     ":": "SLICE",
     ">": "GREATER",
     "<": "LESS",
@@ -79,8 +79,8 @@ MARKS: Final[Dict[str, str]] = {
     "*": "MULTIPLY",
     "/": "DIVIDE",
     "%": "MODULO",
-    " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
-    ",": "SEPERATOR",
+    # " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
+    ",": "SEPARATOR",
 }
 KEYWORDS: Final[Dict[str, str]] = {
     "class": "CLASS",
@@ -109,12 +109,14 @@ BASE_TYPES: Final[List[str]] = [
     "str",
     "string",
     "null",
+    "mdarray",  # TODO (ElBe): Add to _types.py
 ]
 
 
 #################
 # LEXER HELPERS #
 #################
+
 
 class LexerToken:
     """
@@ -128,8 +130,62 @@ class LexerToken:
         :param value: Value of the token.
         """
 
-        self.type = token_type
-        self.value = value
+        self._type = token_type
+        self._value = value
+
+    @property
+    def type(self) -> Any:
+        """Returns the type of the token.
+
+        :return: Type of the token.
+        """
+
+        return self._type
+
+    @type.setter
+    def type(self, value: Any) -> None:
+        """Sets the type of the token.
+
+        :param value: Type of the token.
+        """
+
+        self._type = value
+
+    @type.getter
+    def type(self) -> Any:
+        """Returns the type of the token.
+
+        :return: Type of the token.
+        """
+
+        return self._type
+
+    @property
+    def value(self) -> Any:
+        """Returns the value of the token.
+
+        :return: Value of the token.
+        """
+
+        return self._value
+
+    @value.setter
+    def value(self, value: Any) -> None:
+        """Sets the value of the token.
+
+        :param value: Value of the token.
+        """
+
+        self._value = value
+
+    @value.getter
+    def value(self) -> Any:
+        """Returns the value of the token.
+
+        :return: Value of the token.
+        """
+
+        return self._value
 
     def __repr__(self) -> str:
         """Returns the representation of the token.
@@ -137,7 +193,7 @@ class LexerToken:
         :return: String representation of the token.
         """
 
-        return f"{self.type}: {self.value!r}"
+        return f"{self._type}: {self._value!r}"
 
 
 class LexerError:
@@ -154,9 +210,7 @@ class LexerError:
         :param code: The exit code of the error.
         """
 
-        print(
-            f"Error: {description} in line {line}, column {column}"
-        )
+        print(f"Error: {description} in line {line}, column {column}")
         sys.exit(code)
 
 
@@ -242,6 +296,8 @@ class Lexer:
         in_string = False
 
         while index < len(self.text):
+            self.tokens = [token for token in self.tokens if token is not None]
+
             if self.text[index] == "\n":
                 self.tokens.append(LexerToken("NEWLINE", "\n"))
                 line += 1
@@ -294,24 +350,27 @@ class Lexer:
                             LexerToken(MARKS[self.text[index]], self.text[index])
                         )
                         buffer = ""
-
                     else:
                         buffer += self.text[index]
 
             index += 1
 
-        return [token for token in self.tokens if token is not None]
+        return [
+            token
+            for token in self.tokens
+            if token is not None and token.type != "NEWLINE"
+        ]
 
 
 if __name__ == "__main__":
-    import time
-
-    with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-        data = file.read()
-
-    #start = time.perf_counter()
+    if len(sys.argv[1:]) > 0:
+        with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
+            data = file.read()
+    else:
+        data = """
+        int i   = 1234
+        float f = 12.34
+        """
 
     lexer = Lexer(data)
-    #lexer.lex()
     print("\n".join([str(token) for token in lexer.lex()]))
-    #print(f"Took {time.perf_counter() - start:.2f}s")
