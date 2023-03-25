@@ -265,9 +265,6 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
     elif validate_integer(string) and not already_tokenized:
         return LexerToken("INT", string)
 
-    elif validate_float(string) and not already_tokenized:
-        return LexerToken("FLOAT", string)
-
     elif (
         len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
     ) and not already_tokenized:
@@ -316,7 +313,7 @@ class Lexer:
         line = 1
         comment = False
         multiline_comment = False
-        multiline_comment_helper = 0
+        helper = 0
         column = 1
         in_string = False
 
@@ -324,21 +321,21 @@ class Lexer:
 
         try:
             for index, character in enumerate(self.text):
-                multiline_comment_helper -= 1
+                helper -= 1
                 self.tokens = [token for token in self.tokens if token is not None]
 
                 if character == "\n":
                     line += 1
                     column = 1
                     comment = False
-
-                    buffer.close()
-                    buffer = io.StringIO()
                 else:
                     column += 1
 
                 if not comment:
-                    if len(self.text[index:]) > 1 and self.text[index : index + 2] == "//":
+                    if (
+                        len(self.text[index:]) > 1
+                        and self.text[index : index + 2] == "//"
+                    ):
                         comment = 1
 
                     if self.text[index : index + 2] == "/*":
@@ -346,11 +343,15 @@ class Lexer:
 
                     if multiline_comment and self.text[index : index + 2] == "*/":
                         multiline_comment = False
-                        multiline_comment_helper = 2
+                        helper = 2
 
-                    if not multiline_comment and not comment and multiline_comment_helper <= 0:
+                    if (
+                        not multiline_comment
+                        and not comment
+                        and helper <= 0
+                    ):
                         try:
-                            if character in ["\"", "'"]:
+                            if character in ['"', "'"]:
                                 in_string = not in_string
                                 if not in_string:
                                     self.tokens.append(LexerToken("STRING", buffer))
@@ -362,7 +363,9 @@ class Lexer:
                                 buffer.write(character)
 
                             elif self.text[index] in SEPARATORS:
-                                self.tokens.append(gettoken(buffer.getvalue(), line, column))
+                                self.tokens.append(
+                                    gettoken(buffer.getvalue(), line, column)
+                                )
 
                                 buffer.close()
                                 buffer = io.StringIO()
@@ -370,7 +373,9 @@ class Lexer:
                             elif len(self.text[index:]) > 1 and self.text[
                                 index : index + 2
                             ] in list(DOUBLE_MARKS):
-                                self.tokens.append(gettoken(buffer.getvalue(), line, column))
+                                self.tokens.append(
+                                    gettoken(buffer.getvalue(), line, column)
+                                )
                                 self.tokens.append(
                                     LexerToken(
                                         DOUBLE_MARKS[self.text[index : index + 2]],
@@ -381,25 +386,47 @@ class Lexer:
                                 buffer.close()
                                 buffer = io.StringIO()
 
+                                helper = 2
+
                             elif character in list(MARKS):
-                                self.tokens.append(gettoken(buffer.getvalue(), line, column))
+                                self.tokens.append(
+                                    gettoken(buffer.getvalue(), line, column)
+                                )
                                 self.tokens.append(
                                     LexerToken(MARKS[character], character)
                                 )
                                 buffer.close()
                                 buffer = io.StringIO()
+
                             else:
                                 buffer.write(character)
+
                         except IndexError:
                             pass
         finally:
             buffer.close()
 
-        return [
-            token
-            for token in self.tokens
-            if token is not None
-        ]
+        self.tokens = [token for token in self.tokens if token is not None]
+        for index, token in enumerate(self.tokens):
+            try:
+                print(token.type, token.value)
+                if token.type == "INT" and self.tokens[index - 1].type == "DOT":
+                    print(f"Found possible float at index {index}: {token.value}")
+                    buffer = (
+                        str(self.tokens[index - 2].value)
+                        + "."
+                        + str(self.tokens[index].value)
+                    )
+
+                    self.tokens.pop(index)
+                    self.tokens.pop(index - 1)
+                    self.tokens.pop(index - 2)
+
+                    self.tokens.append(LexerToken("FLOAT", buffer))
+            except IndexError:
+                pass
+
+        return self.tokens
 
 
 if __name__ == "__main__":
@@ -466,9 +493,6 @@ if __name__ == "__main__":
 
     lexer = Lexer(data)
 
-    import time
-    t = time.perf_counter()
-
     if options["types"] and not options["values"]:
         result = [str(token.type) for token in lexer.lex()]
     elif options["values"] and not options["types"]:
@@ -479,5 +503,4 @@ if __name__ == "__main__":
     if not options["no-split"]:
         result = "\n".join(result)
 
-    print(result, f"\n\nExecuted in {time.perf_counter() - t:0.4f} seconds.")
-    print(locals())
+    print(result)

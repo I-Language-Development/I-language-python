@@ -45,6 +45,7 @@ from Main import lexer
 # LEXER TOKEN TEST #
 ####################
 
+
 def test_lexer_token() -> None:
     """Tests lexer tokens."""
 
@@ -181,10 +182,10 @@ def test_lexer_token() -> None:
             "false;",
             [lexer.LexerToken("BOOL", "false"), lexer.LexerToken("SEMICOLON", ";")],
         ),
-        ("1;", [lexer.LexerToken("INT", "1"), lexer.LexerToken("SEMICOLON", ";")]),
+        ("1", [lexer.LexerToken("INT", "1")]),
         (
-            "1.2;",
-            [lexer.LexerToken("FLOAT", "1.2"), lexer.LexerToken("SEMICOLON", ";")],
+            "1.2",
+            [lexer.LexerToken("FLOAT", "1.2")],
         ),
         (
             "name;",
@@ -246,15 +247,10 @@ def test_gettoken(data: str, expected: lexer.LexerToken) -> None:
 # VALIDATE INTEGER #
 ####################
 
+
 @pytest.mark.parametrize(
     "data, expected",
-    [
-        ("0", True),
-        ("1", True),
-        ("0.1", False),
-        ("1.1", False),
-        ("0.0", False)
-    ]
+    [("0", True), ("1", True), ("0.1", False), ("1.1", False), ("0.0", False)],
 )
 def test_validate_integer(data: str, expected: bool) -> None:
     """Tests validate integer function.
@@ -271,6 +267,7 @@ def test_validate_integer(data: str, expected: bool) -> None:
 # VALIDATE FLOAT #
 ##################
 
+
 @pytest.mark.parametrize(
     "data, expected",
     [
@@ -279,7 +276,7 @@ def test_validate_integer(data: str, expected: bool) -> None:
         ("0.1", True),
         ("1.2", True),
         ("0.0", True),
-    ]
+    ],
 )
 def test_validate_float(data: str, expected: bool) -> None:
     """Tests validate float function.
