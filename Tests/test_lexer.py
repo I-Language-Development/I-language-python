@@ -130,9 +130,6 @@ def test_lexer_tokens(data: str, expected: List[lexer.LexerToken]) -> None:
     Args:
         data (str): Data to test.
         expected (list[lexer.LexerToken]): Expected tokens.
-
-    Returns:
-        None
     """
 
     assert [str(token) for token in lexer.Lexer(data).lex()] == [str(token) for token in expected]

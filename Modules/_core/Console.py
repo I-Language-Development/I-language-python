@@ -30,6 +30,7 @@ DEALINGS IN THE SOFTWARE.
 import io
 from typing import (
     Dict,
+    Iterable,
     List,
     Set,
     Tuple,
@@ -46,10 +47,11 @@ class Table:
     Represents a printable table.
     """
 
-    def __init__(self, data: Dict | List | Set | Tuple) -> None:
+    def __init__(self, data: Iterable) -> None:
         """Constructs a table with the given data.
 
-        :param data: The data to construct the table with.
+        Args:
+            data (Iterable): The data to construct the table with.
         """
 
         self.vertical_char = "│"
@@ -72,7 +74,8 @@ class Table:
     def __str__(self) -> str:
         """Returns the string representation of the table.
 
-        :return: The string representation of the table.
+        Returns:
+            The string representation of the table.
         """
 
         with io.StringIO() as result:
@@ -153,16 +156,18 @@ class Table:
     def __repr__(self) -> str:
         """Returns the representation of the table.
 
-        :return: The representation of the table.
+        Returns:
+            The representation of the table.
         """
 
         return str(self)
 
 
-def table(data: Dict | List | Set | Tuple) -> None:
+def table(data: Iterable) -> None:
     """Prints a table with the given data.
 
-    :param data: The data to print.
+    Args:
+        data (Iterable): The data to print.
     """
 
     print(Table(data))

@@ -47,8 +47,11 @@ Infinite: Final[float] = float("inf")
 def _round(number: float) -> int:
     """Rounds a number.
 
-    :param number: Number to round.
-    :return: Rounded number.
+    Args:
+        number (int): Number to round.
+
+    Returns:
+        Rounded number.
     """
 
     return round(number)
