@@ -7,11 +7,10 @@ authors = [
 description = "The I programming language is a high level programming language written in pure python."
 license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.6"  # TODO (ElBe): Test with those versions
+requires-python = ">=3.7"  # TODO (ElBe): Test with those versions
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
