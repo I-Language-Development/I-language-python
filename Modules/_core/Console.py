@@ -68,6 +68,8 @@ class Table:
 
         if isinstance(data, (Dict, List, Set, Tuple)):
             self.data = data
+        elif isinstance(data, str):
+            pass  # TODO (ElBe): Add errors
         else:
             pass  # TODO (ElBe): Add errors
 
@@ -104,7 +106,7 @@ class Table:
 
                 for key, value in self.data.items():
                     result.write(
-                        f"{self.vertical_char} {str(key).center(length[0])} {self.vertical_char}"
+                        f"{self.vertical_char} {str(key).center(length[0])} {self.vertical_char} "
                         + f"{str(value).center(length[1])} {self.vertical_char}\n"
                     )
 
