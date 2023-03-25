@@ -45,16 +45,15 @@ from Main import lexer
 # LEX TEST #
 ############
 
+
 @pytest.mark.parametrize(
     "data, expected",
     [
         ("\n", []),
         ("\t", []),
         ("  ", []),
-
         ("// Test", []),
         ("/* Test */", []),
-
         ("==", [lexer.LexerToken("EQUAL", "==")]),
         ("!=", [lexer.LexerToken("NOT_EQUAL", "!=")]),
         ("<=", [lexer.LexerToken("LESS_EQUAL", "<=")]),
@@ -63,7 +62,6 @@ from Main import lexer
         ("--", [lexer.LexerToken("COUNT_DOWN", "--")]),
         ("&&", [lexer.LexerToken("AND", "&&")]),
         ("||", [lexer.LexerToken("OR", "||")]),
-
         (";", [lexer.LexerToken("SEMICOLON", ";")]),
         ("=", [lexer.LexerToken("SET", "=")]),
         ("{", [lexer.LexerToken("BLOCK_OPEN", "{")]),
@@ -83,46 +81,169 @@ from Main import lexer
         ("/", [lexer.LexerToken("DIVIDE", "/")]),
         ("%", [lexer.LexerToken("MODULO", "%")]),
         (",", [lexer.LexerToken("COMMA", ",")]),
-
-        ("class;", [lexer.LexerToken("CLASS", "class"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("function;", [lexer.LexerToken("FUNCTION", "function"), lexer.LexerToken("SEMICOLON", ";")]),
+        (
+            "class;",
+            [lexer.LexerToken("CLASS", "class"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "function;",
+            [
+                lexer.LexerToken("FUNCTION", "function"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
         ("use;", [lexer.LexerToken("USE", "use"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("import;", [lexer.LexerToken("IMPORT", "import"), lexer.LexerToken("SEMICOLON", ";")]),
+        (
+            "import;",
+            [lexer.LexerToken("IMPORT", "import"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
         ("if;", [lexer.LexerToken("IF", "if"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("elif;", [lexer.LexerToken("ELIF", "elif"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("else;", [lexer.LexerToken("ELSE", "else"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("match;", [lexer.LexerToken("MATCH", "match"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("case;", [lexer.LexerToken("CASE", "case"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("default;", [lexer.LexerToken("DEFAULT", "default"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("while;", [lexer.LexerToken("WHILE", "while"), lexer.LexerToken("SEMICOLON", ";")]),
+        (
+            "elif;",
+            [lexer.LexerToken("ELIF", "elif"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "else;",
+            [lexer.LexerToken("ELSE", "else"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "match;",
+            [lexer.LexerToken("MATCH", "match"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "case;",
+            [lexer.LexerToken("CASE", "case"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "default;",
+            [
+                lexer.LexerToken("DEFAULT", "default"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "while;",
+            [lexer.LexerToken("WHILE", "while"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
         ("for;", [lexer.LexerToken("FOR", "for"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("return;", [lexer.LexerToken("RETURN", "return"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("delete;", [lexer.LexerToken("DELETE", "delete"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("break;", [lexer.LexerToken("BREAK", "break"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("continue;", [lexer.LexerToken("CONTINUE", "continue"), lexer.LexerToken("SEMICOLON", ";")]),
-
-        ("any;", [lexer.LexerToken("BASETYPE", "any"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("bool;", [lexer.LexerToken("BASETYPE", "bool"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("complex;", [lexer.LexerToken("BASETYPE", "complex"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("dict;", [lexer.LexerToken("BASETYPE", "dict"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("dictionary;", [lexer.LexerToken("BASETYPE", "dictionary"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("dynamic;", [lexer.LexerToken("BASETYPE", "dynamic"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("float;", [lexer.LexerToken("BASETYPE", "float"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("int;", [lexer.LexerToken("BASETYPE", "int"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("integer;", [lexer.LexerToken("BASETYPE", "integer"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("list;", [lexer.LexerToken("BASETYPE", "list"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("str;", [lexer.LexerToken("BASETYPE", "str"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("string;", [lexer.LexerToken("BASETYPE", "string"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("null;", [lexer.LexerToken("BASETYPE", "null"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("mdarray;", [lexer.LexerToken("BASETYPE", "mdarray"), lexer.LexerToken("SEMICOLON", ";")]),
-
-        ("_NAME;", [lexer.LexerToken("BUILTIN_CONST", "_NAME"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("true;", [lexer.LexerToken("BOOL", "true"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("false;", [lexer.LexerToken("BOOL", "false"), lexer.LexerToken("SEMICOLON", ";")]),
+        (
+            "return;",
+            [lexer.LexerToken("RETURN", "return"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "delete;",
+            [lexer.LexerToken("DELETE", "delete"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "break;",
+            [lexer.LexerToken("BREAK", "break"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "continue;",
+            [
+                lexer.LexerToken("CONTINUE", "continue"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "any;",
+            [lexer.LexerToken("BASETYPE", "any"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "bool;",
+            [lexer.LexerToken("BASETYPE", "bool"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "complex;",
+            [
+                lexer.LexerToken("BASETYPE", "complex"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "dict;",
+            [lexer.LexerToken("BASETYPE", "dict"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "dictionary;",
+            [
+                lexer.LexerToken("BASETYPE", "dictionary"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "dynamic;",
+            [
+                lexer.LexerToken("BASETYPE", "dynamic"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "float;",
+            [lexer.LexerToken("BASETYPE", "float"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "int;",
+            [lexer.LexerToken("BASETYPE", "int"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "integer;",
+            [
+                lexer.LexerToken("BASETYPE", "integer"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "list;",
+            [lexer.LexerToken("BASETYPE", "list"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "str;",
+            [lexer.LexerToken("BASETYPE", "str"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "string;",
+            [
+                lexer.LexerToken("BASETYPE", "string"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "null;",
+            [lexer.LexerToken("BASETYPE", "null"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "mdarray;",
+            [
+                lexer.LexerToken("BASETYPE", "mdarray"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "_NAME;",
+            [
+                lexer.LexerToken("BUILTIN_CONST", "_NAME"),
+                lexer.LexerToken("SEMICOLON", ";"),
+            ],
+        ),
+        (
+            "true;",
+            [lexer.LexerToken("BOOL", "true"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "false;",
+            [lexer.LexerToken("BOOL", "false"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
         ("1;", [lexer.LexerToken("INT", "1"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("1.2;", [lexer.LexerToken("FLOAT", "1.2"), lexer.LexerToken("SEMICOLON", ";")]),
-        ("name;", [lexer.LexerToken("NAME", "name"), lexer.LexerToken("SEMICOLON", ";")]),
-    ]
+        (
+            "1.2;",
+            [lexer.LexerToken("FLOAT", "1.2"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+        (
+            "name;",
+            [lexer.LexerToken("NAME", "name"), lexer.LexerToken("SEMICOLON", ";")],
+        ),
+    ],
 )
 def test_lexer_tokens(data: str, expected: List[lexer.LexerToken]) -> None:
     """Tests lexer tokens from the given data.
@@ -132,4 +253,6 @@ def test_lexer_tokens(data: str, expected: List[lexer.LexerToken]) -> None:
         expected (list[lexer.LexerToken]): Expected tokens.
     """
 
-    assert [str(token) for token in lexer.Lexer(data).lex()] == [str(token) for token in expected]
+    assert [str(token) for token in lexer.Lexer(data).lex()] == [
+        str(token) for token in expected
+    ]
