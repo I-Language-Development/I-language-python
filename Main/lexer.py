@@ -41,6 +41,7 @@ import sys
 from typing import (
     Dict,
     List,
+    Optional,
 )
 
 from typing_extensions import (
@@ -143,8 +144,9 @@ class LexerToken:
     def __init__(self, token_type: str, value: str) -> None:
         """Initializes a token object.
 
-        :param token_type: Type of the token.
-        :param value: Value of the token.
+        Args:
+            token_type (str): Type of the token.
+            value (str): Value of the token.
         """
 
         self.type = token_type
@@ -153,7 +155,8 @@ class LexerToken:
     def __repr__(self) -> str:
         """Returns the representation of the token.
 
-        :return: String representation of the token.
+        Returns:
+            String representation of the token.
         """
 
         return f"{self.type}: {self.value!r}"
@@ -167,10 +170,11 @@ class LexerError:
     def __init__(self, description: str, line: int, column: int, code: int = 1) -> None:
         """Initializes a lexing error.
 
-        :param description: Description of the error.
-        :param line: Line the error occurred in.
-        :param column: Column the error occurred in.
-        :param code: The exit code of the error.
+        Args:
+            description (str): Description of the error.
+            line (int): Line the error occurred in.
+            column (int): Column the error occurred in.
+            code (int): The exit code of the error.
         """
 
         print(f"Error: {description} in line {line}, column {column}")
@@ -178,35 +182,59 @@ class LexerError:
 
 
 def validate_float(string: str) -> bool:
-    dot = False
-    valid = True
+    """Validates if a string is a valid float.
+
+    Args:
+        string (str): Text to validate.
+
+    Returns:
+        True if the string is a valid float, False otherwise.
+    """
 
     if string[0] == "-":
         string = string[1:]
     for char in string:
-        valid = valid and (char in DIGITS_AS_STRINGS or (char == "." and not dot))
-        if char == ".":
-            dot = True
-    return valid
+        if char in DIGITS_AS_STRINGS:
+            continue
+        elif char == ".":
+            continue
+        else:
+            return False
+
+    return True
 
 
 def validate_integer(string: str) -> bool:
-    valid = True
+    """Validates if a string is a valid integer.
+
+    Args:
+        string (str): Text to validate.
+
+    Returns:
+        True if the string is a valid integer, False otherwise.
+    """
+
     if string[0] == "-":
         string = string[1:]
     for char in string:
-        valid = valid if char in DIGITS_AS_STRINGS else False
+        if char in DIGITS_AS_STRINGS:
+            continue
+        else:
+            return False
 
-    return valid
+    return True
 
 
-def gettoken(string: str, line: int, column: int) -> LexerToken:
+def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
     """Returns a token from the specified string.
 
-    :param string: String to get token from.
-    :param line: Line number of the string.
-    :param column: Column number of the token.
-    :return: Token from the specified string.
+    Args:
+        string (str): String to get token from.
+        line (int): Line number of the string.
+        column (int): Column number of the token.
+
+    Returns:
+        Token from the specified string.
     """
 
     result = None
@@ -248,15 +276,24 @@ class Lexer:
     Represents a lexer object.
     """
 
-    def __init__(self, text: str):
+    def __init__(self, text: str) -> None:
+        """Initializes a lexer object.
+
+        Args:
+            text: Text to lex.
+        """
+
         self.text = text
         self.tokens = []
 
-    def lex(self, text: str = None):
+    def lex(self, text: Optional[str] = None) -> Optional[List[LexerToken]]:
         """Lexes the specified string.
 
-        :param text: Text to lex.
-        :return: List of lexed tokens.
+        Args:
+            text (str): Text to lex.
+
+        Returns:
+            List of lexed tokens.
         """
 
         if text is not None:
