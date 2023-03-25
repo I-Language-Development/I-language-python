@@ -35,8 +35,6 @@ from typing import (
     Tuple,
 )
 
-# from ...Main import _errors
-
 
 #########
 # TABLE #

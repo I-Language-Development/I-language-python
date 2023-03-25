@@ -30,11 +30,12 @@ DEALINGS IN THE SOFTWARE.
 
 
 import pathlib
-import pytest
 import sys
 from typing import (
     List,
 )
+
+import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from Main import lexer
