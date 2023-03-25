@@ -1,7 +1,7 @@
 /*
 * SYNTAX EXAMPLE
 *
-* Version: 0.0.2
+* Version: 0.0.3
 *
 * NOTE:
 * This version is a in-development version and may be changed in the future
@@ -19,6 +19,9 @@
 * THING = Something
 *
 * Everything should be self explanatory
+*
+* SEMICOLONS:
+* Semicolons are required since version 0.0.8.
 */
 
 
@@ -38,11 +41,11 @@ multiline Comment
 /////////////
 
 // Imports:
-import MODULE
+import MODULE;
 // or with custom names
-import MODULE as NAME
+import MODULE as NAME;
 // or just importing some things
-import THING from MODULE [as NAME]
+import THING from MODULE [as NAME];
 
 
 ///////////////
@@ -50,14 +53,14 @@ import THING from MODULE [as NAME]
 ///////////////
 
 // Variables:
-var NAME = EXPRESSION // dynamic typing, also works as type "dynamic"
+var NAME = EXPRESSION; // dynamic typing, also works as type "dynamic"
 // or with types assigned at start
-TYPE NAME = EXPRESSION
+TYPE NAME = EXPRESSION;
 // as object of an Type
-var NAME = new TYPE(ARGUMENTS)
+var NAME = new TYPE(ARGUMENTS);
 
 // Constants:
-const [TYPE] NAME = EXPRESSION
+const [TYPE] NAME = EXPRESSION;
 
 
 ///////////////////////////
@@ -66,23 +69,23 @@ const [TYPE] NAME = EXPRESSION
 
 // Classes:
 class NAME([SUBCLASS]) {
-CODE
+CODE;
 }
 
 // Functions:
 [private] RETURN_TYPE NAME(ARGUMENT_TYPE ARGUMENT_NAME [= DEFAULT_VALUE]) {
-CODE
+CODE;
 }
 // or for dynamic types:
 [private] func[tion] NAME(ARGUMENT_TYPE ARGUMENT_NAME [= DEFAULT_VALUE]) {
-CODE
+CODE;
 }
 
 // Calls to functions from a class:
-CLASS_NAME.NAME()
+CLASS_NAME.NAME();
 
 // Calls to functions:
-NAME(ARGUMENT)
+NAME(ARGUMENT);
 
 
 ///////////////////////
@@ -90,13 +93,15 @@ NAME(ARGUMENT)
 ///////////////////////
 
 // Usage of garbage collection:
-import GarbageCollection
-use GarbageCollection // This is very likely to change in the future
+use GarbageCollection;
+
+// Usage of the python API
+use Python;
 
 // Multithreading:
-import Multithreading
+import Multithreading;
 class NAME(Multithreading){
-CODE
+CODE;
 }
 // Normal classes will still work then
 
@@ -106,11 +111,11 @@ CODE
 /////////////
 
 // String formatting, works with any string or variable that's a string:
-string NAME = f"Hello {PERSON}!"
+string NAME = f"Hello {PERSON}!";
 // or
-string NAME = "Hello {}!".format(PERSON)
+string NAME = "Hello {}!".format(PERSON);
 // or just simply
-string NAME = "Hello " + PERSON + "!"
+string NAME = "Hello " + PERSON + "!";
 
 
 //////////
@@ -118,6 +123,6 @@ string NAME = "Hello " + PERSON + "!"
 //////////
 
 // Get π:
-import Math
-float Pi = Math.Pi
+import Math;
+float Pi = Math.Pi;
 // 3.141592653589793238462643383279502884197

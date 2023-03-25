@@ -1,6 +1,6 @@
 """
 I Language Main program.
-Version: 0.0.6
+Version: 0.0.8
 
 Copyright (c) 2023-present I Language Development.
 
@@ -24,6 +24,6 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __author__ = "I Language Development"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __license__ = "MIT"
 __copyright__ = "Copyright 2023-present I Language Development"
