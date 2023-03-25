@@ -44,6 +44,15 @@ const float Infinite = _core.Math.Infinite
 // ROUND //
 ///////////
 
+/*
+* Rounds a float to the nearest integer.
+*
+* @params
+* number (float): Number to round.
+*
+* @return
+* int: Rounded number.
+*/
 int round(float number) {
     return _core.Math.round(number)
 }

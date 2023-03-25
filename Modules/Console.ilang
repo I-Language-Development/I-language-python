@@ -36,6 +36,15 @@ import types  // TODO (ElBe): Add
 // TABLE //
 ///////////
 
+/*
+* Returns a table containing the given data.
+*
+* @params
+* data (iterable): The data to format as a table.
+*
+* @return
+* str: The table.
+*/
 str table(types.iterable data) {
     return _core.Console.Table.__init__(data)
 }
