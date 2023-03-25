@@ -27,7 +27,6 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-import math
 from typing_extensions import (
     Final,
 )
