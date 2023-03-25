@@ -58,18 +58,16 @@ DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
 DOUBLE_MARKS: Final[Dict[str, str]] = {
     "==": "EQUAL",
-    "<=": "LESS_EQUALS",
-    ">=": "GREATER_EQUALS",
+    "!=": "NOT_EQUAL",
+    "<=": "LESS_EQUAL",
+    ">=": "GREATER_EQUAL",
     "++": "COUNT_UP",
     "--": "COUNT_DOWN",
-}
-COMMENTS: Final[Dict[str, str]] = {
-    "//": "COMMENT",
-    "/*": "COMMENT_OPEN",
-    "*/": "COMMENT_CLOSE",
+    "&&": "AND",
+    "||": "OR",
 }
 MARKS: Final[Dict[str, str]] = {
-    ";": "END_CMD",
+    ";": "SEMICOLON",
     "=": "SET",
     "{": "BLOCK_OPEN",  # Also dicts
     "}": "BLOCK_CLOSE",  # Also dicts
@@ -78,24 +76,35 @@ MARKS: Final[Dict[str, str]] = {
     "[": "INDEX_OPEN",  # Also arrays
     "]": "INDEX_CLOSE",  # Also arrays
     "?": "INDEFINITE",
-    ".": "FLOAT_SEPARATOR",
-    ":": "SLICE",
+    ".": "DOT",
+    ":": "COLON",
     ">": "GREATER",
     "<": "LESS",
-    "+": "ADD",
-    "-": "SUBTRACT",
+    "+": "PLUS",
+    "-": "MINUS",
     "*": "MULTIPLY",
     "/": "DIVIDE",
     "%": "MODULO",
     # " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
-    ",": "SEPARATOR",
+    ",": "COMMA",
+    "!": "NOT",
 }
-KEYWORDS: Final[Dict[str, str]] = {
+COMMENTS: Final[Dict[str, str]] = {
+    "//": "COMMENT",
+    "/*": "COMMENT_OPEN",
+    "*/": "COMMENT_CLOSE",
+}
+KEYWORDS: Final[Dict[str, str]] = {  # TODO (ElBe): Add try, catch, throw and finally
     "class": "CLASS",
+    "function": "FUNCTION",
     "use": "USE",
     "import": "IMPORT",
     "if": "IF",
+    "elif": "ELIF",
     "else": "ELSE",
+    "match": "MATCH",
+    "case": "CASE",
+    "default": "DEFAULT",
     "while": "WHILE",
     "for": "FOR",
     "return": "RETURN",
@@ -131,7 +140,7 @@ class LexerToken:
     Represents a token for the lexer.
     """
 
-    def __init__(self, token_type: Any, value: Any) -> None:
+    def __init__(self, token_type: str, value: str) -> None:
         """Initializes a token object.
 
         :param token_type: Type of the token.
@@ -288,39 +297,42 @@ class Lexer:
                     index += 2
 
                 if not multiline_comment and not comment:
-                    if self.text[index] == "'" or self.text[index] == '"':
-                        in_string = not in_string
-                        if not in_string:
-                            self.tokens.append(LexerToken("STRING", buffer))
+                    try:
+                        if self.text[index] == "'" or self.text[index] == '"':
+                            in_string = not in_string
+                            if not in_string:
+                                self.tokens.append(LexerToken("STRING", buffer))
 
+                                buffer = ""
+
+                        elif in_string:
+                            buffer += self.text[index]
+                        elif self.text[index] in SEPARATORS:
+                            self.tokens.append(gettoken(buffer, line, column))
                             buffer = ""
-
-                    elif in_string:
-                        buffer += self.text[index]
-                    elif self.text[index] in SEPARATORS:
-                        self.tokens.append(gettoken(buffer, line, column))
-                        buffer = ""
-                    elif len(self.text[index:]) > 1 and self.text[
-                        index : index + 2
-                    ] in list(DOUBLE_MARKS):
-                        self.tokens.append(gettoken(buffer, line, column))
-                        self.tokens.append(
-                            LexerToken(
-                                DOUBLE_MARKS[self.text[index : index + 2]],
-                                self.text[index : index + 2],
+                        elif len(self.text[index:]) > 1 and self.text[
+                            index : index + 2
+                        ] in list(DOUBLE_MARKS):
+                            self.tokens.append(gettoken(buffer, line, column))
+                            self.tokens.append(
+                                LexerToken(
+                                    DOUBLE_MARKS[self.text[index : index + 2]],
+                                    self.text[index : index + 2],
+                                )
                             )
-                        )
-                        buffer = ""
-                        index += 1
+                            buffer = ""
+                            index += 1
 
-                    elif self.text[index] in list(MARKS):
-                        self.tokens.append(gettoken(buffer, line, column))
-                        self.tokens.append(
-                            LexerToken(MARKS[self.text[index]], self.text[index])
-                        )
-                        buffer = ""
-                    else:
-                        buffer += self.text[index]
+                        elif self.text[index] in list(MARKS):
+                            self.tokens.append(gettoken(buffer, line, column))
+                            self.tokens.append(
+                                LexerToken(MARKS[self.text[index]], self.text[index])
+                            )
+                            buffer = ""
+                        else:
+                            buffer += self.text[index]
+                    except IndexError:
+                        pass
 
             index += 1
 
