@@ -41,6 +41,17 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 from Main import lexer
 
 
+####################
+# LEXER TOKEN TEST #
+####################
+
+def test_lexer_token() -> None:
+    """Tests lexer tokens."""
+
+    assert lexer.LexerToken("TYPE", "VALUE").type == "TYPE"
+    assert lexer.LexerToken("TYPE", "VALUE").value == "VALUE"
+
+
 ############
 # LEX TEST #
 ############
@@ -81,70 +92,6 @@ from Main import lexer
         ("/", [lexer.LexerToken("DIVIDE", "/")]),
         ("%", [lexer.LexerToken("MODULO", "%")]),
         (",", [lexer.LexerToken("COMMA", ",")]),
-        (
-            "class;",
-            [lexer.LexerToken("CLASS", "class"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "function;",
-            [
-                lexer.LexerToken("FUNCTION", "function"),
-                lexer.LexerToken("SEMICOLON", ";"),
-            ],
-        ),
-        ("use;", [lexer.LexerToken("USE", "use"), lexer.LexerToken("SEMICOLON", ";")]),
-        (
-            "import;",
-            [lexer.LexerToken("IMPORT", "import"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        ("if;", [lexer.LexerToken("IF", "if"), lexer.LexerToken("SEMICOLON", ";")]),
-        (
-            "elif;",
-            [lexer.LexerToken("ELIF", "elif"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "else;",
-            [lexer.LexerToken("ELSE", "else"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "match;",
-            [lexer.LexerToken("MATCH", "match"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "case;",
-            [lexer.LexerToken("CASE", "case"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "default;",
-            [
-                lexer.LexerToken("DEFAULT", "default"),
-                lexer.LexerToken("SEMICOLON", ";"),
-            ],
-        ),
-        (
-            "while;",
-            [lexer.LexerToken("WHILE", "while"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        ("for;", [lexer.LexerToken("FOR", "for"), lexer.LexerToken("SEMICOLON", ";")]),
-        (
-            "return;",
-            [lexer.LexerToken("RETURN", "return"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "delete;",
-            [lexer.LexerToken("DELETE", "delete"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "break;",
-            [lexer.LexerToken("BREAK", "break"), lexer.LexerToken("SEMICOLON", ";")],
-        ),
-        (
-            "continue;",
-            [
-                lexer.LexerToken("CONTINUE", "continue"),
-                lexer.LexerToken("SEMICOLON", ";"),
-            ],
-        ),
         (
             "any;",
             [lexer.LexerToken("BASETYPE", "any"), lexer.LexerToken("SEMICOLON", ";")],
@@ -245,8 +192,8 @@ from Main import lexer
         ),
     ],
 )
-def test_lexer_tokens(data: str, expected: List[lexer.LexerToken]) -> None:
-    """Tests lexer tokens from the given data.
+def test_lex(data: str, expected: List[lexer.LexerToken]) -> None:
+    """Tests lexer function.
 
     Args:
         data (str): Data to test.
@@ -256,3 +203,90 @@ def test_lexer_tokens(data: str, expected: List[lexer.LexerToken]) -> None:
     assert [str(token) for token in lexer.Lexer(data).lex()] == [
         str(token) for token in expected
     ]
+
+
+#################
+# GETTOKEN TEST #
+#################
+
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        ("class", lexer.LexerToken("CLASS", "class")),
+        ("function", lexer.LexerToken("FUNCTION", "function")),
+        ("use", lexer.LexerToken("USE", "use")),
+        ("import", lexer.LexerToken("IMPORT", "import")),
+        ("if", lexer.LexerToken("IF", "if")),
+        ("elif", lexer.LexerToken("ELIF", "elif")),
+        ("else", lexer.LexerToken("ELSE", "else")),
+        ("match", lexer.LexerToken("MATCH", "match")),
+        ("case", lexer.LexerToken("CASE", "case")),
+        ("default", lexer.LexerToken("DEFAULT", "default")),
+        ("while", lexer.LexerToken("WHILE", "while")),
+        ("for", lexer.LexerToken("FOR", "for")),
+        ("return", lexer.LexerToken("RETURN", "return")),
+        ("delete", lexer.LexerToken("DELETE", "delete")),
+        ("break", lexer.LexerToken("BREAK", "break")),
+        ("continue", lexer.LexerToken("CONTINUE", "continue")),
+    ],
+)
+def test_gettoken(data: str, expected: lexer.LexerToken) -> None:
+    """Tests gettoken from the given data.
+
+    Args:
+        data (str): Data to test.
+        expected (lexer.LexerToken): Expected token.
+    """
+
+    assert str(lexer.gettoken(data, 1, 1)) == str(expected)
+
+
+####################
+# VALIDATE INTEGER #
+####################
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        ("0", True),
+        ("1", True),
+        ("0.1", False),
+        ("1.1", False),
+        ("0.0", False)
+    ]
+)
+def test_validate_integer(data: str, expected: bool) -> None:
+    """Tests validate integer function.
+
+    Args:
+        data (str): Data to test.
+        expected (bool): Expected result.
+    """
+
+    assert lexer.validate_integer(data) == expected
+
+
+##################
+# VALIDATE FLOAT #
+##################
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        ("0", False),
+        ("1", False),
+        ("0.1", True),
+        ("1.2", True),
+        ("0.0", True),
+    ]
+)
+def test_validate_float(data: str, expected: bool) -> None:
+    """Tests validate float function.
+
+    Args:
+        data (str): Data to test.
+        expected (bool): Expected result.
+    """
+
+    assert lexer.validate_float(data) == expected
