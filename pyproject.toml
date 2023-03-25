@@ -1,13 +1,13 @@
 [project]
 name = "I-Language"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
   { name="ElBe-Plaq", email="elbe.dev.plaq@gmail.com" },
 ]
 description = "The I programming language is a high level programming language written in pure python."
 license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.7" # TODO (ElBe): Test with those versions
+requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",

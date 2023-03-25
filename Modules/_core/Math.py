@@ -36,7 +36,7 @@ from typing_extensions import (
 # CONSTANTS #
 #############
 
-Infinite: Final[float] = float("inf")
+Infinite: Final[float] = float("inf")  # Should be 1/0
 
 
 #########

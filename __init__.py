@@ -24,6 +24,6 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __author__ = "I Language Development"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 __license__ = "MIT"
 __copyright__ = "Copyright 2023-present I Language Development"
