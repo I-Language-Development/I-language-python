@@ -200,7 +200,7 @@ def validate_integer(string: str) -> bool:
     return valid
 
 
-def gettoken(string: str, line: int, column: int) -> LexerToken | None:
+def gettoken(string: str, line: int, column: int) -> LexerToken:
     """Returns a token from the specified string.
 
     :param string: String to get token from.
@@ -225,7 +225,8 @@ def gettoken(string: str, line: int, column: int) -> LexerToken | None:
     elif validate_float(string) and not already_tokenized:
         if validate_integer(string):
             result = LexerToken("INT", string)  # TODO (ElBe): Fix integers
-        result = LexerToken("FLOAT", string)
+        else:
+            result = LexerToken("FLOAT", string)
 
     elif (
         len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
