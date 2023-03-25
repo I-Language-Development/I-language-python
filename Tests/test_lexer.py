@@ -182,10 +182,10 @@ def test_lexer_token() -> None:
             "false;",
             [lexer.LexerToken("BOOL", "false"), lexer.LexerToken("SEMICOLON", ";")],
         ),
-        ("1", [lexer.LexerToken("INT", "1")]),
+        ("1;", [lexer.LexerToken("INT", "1"), lexer.LexerToken("SEMICOLON", ";")]),
         (
-            "1.2",
-            [lexer.LexerToken("FLOAT", "1.2")],
+            "1.2;",
+            [lexer.LexerToken("FLOAT", "1.2"), lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "name;",

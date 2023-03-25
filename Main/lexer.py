@@ -328,6 +328,14 @@ class Lexer:
                     line += 1
                     column = 1
                     comment = False
+
+                    try:
+                        if not str(self.tokens[-1].type) == "SEMICOLON" or str(self.tokens[-1].type).endswith("CLOSE"):
+                            print("Error: Line was not closed.")
+                            sys.exit(5)
+                    except IndexError:
+                        pass
+
                 else:
                     column += 1
 
@@ -345,11 +353,7 @@ class Lexer:
                         multiline_comment = False
                         helper = 2
 
-                    if (
-                        not multiline_comment
-                        and not comment
-                        and helper <= 0
-                    ):
+                    if not multiline_comment and not comment and helper <= 0:
                         try:
                             if character in ['"', "'"]:
                                 in_string = not in_string
@@ -409,20 +413,20 @@ class Lexer:
         self.tokens = [token for token in self.tokens if token is not None]
         for index, token in enumerate(self.tokens):
             try:
-                print(token.type, token.value)
                 if token.type == "INT" and self.tokens[index - 1].type == "DOT":
-                    print(f"Found possible float at index {index}: {token.value}")
-                    buffer = (
-                        str(self.tokens[index - 2].value)
-                        + "."
-                        + str(self.tokens[index].value)
+                    self.tokens.insert(
+                        index + 1,
+                        LexerToken(
+                            "FLOAT",
+                            str(self.tokens[index - 2].value)
+                            + "."
+                            + str(self.tokens[index].value),
+                        ),
                     )
 
                     self.tokens.pop(index)
                     self.tokens.pop(index - 1)
                     self.tokens.pop(index - 2)
-
-                    self.tokens.append(LexerToken("FLOAT", buffer))
             except IndexError:
                 pass
 
@@ -487,9 +491,9 @@ if __name__ == "__main__":
             data = file.read()
     except (IndexError, FileNotFoundError):
         data = """
-        int i   = 1234
-        float f = 12.34
-        """  # This is test data and will be updated often
+        int i   = 1234;
+        float f = 12.34;
+        """
 
     lexer = Lexer(data)
 
