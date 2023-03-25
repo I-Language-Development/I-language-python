@@ -1,5 +1,9 @@
 # I language
 [![CodeFactor](https://www.codefactor.io/repository/github/i-language-development/i-language/badge)](https://www.codefactor.io/repository/github/i-language-development/i-language)
+[![Pylint](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml)
+[![Ruff](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml)
+[![Bandit](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml)
+[![Pytest](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml)
 
 <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
 
