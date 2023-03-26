@@ -1,5 +1,5 @@
 /*
-* I Language math module.
+* I Language console module.
 * Version: 0.1.0
 
 * Copyright (c) 2023-present ElBe Development.
@@ -29,32 +29,22 @@
 /////////////
 
 import _core
-
-
-///////////////
-// CONSTANTS //
-///////////////
-
-const float pi       = 3.141592653589793238462643383279502884197
-const float e        = 2.718281828459045235360287471352662497757
-const float infinite = _core.Math.Infinite
+import types  // TODO (ElBe): Add
 
 
 ///////////
-// ROUND //
+// TABLE //
 ///////////
 
 /*
-* Rounds a float to the nearest integer.
+* Returns a table containing the given data.
 *
 * @params
-* number (float): Number to round.
+* data (iterable): The data to format as a table.
 *
 * @return
-* int: Rounded number.
+* str: The table.
 */
-int round(float number) {
-    return _core.Math._round(number)
+str table(types.iterable data) {
+    return _core.Console.Table.__init__(data)
 }
-
-// Todo (ElBe): Add floor and ceil

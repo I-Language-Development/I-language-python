@@ -1,6 +1,6 @@
 """
-I Language Math module.
-Version: 0.1.0
+I Language Main program.
+Version: 0.0.8
 
 Copyright (c) 2023-present I Language Development.
 
@@ -23,34 +23,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-###########
-# IMPORTS #
-###########
-
-from typing_extensions import (
-    Final,
-)
-
-
-#############
-# CONSTANTS #
-#############
-
-Infinite: Final[float] = float("inf")
-
-
-#########
-# ROUND #
-#########
-
-def _round(number: float) -> int:
-    """Rounds a number.
-
-    Args:
-        number (int): Number to round.
-
-    Returns:
-        Rounded number.
-    """
-
-    return round(number)
+__author__ = "I Language Development"
+__version__ = "0.0.8"
+__license__ = "MIT"
+__copyright__ = "Copyright 2023-present I Language Development"

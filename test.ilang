@@ -1,8 +1,12 @@
 // Testfile for the I programming language
 
-use GarbageCollection; 
+/*
+OTHER TEST
+*/
 
-import file;            // Imports buildin library
+use GarbageCollection;
+
+import file;            // Imports build in library
 ?string[] mydata;       // New variable: array (string or null) // Syntax may change
 
 class Program(){
@@ -23,6 +27,3 @@ class Program(){
 		return _PROGRAM_END;
 	}
 }
-// GH test
-
-

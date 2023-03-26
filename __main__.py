@@ -1,5 +1,6 @@
+#!/usr/bin/python3
 """
-I Language Math module.
+I Language python package runner.
 Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
@@ -23,34 +24,31 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
 ###########
 # IMPORTS #
 ###########
 
-from typing_extensions import (
-    Final,
-)
+import sys
+
+import Main
+
+Main.parser.parse = lambda x: x
 
 
-#############
-# CONSTANTS #
-#############
+###########
+# EXECUTE #
+###########
 
-Infinite: Final[float] = float("inf")
+if len(sys.argv[1:]) > 0:
+    try:
+        with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
+            Main.parser.parse(file.read())
+    except FileNotFoundError:
+        print("Error: The specified file does not exist.")
+    except UnicodeEncodeError:
+        print("Error: Can not read the specified file.")
 
-
-#########
-# ROUND #
-#########
-
-def _round(number: float) -> int:
-    """Rounds a number.
-
-    Args:
-        number (int): Number to round.
-
-    Returns:
-        Rounded number.
-    """
-
-    return round(number)
+else:
+    print("Error: No file was specified.")
+    sys.exit(1)

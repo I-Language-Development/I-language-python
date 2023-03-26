@@ -1,5 +1,5 @@
 """
-I Language Math module.
+I Language math test.
 Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
@@ -23,34 +23,54 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
 ###########
 # IMPORTS #
 ###########
 
-from typing_extensions import (
-    Final,
+
+import pathlib
+import sys
+from typing import (
+    Iterable,
 )
 
+import pytest
 
-#############
-# CONSTANTS #
-#############
-
-Infinite: Final[float] = float("inf")
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+from Modules._core import Math
 
 
-#########
-# ROUND #
-#########
+#################
+# INFINITY TEST #
+#################
 
-def _round(number: float) -> int:
-    """Rounds a number.
+
+def test_lexer_tokens() -> None:
+    """Tests infinity constant."""
+
+    assert Math.Infinite == float("inf")
+
+
+##############
+# ROUND TEST #
+##############
+
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        (1.123456789, 1),
+        (1.5, 2),
+        (0.00000000000000000000000000003, 0),
+    ],
+)
+def test_round(data: float, expected: int) -> None:
+    """Tests round function.
 
     Args:
-        number (int): Number to round.
-
-    Returns:
-        Rounded number.
+        data (float): Input data.
+        expected (int): Expected result.
     """
 
-    return round(number)
+    assert Math._round(data) == expected

@@ -1,8 +1,8 @@
 """
 I Language Random module.
-Version: 0.1.0
+Version: 0.1.1
 
-Copyright (c) 2023-present ElBe Development.
+Copyright (c) 2023-present I Language Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -29,8 +29,11 @@ DEALINGS IN THE SOFTWARE.
 
 import random
 from typing import (
-    Any,
     List,
+)
+
+from typing_extensions import (
+    Any,
 )
 
 
@@ -41,9 +44,16 @@ from typing import (
 def randint(minimum: int, maximum: int) -> int:
     """Generates a random number.
 
-    :param minimum: Lowest possible value.
-    :param maximum: Highest possible value.
-    :return: Random number between minimum and maximum.
+    IMPORTANT SECURITY NOTE:
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
+
+    Args:
+        minimum (int): Lowest possible value.
+        maximum (int): Highest possible value.
+
+    Returns:
+        Random number between minimum and maximum.
     """
 
     return random.randint(minimum, maximum)
@@ -56,17 +66,40 @@ def randint(minimum: int, maximum: int) -> int:
 def choices(iterable: List, choices: int = 1) -> Any:
     """Returns a random value from a given list.
 
-    :param iterable: List to return a random value from.
-    :param choices: Number of choices to return form the iterable. If choices is bigger than the iterable, the remaining
-                    values will be skipped.
-    :return: Random value(s) from iterable.
+    IMPORTANT SECURITY NOTE:
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
+
+    Args:
+        iterable (list): List to return a random value from.
+        choices (int): Number of choices to return form the iterable. If choices is bigger than the iterable, the
+                       remaining values will be skipped.
+
+    Returns:
+        Random value(s) from iterable.
     """
 
-    if choices == 1:
-        return random.choice(iterable)
-    else:
-        return random.choices(iterable)
+    return random.choices(
+        iterable, k=choices if choices <= len(iterable) else len(iterable)
+    )
+
 
 ###########
 # SHUFFLE #
 ###########
+
+def shuffle(iterable: List) -> List:
+    """Shuffles a list and returns it.
+
+    IMPORTANT SECURITY NOTE:
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
+
+    Args:
+        iterable (list): List to shuffle.
+
+    Returns:
+        Shuffled list.
+    """
+
+    return random.shuffle(iterable)

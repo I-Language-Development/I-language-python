@@ -31,8 +31,11 @@ DEALINGS IN THE SOFTWARE.
 import ast
 import builtins
 from typing import (
-    Any as _Any,
     List as _List,
+)
+
+from typing_extensions import (
+    Any as _Any,
     final,
     Self,
     Type,
@@ -42,6 +45,7 @@ from typing import (
 #############
 # BASE TYPE #
 #############
+
 
 class BaseType:
     """
@@ -73,6 +77,7 @@ class BaseType:
 #########
 # TYPES #
 #########
+
 
 class Any(BaseType):
     """
