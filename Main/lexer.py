@@ -313,6 +313,7 @@ class Lexer:
         line = 1
         comment = False
         multiline_comment = False
+        append_newline = False
         helper = 0
         column = 1
         in_string = False
@@ -322,19 +323,15 @@ class Lexer:
         try:
             for index, character in enumerate(self.text):
                 helper -= 1
+
                 self.tokens = [token for token in self.tokens if token is not None]
 
                 if character == "\n":
+                    append_newline = True
+
                     line += 1
                     column = 1
                     comment = False
-
-                    try:
-                        if not str(self.tokens[-1].type) == "SEMICOLON" or str(self.tokens[-1].type).endswith("CLOSE"):
-                            print("Error: Line was not closed.")
-                            sys.exit(5)
-                    except IndexError:
-                        pass
 
                 else:
                     column += 1
@@ -358,7 +355,9 @@ class Lexer:
                             if character in ['"', "'"]:
                                 in_string = not in_string
                                 if not in_string:
-                                    self.tokens.append(LexerToken("STRING", buffer))
+                                    self.tokens.append(
+                                        LexerToken("STRING", buffer.getvalue())
+                                    )
 
                                     buffer.close()
                                     buffer = io.StringIO()
@@ -367,9 +366,7 @@ class Lexer:
                                 buffer.write(character)
 
                             elif self.text[index] in SEPARATORS:
-                                self.tokens.append(
-                                    gettoken(buffer.getvalue(), line, column)
-                                )
+                                self.tokens.append(gettoken(buffer.getvalue(), line, column))
 
                                 buffer.close()
                                 buffer = io.StringIO()
@@ -404,6 +401,9 @@ class Lexer:
 
                             else:
                                 buffer.write(character)
+                            if append_newline:
+                                append_newline = False
+                                self.tokens.append(LexerToken("NEWLINE", "\n"))
 
                         except IndexError:
                             pass
@@ -411,17 +411,17 @@ class Lexer:
             buffer.close()
 
         self.tokens = [token for token in self.tokens if token is not None]
+        modified_tokens = {}
+
         for index, token in enumerate(self.tokens):
             try:
+                if token.type == "NEWLINE" and index == 0:
+                    self.tokens.pop(index)
+                    index -= 1
                 if token.type == "INT" and self.tokens[index - 1].type == "DOT":
-                    self.tokens.insert(
-                        index + 1,
-                        LexerToken(
-                            "FLOAT",
-                            str(self.tokens[index - 2].value)
-                            + "."
-                            + str(self.tokens[index].value),
-                        ),
+                    modified_tokens[index - 2] = LexerToken(
+                        "FLOAT",
+                        f"{self.tokens[index-2].value}.{self.tokens[index].value}",
                     )
 
                     self.tokens.pop(index)
@@ -429,6 +429,9 @@ class Lexer:
                     self.tokens.pop(index - 2)
             except IndexError:
                 pass
+
+        for index, token in modified_tokens.items():
+            self.tokens.insert(index, token)
 
         return self.tokens
 
@@ -491,8 +494,8 @@ if __name__ == "__main__":
             data = file.read()
     except (IndexError, FileNotFoundError):
         data = """
-        int i   = 1234;
-        float f = 12.34;
+        int i   = 1234
+        float f = 12.34
         """
 
     lexer = Lexer(data)
