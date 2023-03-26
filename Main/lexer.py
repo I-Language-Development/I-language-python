@@ -50,6 +50,7 @@ from typing_extensions import (
     Final,
 )
 
+import Main._types
 
 #############
 # CONSTANTS #
@@ -434,7 +435,6 @@ class Lexer:
             self.tokens.insert(index, token)
 
         return self.tokens
-
 
 if __name__ == "__main__":
     options: Dict[str, bool] = {

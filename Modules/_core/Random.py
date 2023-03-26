@@ -41,7 +41,6 @@ from typing_extensions import (
 # RANDINT #
 ###########
 
-
 def randint(minimum: int, maximum: int) -> int:
     """Generates a random number.
 
@@ -63,7 +62,6 @@ def randint(minimum: int, maximum: int) -> int:
 ###########
 # CHOICES #
 ###########
-
 
 def choices(iterable: List, choices: int = 1) -> Any:
     """Returns a random value from a given list.
@@ -89,7 +87,6 @@ def choices(iterable: List, choices: int = 1) -> Any:
 ###########
 # SHUFFLE #
 ###########
-
 
 def shuffle(iterable: List) -> List:
     """Shuffles a list and returns it.

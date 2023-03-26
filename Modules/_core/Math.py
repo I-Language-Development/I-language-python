@@ -36,13 +36,12 @@ from typing_extensions import (
 # CONSTANTS #
 #############
 
-Infinite: Final[float] = float("inf")  # Should be 1/0
+Infinite: Final[float] = float("inf")
 
 
 #########
 # ROUND #
 #########
-
 
 def _round(number: float) -> int:
     """Rounds a number.

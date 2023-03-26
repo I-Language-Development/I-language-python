@@ -35,9 +35,9 @@ import _core
 // CONSTANTS //
 ///////////////
 
-const float Pi       = 3.141592653589793238462643383279502884197
-const float E        = 2.718281828459045235360287471352662497757
-const float Infinite = _core.Math.Infinite
+const float pi       = 3.141592653589793238462643383279502884197
+const float e        = 2.718281828459045235360287471352662497757
+const float infinite = _core.Math.Infinite
 
 
 ///////////
@@ -54,7 +54,7 @@ const float Infinite = _core.Math.Infinite
 * int: Rounded number.
 */
 int round(float number) {
-    return _core.Math.round(number)
+    return _core.Math._round(number)
 }
 
 // Todo (ElBe): Add floor and ceil
