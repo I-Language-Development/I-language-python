@@ -1,6 +1,6 @@
 """
-I Language Math module.
-Version: 0.1.1
+I Language setup program.
+Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
 
@@ -27,68 +27,11 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-import math
-from typing_extensions import (
-    Final,
-)
-
-
-#############
-# CONSTANTS #
-#############
-
-Infinite: Final[float] = float("inf")  # pylint: disable=C0103
+from setuptools import setup
 
 
 #########
-# ROUND #
+# SETUP #
 #########
 
-
-def _round(number: float) -> int:
-    """Rounds a number to the nearest integer.
-
-    Args:
-        number (float): Number to round.
-
-    Returns:
-        int: Rounded number.
-    """
-
-    return round(number)
-
-
-#########
-# FLOOR #
-#########
-
-
-def floor(number: float) -> int:
-    """Rounds a number to the nearest integer below.
-
-    Args:
-        number (float): Number to round.
-
-    Returns:
-        int: Rounded number.
-    """
-
-    return math.floor(number)
-
-
-########
-# CEIL #
-########
-
-
-def ceil(number: float) -> int:
-    """Rounds a number to the nearest integer above.
-
-    Args:
-        number (int): Number to round.
-
-    Returns:
-        int: Rounded number.
-    """
-
-    return math.ceil(number)
+setup()

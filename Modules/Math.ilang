@@ -1,6 +1,6 @@
 /*
 * I Language math module.
-* Version: 0.1.0
+* Version: 0.1.1
 
 * Copyright (c) 2023-present ElBe Development.
 *
@@ -29,6 +29,7 @@
 /////////////
 
 import _core
+import types
 
 
 ///////////////
@@ -57,4 +58,59 @@ int round(float number) {
     return _core.Math.round(number)
 }
 
-// Todo (ElBe): Add floor and ceil
+
+///////////
+// FLOOR //
+///////////
+
+/*
+* Rounds a number to the nearest integer below.
+*
+* @params
+* number (float): Number to round.
+*
+* @return
+* int: Rounded number.
+*/
+int floor(float number) {
+    return _core.Math.floor(number)
+}
+
+
+//////////
+// CEIL //
+//////////
+
+/*
+* Rounds a number to the nearest integer above.
+*
+* @params
+* number (float): The number to round.
+*
+* @return
+* int: Rounded number.
+*/
+int ceil(float number) {
+    return _core.Math.ceil(number)
+}
+
+
+//////////////////
+// COMPLEX TYPE //
+//////////////////
+
+class Complex(type) {
+    /*
+    * Complex integer type.
+    *
+    * @params
+    * value (int): Complex number.
+    *
+    * @return
+    * complex: Complex number.
+    */
+    int init(value: int) {
+        parent.init(value, types.Complex)
+        return value
+    }
+}

@@ -1,5 +1,5 @@
 """
-I Language core.
+I Language core modules.
 Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.

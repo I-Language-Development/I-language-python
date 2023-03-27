@@ -1,6 +1,6 @@
 """
 I Language lexer test.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -28,7 +28,6 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-
 import pathlib
 import sys
 from typing import (
@@ -38,7 +37,7 @@ from typing import (
 import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from Main import lexer
+from Main import lexer  # pylint: disable=E0401, C0413
 
 
 ####################
@@ -95,11 +94,13 @@ def test_lexer_token() -> None:
         (",", [lexer.LexerToken("COMMA", ",")]),
         (
             "any;",
-            [lexer.LexerToken("BASETYPE", "any"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "any"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "bool;",
-            [lexer.LexerToken("BASETYPE", "bool"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "bool"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "complex;",
@@ -110,7 +111,8 @@ def test_lexer_token() -> None:
         ),
         (
             "dict;",
-            [lexer.LexerToken("BASETYPE", "dict"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "dict"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "dictionary;",
@@ -128,11 +130,13 @@ def test_lexer_token() -> None:
         ),
         (
             "float;",
-            [lexer.LexerToken("BASETYPE", "float"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "float"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "int;",
-            [lexer.LexerToken("BASETYPE", "int"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "int"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "integer;",
@@ -143,11 +147,13 @@ def test_lexer_token() -> None:
         ),
         (
             "list;",
-            [lexer.LexerToken("BASETYPE", "list"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "list"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "str;",
-            [lexer.LexerToken("BASETYPE", "str"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "str"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "string;",
@@ -158,7 +164,8 @@ def test_lexer_token() -> None:
         ),
         (
             "null;",
-            [lexer.LexerToken("BASETYPE", "null"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BASETYPE", "null"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "mdarray;",
@@ -176,20 +183,25 @@ def test_lexer_token() -> None:
         ),
         (
             "true;",
-            [lexer.LexerToken("BOOL", "true"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BOOL", "true"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "false;",
-            [lexer.LexerToken("BOOL", "false"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("BOOL", "false"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
-        ("1;", [lexer.LexerToken("INT", "1"), lexer.LexerToken("SEMICOLON", ";")]),
+        ("1;", [lexer.LexerToken("INT", "1"),
+         lexer.LexerToken("SEMICOLON", ";")]),
         (
             "1.2;",
-            [lexer.LexerToken("FLOAT", "1.2"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("FLOAT", "1.2"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
             "name;",
-            [lexer.LexerToken("NAME", "name"), lexer.LexerToken("SEMICOLON", ";")],
+            [lexer.LexerToken("NAME", "name"),
+             lexer.LexerToken("SEMICOLON", ";")],
         ),
     ],
 )

@@ -1,6 +1,6 @@
 """
 I Language console test.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -38,7 +38,7 @@ from typing import (
 import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from Modules._core import Console
+from Modules._core import Console  # pylint: disable=E0401, C0413
 
 
 ################

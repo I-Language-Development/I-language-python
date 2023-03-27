@@ -46,7 +46,6 @@ from typing import (
 )
 
 from typing_extensions import (
-    Any,
     Final,
 )
 
@@ -55,8 +54,10 @@ from typing_extensions import (
 # CONSTANTS #
 #############
 
-DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+DIGITS_AS_STRINGS: Final[List[str]] = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
+# TODO (ElBe): Add grammar instead of this
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
 DOUBLE_MARKS: Final[Dict[str, str]] = {
     "==": "EQUAL",
@@ -65,8 +66,8 @@ DOUBLE_MARKS: Final[Dict[str, str]] = {
     ">=": "GREATER_EQUAL",
     "++": "COUNT_UP",
     "--": "COUNT_DOWN",
-    "&&": "AND",
-    "||": "OR",
+    "&&": "AND",  # Maybe add and keyword?
+    "||": "OR",  # Maybe add or keyword?
 }
 MARKS: Final[Dict[str, str]] = {
     ";": "SEMICOLON",
@@ -87,7 +88,6 @@ MARKS: Final[Dict[str, str]] = {
     "*": "MULTIPLY",
     "/": "DIVIDE",
     "%": "MODULO",
-    # " .".replace(" ", ""): "CHILD",  # Duplicate, needs escaping
     ",": "COMMA",
     "!": "NOT",
 }
@@ -96,7 +96,7 @@ COMMENTS: Final[Dict[str, str]] = {
     "/*": "COMMENT_OPEN",
     "*/": "COMMENT_CLOSE",
 }
-KEYWORDS: Final[Dict[str, str]] = {  # TODO (ElBe): Add try, catch, throw and finally
+KEYWORDS: Final[Dict[str, str]] = {
     "class": "CLASS",
     "function": "FUNCTION",
     "use": "USE",
@@ -113,11 +113,14 @@ KEYWORDS: Final[Dict[str, str]] = {  # TODO (ElBe): Add try, catch, throw and fi
     "delete": "DELETE",
     "break": "BREAK",
     "continue": "CONTINUE",
+    "try": "TRY",
+    "catch": "CATCH",
+    "throw": "THROW",
+    "finally": "FINALLY",
 }
 BASE_TYPES: Final[List[str]] = [
     "any",
     "bool",
-    "complex",  # TODO (ElBe): Move to math module
     "dict",
     "dictionary",
     "dynamic",
@@ -128,7 +131,9 @@ BASE_TYPES: Final[List[str]] = [
     "str",
     "string",
     "null",
-    "mdarray",  # TODO (ElBe): Add to _types.py
+    "mdarray",
+
+    "complex",  # Just for support thingy I guess idk lol
 ]
 
 
@@ -324,7 +329,8 @@ class Lexer:
             for index, character in enumerate(self.text):
                 helper -= 1
 
-                self.tokens = [token for token in self.tokens if token is not None]
+                self.tokens = [
+                    token for token in self.tokens if token is not None]
 
                 if character == "\n":
                     append_newline = True
@@ -339,14 +345,14 @@ class Lexer:
                 if not comment:
                     if (
                         len(self.text[index:]) > 1
-                        and self.text[index : index + 2] == "//"
+                        and self.text[index: index + 2] == "//"
                     ):
                         comment = 1
 
-                    if self.text[index : index + 2] == "/*":
+                    if self.text[index: index + 2] == "/*":
                         multiline_comment = True
 
-                    if multiline_comment and self.text[index : index + 2] == "*/":
+                    if multiline_comment and self.text[index: index + 2] == "*/":
                         multiline_comment = False
                         helper = 2
 
@@ -366,21 +372,23 @@ class Lexer:
                                 buffer.write(character)
 
                             elif self.text[index] in SEPARATORS:
-                                self.tokens.append(gettoken(buffer.getvalue(), line, column))
+                                self.tokens.append(
+                                    gettoken(buffer.getvalue(), line, column)
+                                )
 
                                 buffer.close()
                                 buffer = io.StringIO()
 
                             elif len(self.text[index:]) > 1 and self.text[
-                                index : index + 2
+                                index: index + 2
                             ] in list(DOUBLE_MARKS):
                                 self.tokens.append(
                                     gettoken(buffer.getvalue(), line, column)
                                 )
                                 self.tokens.append(
                                     LexerToken(
-                                        DOUBLE_MARKS[self.text[index : index + 2]],
-                                        self.text[index : index + 2],
+                                        DOUBLE_MARKS[self.text[index: index + 2]],
+                                        self.text[index: index + 2],
                                     )
                                 )
 

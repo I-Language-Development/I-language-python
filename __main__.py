@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 I Language python package runner.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
