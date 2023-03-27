@@ -238,7 +238,7 @@ def validate_integer(string: str) -> bool:
     return True
 
 
-def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
+def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:  # pylint: disable=R1710  # Error will exit
     """Returns a token from the specified string.
 
     Args:
@@ -251,31 +251,41 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
     """
 
     already_tokenized = False
+    result = None
 
     if string in list(KEYWORDS) and not already_tokenized:
-        return LexerToken(KEYWORDS[string], string)
+        already_tokenized = True
+        result = LexerToken(KEYWORDS[string], string)
 
     elif (len(string) > 1 and string[0] == "_") and not already_tokenized:
-        return LexerToken("BUILTIN_CONST", string)
+        already_tokenized = True
+        result = LexerToken("BUILTIN_CONST", string)
 
     elif string in ["true", "false"] and not already_tokenized:
-        return LexerToken("BOOL", string)
+        already_tokenized = True
+        result = LexerToken("BOOL", string)
 
     elif string in BASE_TYPES and not already_tokenized:
-        return LexerToken("BASETYPE", string)
+        already_tokenized = True
+        result = LexerToken("BASETYPE", string)
 
     elif len(string) == 0 and not already_tokenized:
-        return None
+        already_tokenized = True
+        result = None
 
     elif validate_integer(string) and not already_tokenized:
-        return LexerToken("INT", string)
+        already_tokenized = True
+        result = LexerToken("INT", string)
 
     elif (
         len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
     ) and not already_tokenized:
-        return LexerToken("NAME", string)
+        already_tokenized = True
+        result = LexerToken("NAME", string)
     else:
         LexerError(f"Unrecognized Pattern: {string!r}", line, column)
+
+    return result
 
 
 ####################
