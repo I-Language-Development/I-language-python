@@ -1,0 +1,29 @@
+// Testfile for the I programming language
+
+/*
+OTHER TEST
+*/
+
+use GarbageCollection;
+
+import file;            // Imports build in library
+?string[] mydata;       // New variable: array (string or null) // Syntax may change
+
+class Program(){
+	int main(){
+		bool input_loop = true;
+		while (input_loop){
+			mydata.append(input("What to append? "));
+				if (mydata[-1] == "quit"){
+				mydata = mydata[:-1]; // Slice the array
+			}
+		}
+		dynamic this_file = file.open();
+		for(int i; i<len(mydata);i++;){ // Syntax may change
+			this_file.write_string(mydata[i]);
+		}
+		this_file.close() // Context Managers
+		delete this_file; // Not needed, because of GarbageCollection
+		return _PROGRAM_END;
+	}
+}
