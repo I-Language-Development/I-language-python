@@ -237,7 +237,9 @@ class Null(BaseType):
         :param value: Value of the object to check for none value.
         """
 
-        super().__init__(value, )  # TODO (ElBe): Find null type
+        super().__init__(
+            value,
+        )  # TODO (ElBe): Find null type
 
 
 class Str(BaseType):

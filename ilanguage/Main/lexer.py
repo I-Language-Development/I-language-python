@@ -54,8 +54,7 @@ from typing_extensions import (
 # CONSTANTS #
 #############
 
-DIGITS_AS_STRINGS: Final[List[str]] = [
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
 # TODO (ElBe): Add grammar instead of this
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
@@ -132,7 +131,6 @@ BASE_TYPES: Final[List[str]] = [
     "string",
     "null",
     "mdarray",
-
     "complex",  # Just for support thingy I guess idk lol
 ]
 
@@ -238,7 +236,9 @@ def validate_integer(string: str) -> bool:
     return True
 
 
-def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:  # pylint: disable=R1710  # Error will exit
+def gettoken(
+    string: str, line: int, column: int
+) -> Optional[LexerToken]:  # pylint: disable=R1710  # Error will exit
     """Returns a token from the specified string.
 
     Args:
@@ -339,11 +339,10 @@ class Lexer:
             for index, character in enumerate(self.text):
                 helper -= 1
 
-                self.tokens = [
-                    token for token in self.tokens if token is not None]
+                self.tokens = [token for token in self.tokens if token is not None]
 
                 if character == "\n":
-                    append_newline = True
+                    append_newline = True and not multiline_comment
 
                     line += 1
                     column = 1
@@ -355,14 +354,14 @@ class Lexer:
                 if not comment:
                     if (
                         len(self.text[index:]) > 1
-                        and self.text[index: index + 2] == "//"
+                        and self.text[index : index + 2] == "//"
                     ):
                         comment = 1
 
-                    if self.text[index: index + 2] == "/*":
+                    if self.text[index : index + 2] == "/*":
                         multiline_comment = True
 
-                    if multiline_comment and self.text[index: index + 2] == "*/":
+                    if multiline_comment and self.text[index : index + 2] == "*/":
                         multiline_comment = False
                         helper = 2
 
@@ -390,15 +389,15 @@ class Lexer:
                                 buffer = io.StringIO()
 
                             elif len(self.text[index:]) > 1 and self.text[
-                                index: index + 2
+                                index : index + 2
                             ] in list(DOUBLE_MARKS):
                                 self.tokens.append(
                                     gettoken(buffer.getvalue(), line, column)
                                 )
                                 self.tokens.append(
                                     LexerToken(
-                                        DOUBLE_MARKS[self.text[index: index + 2]],
-                                        self.text[index: index + 2],
+                                        DOUBLE_MARKS[self.text[index : index + 2]],
+                                        self.text[index : index + 2],
                                     )
                                 )
 
@@ -462,7 +461,7 @@ if __name__ == "__main__":
     }
 
     if len(sys.argv[1:]) > 0:
-        for argument in sys.argv[1:]:
+        for argument in sys.argv[2:]:
             valid_argument = False
 
             if argument.lower() in ["-h", "--help"]:
