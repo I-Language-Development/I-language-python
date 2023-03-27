@@ -6,8 +6,8 @@ OTHER TEST
 
 use GarbageCollection;
 
-import file;            // Imports build in library
-?string[] mydata;       // New variable: array (string or null) // Syntax may change
+import file;            // Imports build in library for file handling
+?string[] mydata;       // New variable: array (string or null) // Syntax WILL change
 
 class Program(){
 	int main(){
