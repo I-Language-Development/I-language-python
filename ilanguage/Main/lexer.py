@@ -55,7 +55,8 @@ from typing_extensions import (
 # CONSTANTS #
 #############
 
-DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+DIGITS_AS_STRINGS: Final[List[str]] = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
 # TODO (ElBe): Add grammar instead of this
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
@@ -316,13 +317,13 @@ def lex(
                 column += 1
 
             if not comment:
-                if len(text[index:]) > 1 and text[index : index + 2] == "//":
+                if len(text[index:]) > 1 and text[index: index + 2] == "//":
                     comment = 1
 
-                if text[index : index + 2] == "/*":
+                if text[index: index + 2] == "/*":
                     multiline_comment = True
 
-                if multiline_comment and text[index : index + 2] == "*/":
+                if multiline_comment and text[index: index + 2] == "*/":
                     multiline_comment = False
                     helper = 2
 
@@ -331,7 +332,8 @@ def lex(
                         if character in ['"', "'"]:
                             in_string = not in_string
                             if not in_string:
-                                tokens.append(LexerToken("STRING", buffer.getvalue()))
+                                tokens.append(LexerToken(
+                                    "STRING", buffer.getvalue()))
 
                                 buffer.close()
                                 buffer = io.StringIO()
@@ -340,19 +342,21 @@ def lex(
                             buffer.write(character)
 
                         elif text[index] in SEPARATORS:
-                            tokens.append(gettoken(buffer.getvalue(), line, column))
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column))
 
                             buffer.close()
                             buffer = io.StringIO()
 
-                        elif len(text[index:]) > 1 and text[index : index + 2] in list(
+                        elif len(text[index:]) > 1 and text[index: index + 2] in list(
                             DOUBLE_MARKS
                         ):
-                            tokens.append(gettoken(buffer.getvalue(), line, column))
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column))
                             tokens.append(
                                 LexerToken(
-                                    DOUBLE_MARKS[text[index : index + 2]],
-                                    text[index : index + 2],
+                                    DOUBLE_MARKS[text[index: index + 2]],
+                                    text[index: index + 2],
                                 )
                             )
 
@@ -362,8 +366,10 @@ def lex(
                             helper = 2
 
                         elif character in list(MARKS):
-                            tokens.append(gettoken(buffer.getvalue(), line, column))
-                            tokens.append(LexerToken(MARKS[character], character))
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column))
+                            tokens.append(LexerToken(
+                                MARKS[character], character))
                             buffer.close()
                             buffer = io.StringIO()
 
