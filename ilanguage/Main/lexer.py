@@ -202,8 +202,7 @@ def validate_float(string: str) -> bool:
     for character in string:
         if character in DIGITS_AS_STRINGS or character == ".":
             continue
-        else:
-            return False
+        return False
 
     if "." not in string:
         return False
@@ -230,8 +229,7 @@ def validate_integer(string: str) -> bool:
             continue
         elif character == ".":
             return False
-        else:
-            return False
+        return False
 
     return True
 
