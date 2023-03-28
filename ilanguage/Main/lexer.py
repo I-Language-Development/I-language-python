@@ -275,7 +275,10 @@ def gettoken(
 # MAIN LEXER #
 ##############
 
-def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: disable=R0912
+
+def lex(
+    text: Optional[str] = None,
+) -> Optional[List[LexerToken]]:  # pylint: disable=R0912
     """Lexes the specified string.
 
     Args:
@@ -313,10 +316,7 @@ def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: di
                 column += 1
 
             if not comment:
-                if (
-                    len(text[index:]) > 1
-                    and text[index : index + 2] == "//"
-                ):
+                if len(text[index:]) > 1 and text[index : index + 2] == "//":
                     comment = 1
 
                 if text[index : index + 2] == "/*":
@@ -331,9 +331,7 @@ def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: di
                         if character in ['"', "'"]:
                             in_string = not in_string
                             if not in_string:
-                                tokens.append(
-                                    LexerToken("STRING", buffer.getvalue())
-                                )
+                                tokens.append(LexerToken("STRING", buffer.getvalue()))
 
                                 buffer.close()
                                 buffer = io.StringIO()
@@ -342,19 +340,15 @@ def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: di
                             buffer.write(character)
 
                         elif text[index] in SEPARATORS:
-                            tokens.append(
-                                gettoken(buffer.getvalue(), line, column)
-                            )
+                            tokens.append(gettoken(buffer.getvalue(), line, column))
 
                             buffer.close()
                             buffer = io.StringIO()
 
-                        elif len(text[index:]) > 1 and text[
-                            index : index + 2
-                        ] in list(DOUBLE_MARKS):
-                            tokens.append(
-                                gettoken(buffer.getvalue(), line, column)
-                            )
+                        elif len(text[index:]) > 1 and text[index : index + 2] in list(
+                            DOUBLE_MARKS
+                        ):
+                            tokens.append(gettoken(buffer.getvalue(), line, column))
                             tokens.append(
                                 LexerToken(
                                     DOUBLE_MARKS[text[index : index + 2]],
@@ -368,12 +362,8 @@ def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: di
                             helper = 2
 
                         elif character in list(MARKS):
-                            tokens.append(
-                                gettoken(buffer.getvalue(), line, column)
-                            )
-                            tokens.append(
-                                LexerToken(MARKS[character], character)
-                            )
+                            tokens.append(gettoken(buffer.getvalue(), line, column))
+                            tokens.append(LexerToken(MARKS[character], character))
                             buffer.close()
                             buffer = io.StringIO()
 
@@ -423,11 +413,7 @@ if __name__ == "__main__":
 
     if len(sys.argv[1:]) > 0:
         for argument in sys.argv[2:]:
-            valid_argument = False
-
             if argument.lower() in ["-h", "--help"]:
-                valid_argument = True
-
                 print(
                     "Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]"
                 )
@@ -443,29 +429,23 @@ if __name__ == "__main__":
                 sys.exit(0)
 
             elif argument.lower() in ["-v", "--version"]:
-                valid_argument = True
-
                 print(f"Version: {__version__}")
                 sys.exit(0)
 
             elif argument.lower() == "--types":
-                valid_argument = True
                 options["types"] = True
 
             elif argument.lower() == "--values":
-                valid_argument = True
                 options["values"] = True
 
             elif argument.lower() == "--no-split":
-                valid_argument = True
                 options["no-split"] = True
 
             else:
-                if not valid_argument:
-                    print(
-                        f"Error: Invalid argument: {argument!r}"
-                    )  # TODO (Ranastra): Add errors
-                    sys.exit(1)
+                print(
+                    f"Error: Invalid argument: {argument!r}"
+                )  # TODO (Ranastra): Add errors
+                sys.exit(1)
 
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
