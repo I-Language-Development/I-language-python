@@ -277,9 +277,9 @@ def gettoken(
 ##############
 
 
-def lex(
+def lex(  # pylint: disable=R0912, R0915
     text: Optional[str] = None,
-) -> Optional[List[LexerToken]]:  # pylint: disable=R0912
+) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
 
     Args:
