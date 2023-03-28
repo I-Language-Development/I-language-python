@@ -166,7 +166,7 @@ class LexerToken:
         return f"{self.type}: {self.value!r}"
 
 
-class LexerError:
+class LexerError:  # pylint: disable=R0903
     """
     Represents an error while lexing.
     """

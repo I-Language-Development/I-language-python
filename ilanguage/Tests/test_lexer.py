@@ -200,7 +200,7 @@ def test_lex(data: str, expected: List[lexer.LexerToken]) -> None:
         expected (list[lexer.LexerToken]): Expected tokens.
     """
 
-    assert [str(token) for token in lexer.Lexer(data).lex()] == [
+    assert [str(token) for token in lexer.lex(data)] == [
         str(token) for token in expected
     ]
 
