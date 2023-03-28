@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 __author__ = "I-language Development"
 __version__ = "0.1.5"
 
-
+import ast
 ###########
 # IMPORTS #
 ###########
@@ -411,65 +411,73 @@ def lex(  # pylint: disable=R0912, R0915
 
 
 if __name__ == "__main__":
-    options: Dict[str, bool] = {
-        "types": False,
-        "values": False,
-        "no-split": False,
-    }
+    # options: Dict[str, bool] = {
+    #     "types": False,
+    #     "values": False,
+    #     "no-split": False,
+    # }
+    #
+    # if len(sys.argv[1:]) > 0:
+    #     for argument in sys.argv[2:]:
+    #         if argument.lower() in ["-h", "--help"]:
+    #             print(
+    #                 "Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]"
+    #             )
+    #             print("Lexer of the I-programming language.")
+    #             print("Options:")
+    #             print("    -h, --help             Shows this help and exits.")
+    #             print(
+    #                 "    -v, --version          Shows the version of the lexer and exits."
+    #             )
+    #             print("    --types                Only print the types of the tokens.")
+    #             print("    --values               Only print the values of the tokens.")
+    #             print("    --no-split             Prints the tokens in a list.")
+    #             sys.exit(0)
+    #
+    #         elif argument.lower() in ["-v", "--version"]:
+    #             print(f"Version: {__version__}")
+    #             sys.exit(0)
+    #
+    #         elif argument.lower() == "--types":
+    #             options["types"] = True
+    #
+    #         elif argument.lower() == "--values":
+    #             options["values"] = True
+    #
+    #         elif argument.lower() == "--no-split":
+    #             options["no-split"] = True
+    #
+    #         else:
+    #             print(
+    #                 f"Error: Invalid argument: {argument!r}"
+    #             )  # TODO (Ranastra): Add errors
+    #             sys.exit(1)
+    #
+    # try:
+    #     with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
+    #         DATA = file.read()
+    # except (IndexError, FileNotFoundError):
+    #     DATA = """
+    #     int i   = 1234
+    #     float f = 12.34
+    #     """
+    #
+    # if options["types"] and not options["values"]:
+    #     result = [str(token.type) for token in lex(DATA)]
+    # elif options["values"] and not options["types"]:
+    #     result = [str(token.value) for token in lex(DATA)]
+    # else:
+    #     result = [str(token) for token in lex(DATA)]
+    #
+    # if not options["no-split"]:
+    #     result = "\n".join(result)
+    #
+    # print(result)
 
-    if len(sys.argv[1:]) > 0:
-        for argument in sys.argv[2:]:
-            if argument.lower() in ["-h", "--help"]:
-                print(
-                    "Usage: lexer.py [PATH] [-h] [-v] [--types] [--values] [--no-split]"
-                )
-                print("Lexer of the I-programming language.")
-                print("Options:")
-                print("    -h, --help             Shows this help and exits.")
-                print(
-                    "    -v, --version          Shows the version of the lexer and exits."
-                )
-                print("    --types                Only print the types of the tokens.")
-                print("    --values               Only print the values of the tokens.")
-                print("    --no-split             Prints the tokens in a list.")
-                sys.exit(0)
+    import parser
+    f = open("test.ilang","r")
+    l = lex(f.read())
+    f.close()
+    p = parser.Parser(l)
+    print(p.parse())
 
-            elif argument.lower() in ["-v", "--version"]:
-                print(f"Version: {__version__}")
-                sys.exit(0)
-
-            elif argument.lower() == "--types":
-                options["types"] = True
-
-            elif argument.lower() == "--values":
-                options["values"] = True
-
-            elif argument.lower() == "--no-split":
-                options["no-split"] = True
-
-            else:
-                print(
-                    f"Error: Invalid argument: {argument!r}"
-                )  # TODO (Ranastra): Add errors
-                sys.exit(1)
-
-    try:
-        with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-            DATA = file.read()
-    except (IndexError, FileNotFoundError):
-        DATA = """
-        int i   = 1234
-        float f = 12.34
-        """
-
-    if options["types"] and not options["values"]:
-        result = [str(token.type) for token in lex(DATA)]
-    elif options["values"] and not options["types"]:
-        result = [str(token.value) for token in lex(DATA)]
-    else:
-        result = [str(token) for token in lex(DATA)]
-
-    if not options["no-split"]:
-        result = "\n".join(result)
-
-    print(result)

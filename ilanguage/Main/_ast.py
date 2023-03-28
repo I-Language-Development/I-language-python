@@ -22,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+#from _ast import AST # WE DO NOT NEED THIS DAMN
 
 # TODO (ElBe): Add docstrings, tests and extend the modulesssss
 
@@ -36,16 +37,39 @@ def delete_locals(local):
             known_vars.popitem(value)
 
 
+class StaticValue:
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
+
+    def __str__(self):
+        return "<" + self.type.upper() + ": " + str(self.value) + ">"
+
+class StaticList:
+    def __init__(self, type, values, dimension):
+        self.type = type
+        self.values = values
+        self.dimension = dimension
+
+    def __str__(self):
+        return "<" + self.type.upper() + self.dimension*"[]" + ": " + str(self.values) + ">"
 class AST:
     def __str__(self):
+        self.nexttask: AST|None = None
         return "<Empty AST Node>"
 
     def __repr__(self):
         return self.__str__()
 
+    def last(self):  # get last code in queue
+        if self.nexttask is not None:
+            return self.nexttask.last()
+        return self
+
 
 class Main(AST):
     def __init__(self, name="Main"):
+        super().__init__()
         self.next_task = AST()
         self.name = name
 

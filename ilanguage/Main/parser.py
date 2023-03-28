@@ -1,5 +1,5 @@
 
-import ast
+import _ast as ast
 class ParserError(BaseException):
     def __init__(self,name,help,line,errcode=0):
         self.name = name
@@ -40,7 +40,7 @@ class Parser:
     def parse_function_definition(self,tokens,line,local):
         if tokens[0].type == "BASETYPE":
             if tokens[1].type == "NAME":
-                split = self.splittokens(tokens,"CLAMP_CLOSE"):
+                split = self.splittokens(tokens,"CLAMP_CLOSE")
                 if len(split)==2:
                     split[0] = split[0][1:]
                     if tokens[3].type == "CLAMP_OPEN":
