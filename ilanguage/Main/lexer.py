@@ -236,7 +236,7 @@ def validate_integer(string: str) -> bool:
 
 def gettoken(
     string: str, line: int, column: int
-) -> Optional[LexerToken]:  # pylint: disable=R1710  # Error will exit
+) -> Optional[LexerToken]:  # pylint: disable=R1710
     """Returns a token from the specified string.
 
     Args:
@@ -286,169 +286,147 @@ def gettoken(
     return result
 
 
-####################
-# MAIN LEXER CLASS #
-####################
+##############
+# MAIN LEXER #
+##############
 
+def lex(text: Optional[str] = None) -> Optional[List[LexerToken]]:  # pylint: disable=R0912
+    """Lexes the specified string.
 
-class Lexer:
+    Args:
+         text (str): Text to lex.
+
+    Returns:
+        List of lexed tokens.
     """
-    Represents a lexer object.
-    """
 
-    def __init__(self, text: str) -> None:
-        """Initializes a lexer object.
+    tokens = []
+    line = 1
+    comment = False
+    multiline_comment = False
+    append_newline = False
+    helper = 0
+    column = 1
+    in_string = False
 
-        Args:
-            text: Text to lex.
-        """
+    buffer = io.StringIO()
 
-        self.text = text
-        self.tokens = []
+    try:
+        for index, character in enumerate(text):
+            helper -= 1
 
-    def lex(self, text: Optional[str] = None) -> Optional[List[LexerToken]]:
-        """Lexes the specified string.
+            tokens = [token for token in tokens if token is not None]
 
-        Args:
-            text (str): Text to lex.
+            if character == "\n":
+                append_newline = True and not multiline_comment
 
-        Returns:
-            List of lexed tokens.
-        """
+                line += 1
+                column = 1
+                comment = False
 
-        if text is not None:
-            self.text = text
-        else:
-            if self.text is None:
-                print("Error: No text specified for lexing.")
-                sys.exit()
+            else:
+                column += 1
 
-        line = 1
-        comment = False
-        multiline_comment = False
-        append_newline = False
-        helper = 0
-        column = 1
-        in_string = False
+            if not comment:
+                if (
+                    len(text[index:]) > 1
+                    and text[index : index + 2] == "//"
+                ):
+                    comment = 1
 
-        buffer = io.StringIO()
+                if text[index : index + 2] == "/*":
+                    multiline_comment = True
 
+                if multiline_comment and text[index : index + 2] == "*/":
+                    multiline_comment = False
+                    helper = 2
+
+                if not multiline_comment and not comment and helper <= 0:
+                    try:
+                        if character in ['"', "'"]:
+                            in_string = not in_string
+                            if not in_string:
+                                tokens.append(
+                                    LexerToken("STRING", buffer.getvalue())
+                                )
+
+                                buffer.close()
+                                buffer = io.StringIO()
+
+                        elif in_string:
+                            buffer.write(character)
+
+                        elif text[index] in SEPARATORS:
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column)
+                            )
+
+                            buffer.close()
+                            buffer = io.StringIO()
+
+                        elif len(text[index:]) > 1 and text[
+                            index : index + 2
+                        ] in list(DOUBLE_MARKS):
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column)
+                            )
+                            tokens.append(
+                                LexerToken(
+                                    DOUBLE_MARKS[text[index : index + 2]],
+                                    text[index : index + 2],
+                                )
+                            )
+
+                            buffer.close()
+                            buffer = io.StringIO()
+
+                            helper = 2
+
+                        elif character in list(MARKS):
+                            tokens.append(
+                                gettoken(buffer.getvalue(), line, column)
+                            )
+                            tokens.append(
+                                LexerToken(MARKS[character], character)
+                            )
+                            buffer.close()
+                            buffer = io.StringIO()
+
+                        else:
+                            buffer.write(character)
+                        if append_newline:
+                            append_newline = False
+                            tokens.append(LexerToken("NEWLINE", "\n"))
+
+                    except IndexError:
+                        pass
+    finally:
+        buffer.close()
+
+    tokens = [token for token in tokens if token is not None]
+    modified_tokens = {}
+
+    for index, token in enumerate(tokens):
         try:
-            for index, character in enumerate(self.text):
-                helper -= 1
+            if token.type == "NEWLINE" and index == 0:
+                tokens.pop(index)
+                index -= 1
+            if token.type == "INT" and tokens[index - 1].type == "DOT":
+                modified_tokens[index - 2] = LexerToken(
+                    "FLOAT",
+                    f"{tokens[index-2].value}.{tokens[index].value}",
+                )
 
-                self.tokens = [token for token in self.tokens if token is not None]
+                tokens.pop(index)
+                tokens.pop(index - 1)
+                tokens.pop(index - 2)
+        except IndexError:
+            pass
 
-                if character == "\n":
-                    append_newline = True and not multiline_comment
+    for index, token in modified_tokens.items():
+        tokens.insert(index, token)
 
-                    line += 1
-                    column = 1
-                    comment = False
-
-                else:
-                    column += 1
-
-                if not comment:
-                    if (
-                        len(self.text[index:]) > 1
-                        and self.text[index : index + 2] == "//"
-                    ):
-                        comment = 1
-
-                    if self.text[index : index + 2] == "/*":
-                        multiline_comment = True
-
-                    if multiline_comment and self.text[index : index + 2] == "*/":
-                        multiline_comment = False
-                        helper = 2
-
-                    if not multiline_comment and not comment and helper <= 0:
-                        try:
-                            if character in ['"', "'"]:
-                                in_string = not in_string
-                                if not in_string:
-                                    self.tokens.append(
-                                        LexerToken("STRING", buffer.getvalue())
-                                    )
-
-                                    buffer.close()
-                                    buffer = io.StringIO()
-
-                            elif in_string:
-                                buffer.write(character)
-
-                            elif self.text[index] in SEPARATORS:
-                                self.tokens.append(
-                                    gettoken(buffer.getvalue(), line, column)
-                                )
-
-                                buffer.close()
-                                buffer = io.StringIO()
-
-                            elif len(self.text[index:]) > 1 and self.text[
-                                index : index + 2
-                            ] in list(DOUBLE_MARKS):
-                                self.tokens.append(
-                                    gettoken(buffer.getvalue(), line, column)
-                                )
-                                self.tokens.append(
-                                    LexerToken(
-                                        DOUBLE_MARKS[self.text[index : index + 2]],
-                                        self.text[index : index + 2],
-                                    )
-                                )
-
-                                buffer.close()
-                                buffer = io.StringIO()
-
-                                helper = 2
-
-                            elif character in list(MARKS):
-                                self.tokens.append(
-                                    gettoken(buffer.getvalue(), line, column)
-                                )
-                                self.tokens.append(
-                                    LexerToken(MARKS[character], character)
-                                )
-                                buffer.close()
-                                buffer = io.StringIO()
-
-                            else:
-                                buffer.write(character)
-                            if append_newline:
-                                append_newline = False
-                                self.tokens.append(LexerToken("NEWLINE", "\n"))
-
-                        except IndexError:
-                            pass
-        finally:
-            buffer.close()
-
-        self.tokens = [token for token in self.tokens if token is not None]
-        modified_tokens = {}
-
-        for index, token in enumerate(self.tokens):
-            try:
-                if token.type == "NEWLINE" and index == 0:
-                    self.tokens.pop(index)
-                    index -= 1
-                if token.type == "INT" and self.tokens[index - 1].type == "DOT":
-                    modified_tokens[index - 2] = LexerToken(
-                        "FLOAT",
-                        f"{self.tokens[index-2].value}.{self.tokens[index].value}",
-                    )
-
-                    self.tokens.pop(index)
-                    self.tokens.pop(index - 1)
-                    self.tokens.pop(index - 2)
-            except IndexError:
-                pass
-
-        for index, token in modified_tokens.items():
-            self.tokens.insert(index, token)
-
-        return self.tokens
+    return tokens
 
 
 if __name__ == "__main__":
@@ -513,14 +491,13 @@ if __name__ == "__main__":
         float f = 12.34
         """
 
-    lexer = Lexer(data)
 
     if options["types"] and not options["values"]:
-        result = [str(token.type) for token in lexer.lex()]
+        result = [str(token.type) for token in lex(data)]
     elif options["values"] and not options["types"]:
-        result = [str(token.value) for token in lexer.lex()]
+        result = [str(token.value) for token in lex(data)]
     else:
-        result = [str(token) for token in lexer.lex()]
+        result = [str(token) for token in lex(data)]
 
     if not options["no-split"]:
         result = "\n".join(result)
