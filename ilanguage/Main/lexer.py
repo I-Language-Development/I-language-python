@@ -71,7 +71,7 @@ DOUBLE_MARKS: Final[Dict[str, str]] = {
     "||": "OR",  # Maybe add or keyword?
 }
 MARKS: Final[Dict[str, str]] = {
-    ";": "SEMICOLON",
+    ";": "END_CMD",  # DON'T CHANGE THIS!!!!!!!!!!!
     "=": "SET",
     "{": "BLOCK_OPEN",  # Also dicts
     "}": "BLOCK_CLOSE",  # Also dicts
@@ -475,9 +475,10 @@ if __name__ == "__main__":
     # print(result)
 
     import parser
-    f = open("test.ilang","r")
+    f = open("../test.ilang","r")
     l = lex(f.read())
     f.close()
+    print(l)
     p = parser.Parser(l)
     print(p.parse())
 

@@ -1,5 +1,5 @@
 
-import _ast as ast
+import iast as ast
 class ParserError(BaseException):
     def __init__(self,name,help,line,errcode=0):
         self.name = name
@@ -93,7 +93,7 @@ class Parser:
                 block -= 1
                 ast.delete_locals(block+1)
             if block == 0 and tokens[index].type == "END_CMD":
-                tree = self.parseoneof(buffer,line,local + block,[self.parse_define_variable,self.parse_import])
+                tree = self.parseoneof(buffer,line,local + block,[self.parse_define_variable, self.parse_import])
                 #if tree is None: pass
                 start.last().nexttask = tree
                 buffer = []
@@ -103,8 +103,8 @@ class Parser:
     def parse_import(self,tokens,line,local):
         if tokens[0].type == "IMPORT":
             if tokens[1].type == "NAME":
-                if len(tokens) == 3 and tokens[2].type == "END_CMD":
-                    return ast.Import(tokens[1].value)
+                #if len(tokens) == 3 and tokens[2].type == "END_CMD":
+                return ast.Import(tokens[1].value)
 
             else: raise ParserError("notaname",
                                     "Expected a module name after 'import'",
@@ -138,7 +138,7 @@ class Parser:
                     if not tokens[1].value in ast.known_vars:
                         print("Variable found")
                         ast.known_vars[tokens[1].value] = ast.Variable(tokens[1].value,tokens[0].value,local,listdimension,line,indef)
-                        return ast.DefineVariable_novalue(tokens[1].value,tokens[0].value,listdimension,indef)
+                        return ast.DefineVariableNovalue(tokens[1].value,tokens[0].value,listdimension,indef)
                     else:
                         raise ParserError("varoverlap",
                                           "This variable seems overlapping with an already existing one ('" + str(ast.known_vars[tokens[1].value].name) + "', line " + str(ast.known_vars[tokens[1].value].line) + ")",

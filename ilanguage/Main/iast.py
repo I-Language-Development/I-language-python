@@ -32,7 +32,7 @@ known_funcs = {}
 
 
 def delete_locals(local):
-    for value in list(known_vars):
+    for value in list(known_vars.values()):
         if value.local >= local:
             known_vars.popitem(value)
 
@@ -54,8 +54,9 @@ class StaticList:
     def __str__(self):
         return "<" + self.type.upper() + self.dimension*"[]" + ": " + str(self.values) + ">"
 class AST:
+    def __init__(self):
+        self.nexttask: AST | None = None
     def __str__(self):
-        self.nexttask: AST|None = None
         return "<Empty AST Node>"
 
     def __repr__(self):
@@ -67,33 +68,48 @@ class AST:
         return self
 
 
+class Import(AST):
+    def __init__(self,name,namespace=None):
+        super().__init__()
+        self.name = name
+        if namespace == None: namespace = name
+        self.namespace = namespace
+
+    def __str__(self):
+        return "<Import " + self.name + (" as " + self.namespace)*int(self.namespace != self.name) + ">\n" + str(self.nexttask)
 class Main(AST):
     def __init__(self, name="Main"):
         super().__init__()
-        self.next_task = AST()
         self.name = name
 
     def __str__(self):
-        return "<Main Program '" + self.name + "'>\n" + str(self.next_task)
+        return "<Main Program '" + self.name + "'>\n" + str(self.nexttask)
 
 
 class DefineVariableNovalue(AST):
     def __init__(self, name, _type, _list, indef):
+        super().__init__()
         self.name = name
         self.type = _type
         self.list = _list
         self.indef = indef
-        self.nexttask = AST()
+
+    def __str__(self):
+        return "<Define '" + self.name + "' as '" + int(self.indef)*"?" + self.type + self.list*"[]" + "'>\n" + str(self.nexttask)
 
 
 class DefineVariable(AST):
     def __init__(self, name, _type, _list, indef, value):
+        super().__init__()
         self.name = name
         self.type = _type
         self.list = _list
         self.indef = indef  # What is this used for?
         self.next_task = AST()
         self.value: AST = value
+    def __str__(self):
+        return "<Define '" + self.name + "' as '" + int(self.indef)*"?" + self.type + self.list*"[]" + "' set to " + str(self.value) + ">\n" + str(self.nexttask)
+
 
 
 class Variable:
