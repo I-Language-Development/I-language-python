@@ -54,19 +54,19 @@ class Main(AST):
 
 
 class DefineVariableNovalue(AST):
-    def __init__(self, name, type, list, indef):
+    def __init__(self, name, _type, _list, indef):
         self.name = name
-        self.type = type
-        self.list = list
+        self.type = _type
+        self.list = _list
         self.indef = indef
         self.nexttask = AST()
 
 
 class DefineVariable(AST):
-    def __init__(self, name, type, list, indef, value):
+    def __init__(self, name, _type, _list, indef, value):
         self.name = name
-        self.type = type
-        self.list = list
+        self.type = _type
+        self.list = _list
         self.indef = indef  # What is this used for?
         self.next_task = AST()
         self.value: AST = value
