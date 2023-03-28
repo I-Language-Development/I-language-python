@@ -1,8 +1,8 @@
 """
-I Language Math module.
+I Language errors.
 Version: 0.1.0
 
-Copyright (c) 2023-present I Language Development.
+Copyright (c) 2023-present ElBe Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -23,33 +23,55 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
 ###########
 # IMPORTS #
 ###########
 
-import math
-from typing import (
-    Final,
-)
-
-
-#############
-# CONSTANTS #
-#############
-
-Infinite: Final[float] = float("inf")
+import sys
 
 
 #########
-# ROUND #
+# ERROR #
 #########
 
 
-def _round(number: float) -> int:
-    """Rounds a number.
-
-    :param number: Number to round.
-    :return: Rounded number.
+class Error:
+    """
+    Represents a base error object.
     """
 
-    return round(number)
+    def __init__(
+        self, text: str, line: int = 0, column: int = 0, exit_code: int = 1
+    ) -> None:
+        """Initializes a new type.
+
+        :param text: Error text
+        :param line: Line the error occurred on.
+        :param column: Column the error occurred on.
+        :param exit_code: Code to use when exiting. If code is 0, there won't be an exit.
+        """
+
+        print(f"Error: {text}, in line {line} column {column}.")
+        sys.exit(exit_code)
+
+
+##########
+# ERRORS #
+##########
+
+
+class Unspecified(Error):
+    """
+    Represents a unspecified error.
+    """
+
+    def __init__(self, description: str, line: int = 0, column: int = 0) -> None:
+        """Initialize a new unspecified error.
+
+        :param description: Description of the error.
+        :param line: Line the error occurred on.
+        :param column: Column the error occurred on.
+        """
+
+        super().__init__(description, line, column)

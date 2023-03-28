@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 I Language python package runner.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -29,11 +29,27 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
+import platform
 import sys
 
 import Main
 
 Main.parser.parse = lambda x: x
+
+
+#########
+# SETUP #
+#########
+
+# pylint: disable=R0801
+if (
+    platform.system() == "Windows" and platform.release() == "10"
+):  # Fixes colored output on Windows
+    import ctypes
+
+    kernel32 = ctypes.windll.kernel32
+    kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+# pylint: enable=R0801
 
 
 ###########

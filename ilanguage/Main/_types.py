@@ -31,8 +31,11 @@ DEALINGS IN THE SOFTWARE.
 import ast
 import builtins
 from typing import (
-    Any as _Any,
     List as _List,
+)
+
+from typing_extensions import (
+    Any as _Any,
     final,
     self,
     Type,
@@ -42,6 +45,7 @@ from typing import (
 #############
 # BASE TYPE #
 #############
+
 
 class BaseType:
     """
@@ -73,6 +77,7 @@ class BaseType:
 #########
 # TYPES #
 #########
+
 
 class Any(BaseType):
     """
@@ -232,7 +237,9 @@ class Null(BaseType):
         :param value: Value of the object to check for none value.
         """
 
-        super().__init__(value)  # TODO (ElBe): Find null type
+        super().__init__(
+            value,
+        )  # TODO (ElBe): Find null type
 
 
 class Str(BaseType):
@@ -262,3 +269,19 @@ class String(Str):
         """
 
         super().__init__(value)
+
+
+@final
+class mdarray(BaseType):
+    """
+    Multi-dimensional array type.
+    """
+
+    def __init__(self, value: _Any) -> None:
+        """Initializes a multi-dimensional array type.
+
+        Args:
+            value (mdarray): Value of the object to check for multi-dimensional array value.
+        """
+
+        super().__init__(value, _Any)  # TODO (ElBe): Add python type

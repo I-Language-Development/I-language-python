@@ -1,0 +1,116 @@
+/*
+* I Language math module.
+* Version: 0.1.1
+
+* Copyright (c) 2023-present ElBe Development.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a
+* copy of this software and associated documentation files (the 'Software'),
+* to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense,
+* and/or sell copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+* DEALINGS IN THE SOFTWARE.
+*/
+
+
+/////////////
+// IMPORTS //
+/////////////
+
+import _core
+import types
+
+
+///////////////
+// CONSTANTS //
+///////////////
+
+const float Pi       = 3.141592653589793238462643383279502884197
+const float E        = 2.718281828459045235360287471352662497757
+const float Infinite = _core.Math.Infinite
+
+
+///////////
+// ROUND //
+///////////
+
+/*
+* Rounds a float to the nearest integer.
+*
+* @params
+* number (float): Number to round.
+*
+* @return
+* int: Rounded number.
+*/
+int round(float number) {
+    return _core.Math.round(number)
+}
+
+
+///////////
+// FLOOR //
+///////////
+
+/*
+* Rounds a number to the nearest integer below.
+*
+* @params
+* number (float): Number to round.
+*
+* @return
+* int: Rounded number.
+*/
+int floor(float number) {
+    return _core.Math.floor(number)
+}
+
+
+//////////
+// CEIL //
+//////////
+
+/*
+* Rounds a number to the nearest integer above.
+*
+* @params
+* number (float): The number to round.
+*
+* @return
+* int: Rounded number.
+*/
+int ceil(float number) {
+    return _core.Math.ceil(number)
+}
+
+
+//////////////////
+// COMPLEX TYPE //
+//////////////////
+
+class Complex(type) {
+    /*
+    * Complex integer type.
+    *
+    * @params
+    * value (int): Complex number.
+    *
+    * @return
+    * complex: Complex number.
+    */
+    int init(value: int) {
+        parent.init(value, types.Complex)
+        return value
+    }
+}

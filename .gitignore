@@ -133,3 +133,4 @@ dmypy.json
 .git/
 dist/
 *.zip
+.ruff_cache/

@@ -29,8 +29,11 @@ DEALINGS IN THE SOFTWARE.
 
 import random
 from typing import (
-    Any,
     List,
+)
+
+from typing_extensions import (
+    Any,
 )
 
 
@@ -43,12 +46,15 @@ def randint(minimum: int, maximum: int) -> int:
     """Generates a random number.
 
     IMPORTANT SECURITY NOTE:
-     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
-     This library uses such generators.
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
 
-    :param minimum: Lowest possible value.
-    :param maximum: Highest possible value.
-    :return: Random number between minimum and maximum.
+    Args:
+        minimum (int): Lowest possible value.
+        maximum (int): Highest possible value.
+
+    Returns:
+        Random number between minimum and maximum.
     """
 
     return random.randint(minimum, maximum)
@@ -63,13 +69,16 @@ def choices(iterable: List, choices: int = 1) -> Any:
     """Returns a random value from a given list.
 
     IMPORTANT SECURITY NOTE:
-     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
-     This library uses such generators.
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
 
-    :param iterable: List to return a random value from.
-    :param choices: Number of choices to return form the iterable. If choices is bigger than the iterable, the remaining
-                    values will be skipped.
-    :return: Random value(s) from iterable.
+    Args:
+        iterable (list): List to return a random value from.
+        choices (int): Number of choices to return form the iterable. If choices is bigger than the iterable, the
+                       remaining values will be skipped.
+
+    Returns:
+        Random value(s) from iterable.
     """
 
     return random.choices(
@@ -86,11 +95,14 @@ def shuffle(iterable: List) -> List:
     """Shuffles a list and returns it.
 
     IMPORTANT SECURITY NOTE:
-     Standard pseudo-random generators are not suitable for security/cryptographic purposes.
-     This library uses such generators.
+        Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+        This library uses such generators.
 
-    :param iterable: List to shuffle.
-    :return: Shuffled list.
+    Args:
+        iterable (list): List to shuffle.
+
+    Returns:
+        Shuffled list.
     """
 
     return random.shuffle(iterable)
