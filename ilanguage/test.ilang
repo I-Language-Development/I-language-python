@@ -10,7 +10,7 @@ import file;            // Imports build in library for file handling
 ?string[] mydata;       // New variable: array (string or null) // Syntax WILL change
 
 class Program(){
-	int main(){
+	int main(){ // you could just write it in your main file if you wanted
 		bool input_loop = true;
 		while (input_loop){
 			mydata.append(input("What to append? "));
