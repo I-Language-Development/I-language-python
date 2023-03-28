@@ -37,6 +37,7 @@ __version__ = "0.1.5"
 # IMPORTS #
 ###########
 
+import dataclasses
 import io
 import sys
 from typing import (
@@ -140,21 +141,14 @@ BASE_TYPES: Final[List[str]] = [
 #################
 
 
+@dataclasses.dataclass(repr=False)
 class LexerToken:
     """
     Represents a token for the lexer.
     """
 
-    def __init__(self, token_type: str, value: str) -> None:
-        """Initializes a token object.
-
-        Args:
-            token_type (str): Type of the token.
-            value (str): Value of the token.
-        """
-
-        self.type = token_type
-        self.value = value
+    type: str
+    value: str
 
     def __repr__(self) -> str:
         """Returns the representation of the token.
