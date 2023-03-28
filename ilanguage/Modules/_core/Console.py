@@ -1,6 +1,6 @@
 """
 I Language Console module.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -28,6 +28,7 @@ DEALINGS IN THE SOFTWARE.
 ###########
 
 import io
+import platform
 from typing import (
     Dict,
     Iterable,
@@ -35,6 +36,17 @@ from typing import (
     Set,
     Tuple,
 )
+
+
+#########
+# SETUP #
+#########
+
+if platform.system() == "Windows" and platform.release() == "10":  # Fixes colored output on Windows
+    import ctypes
+
+    kernel32 = ctypes.windll.kernel32
+    kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 
 
 #########
