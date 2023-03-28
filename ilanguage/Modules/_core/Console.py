@@ -81,9 +81,9 @@ class Table:
         if isinstance(data, (Dict, List, Set, Tuple)):
             self.data = data
         elif isinstance(data, str):
-            pass  # TODO (ElBe): Add errors
+            pass  # TODO (Ranastra): Add errors
         else:
-            pass  # TODO (ElBe): Add errors
+            pass  # TODO (Ranastra): Add errors
 
     def __str__(self) -> str:
         """Returns the string representation of the table.
