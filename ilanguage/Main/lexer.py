@@ -141,7 +141,7 @@ BASE_TYPES: Final[List[str]] = [
 #################
 
 
-@dataclasses.dataclass(repr=False)
+@dataclasses.dataclass
 class LexerToken:
     """
     Represents a token for the lexer.
@@ -149,15 +149,6 @@ class LexerToken:
 
     type: str
     value: str
-
-    def __repr__(self) -> str:
-        """Returns the representation of the token.
-
-        Returns:
-            String representation of the token.
-        """
-
-        return f"{self.type}: {self.value!r}"
 
 
 class LexerError:  # pylint: disable=R0903
@@ -478,20 +469,19 @@ if __name__ == "__main__":
 
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-            data = file.read()
+            DATA = file.read()
     except (IndexError, FileNotFoundError):
-        data = """
+        DATA = """
         int i   = 1234
         float f = 12.34
         """
 
-
     if options["types"] and not options["values"]:
-        result = [str(token.type) for token in lex(data)]
+        result = [str(token.type) for token in lex(DATA)]
     elif options["values"] and not options["types"]:
-        result = [str(token.value) for token in lex(data)]
+        result = [str(token.value) for token in lex(DATA)]
     else:
-        result = [str(token) for token in lex(data)]
+        result = [str(token) for token in lex(DATA)]
 
     if not options["no-split"]:
         result = "\n".join(result)
