@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-<img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png">
+<img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png" height="300px">
 
 The I programming language is a high level programming language written in pure python.
 
