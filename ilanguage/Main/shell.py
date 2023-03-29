@@ -42,25 +42,29 @@ from typing import (
 # HELPER FUNCTIONS #
 ####################
 
-# commands = {}
 
-def register_command(name: str, function: Callable) -> Dict[str, Dict[str, Union[str, List[str], Callable]]]:
+def register_command(
+    name: str,
+    function: Callable,
+    commands: Dict[str, Dict[str, Union[str, List[str], Callable]]],
+) -> Dict[str, Dict[str, Union[str, List[str], Callable]]]:
     """Registers a command.
 
     Args:
         name (str): The name of the command.
         function (Callable): The function to execute when the command is called.
+        commands (Dict[str, Dict[str, Union[str, List[str], Callable]]]): Dictionary of commands.
     """
 
-    result = {
-        name: {
-            "description": function.__doc__.splitlines()[0],
-            "long_description": [line.replace("    ", "", 1) for line in function.__doc__.splitlines()[2:]],
-            "function": function,
-        }
+    commands[name] = {
+        "description": function.__doc__.splitlines()[0],
+        "long_description": [
+            line.replace("    ", "", 1) for line in function.__doc__.splitlines()[2:]
+        ],
+        "function": function,
     }
 
-    return result
+    return commands
 
 
 ############
@@ -77,7 +81,11 @@ def exit_command(*_) -> None:
     sys.exit(0)
 
 
-def help_command(command: Optional[str] = None, *_) -> None:
+def help_command(  # pylint: disable=W1113
+    commands: Dict[str, Dict[str, Union[str, List[str], Callable]]],
+    command: Optional[str] = "",
+    *_,
+) -> None:
     """Shows this message or help for a specific command.
 
     Shows the help message or help for a specified command.
@@ -88,14 +96,14 @@ def help_command(command: Optional[str] = None, *_) -> None:
     """
 
     if command is None or command == "" or command.isspace():
-        print(f"Usage: help [command]\n")
+        print("Usage: help [command]\n")
         print("Available commands:")
         for key, value in commands.items():
             print(f"{key:20} {value['description']}")
     else:
         for key, value in commands.items():
             if command.lower() == key:
-                print('\n'.join(commands[key]['long_description']))
+                print("\n".join(commands[key]["long_description"]))
 
 
 ##############
@@ -108,24 +116,24 @@ def main() -> None:
     Main shell function.
     """
 
-    commands = register_command("exit", exit_command)
-    commands["help"] = register_command("help", help_command)
+    commands = {}
 
-    sorted_commands = {key: commands[key] for key in list(commands.keys()).sort()}
+    commands = register_command("exit", exit_command, commands)
+    commands = register_command("help", help_command, commands)
 
     print(
         r"""
-      _____   _                                              
-     |_   _| | |                                             
-       | |   | |     __ _ _ __   __ _ _   _  __ _  __ _  ___       I language shell   
-       | |   | |    / _` | '_ \ / _` | | | |/ _` |/ _` |/ _ \     Copyright (c) 2023-present I Language Development.
-      _| |_  | |___| (_| | | | | (_| | |_| | (_| | (_| |  __/
-     |_____| |______\__,_|_| |_|\__, |\__,_|\__,_|\__, |\___|
-                                 __/ |             __/ |     
-                                |___/             |___/  
+ _____   _                                              
+|_   _| | |                                             
+  | |   | |     __ _ _ __   __ _ _   _  __ _  __ _  ___      I language shell   
+  | |   | |    / _` | '_ \ / _` | | | |/ _` |/ _` |/ _ \     Copyright (c) 2023-present I Language Development.
+ _| |_  | |___| (_| | | | | (_| | |_| | (_| | (_| |  __/
+|_____| |______\__,_|_| |_|\__, |\__,_|\__,_|\__, |\___|
+                            __/ |             __/ |     
+                           |___/             |___/  
                                 
-    You can use the help command, to get a list of commands.
-    """
+You can use the help command, to get a list of commands.
+"""
     )
 
     while True:
@@ -134,7 +142,7 @@ def main() -> None:
 
             for key, values in commands.items():
                 if key == command[0]:
-                    values["function"](*command[1:])
+                    values["function"](commands, *command[1:])
 
         except KeyboardInterrupt:
             sys.exit(0)
