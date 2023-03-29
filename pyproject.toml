@@ -6,7 +6,7 @@ authors = [
     { name="MasterOktagon" }
 ]
 description = "The I programming language is a high level programming language written in pure python."
-readme = "README.md"
+readme = ".github/README.md"
 requires-python = ">=3.7"
 keywords=[
     "i language",
@@ -45,6 +45,7 @@ dev = [
     "autopep8==2.0.2",
     "bandit==1.7.5",
     "black==23.1.0",
+    "build==0.10.0",
     "pipreqs==0.4.11",
     "pylint_runner==0.6.0",
     "pytest==7.2.2",
@@ -52,6 +53,7 @@ dev = [
     "pytest-picked==0.4.6",
     "pytest-pretty==1.1.1",
     "ruff==0.0.259",
+    "twine==4.0.2",
 ]
 docs = [
     "mkdocstrings[python]==0.20.0",
