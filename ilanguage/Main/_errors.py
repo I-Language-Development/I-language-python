@@ -2,7 +2,7 @@
 I Language errors.
 Version: 0.1.0
 
-Copyright (c) 2023-present ElBe Development.
+Copyright (c) 2023-present I Language Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),

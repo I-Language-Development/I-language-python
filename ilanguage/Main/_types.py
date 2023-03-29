@@ -2,7 +2,7 @@
 I Language types.
 Version: 0.1.2
 
-Copyright (c) 2023-present ElBe Development.
+Copyright (c) 2023-present I Language Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -32,6 +32,7 @@ import ast
 import builtins
 from typing import (
     List as _List,
+    Optional,
 )
 
 from typing_extensions import (
@@ -54,11 +55,12 @@ class BaseType:
 
     types: _List[Self] = []
 
-    def __init__(self, value: str, python_type: Type) -> None:
+    def __init__(self, value: str, python_type: Optional[Type]) -> None:
         """Initializes a new type.
 
-        :param value: Value of the type.
-        :param python_type: Python base type representing this type.
+        Args:
+            value (str): Value of the type.
+            python_type (Optional[Type]): Python base type representing this type.
         """
 
         self.value = value
@@ -71,7 +73,8 @@ class BaseType:
         Validates the value with the type.
         """
 
-        self.python_type(ast.literal_eval(self.value))
+        if self.python_type is not None:
+            self.python_type(ast.literal_eval(self.value))
 
 
 #########
@@ -237,9 +240,7 @@ class Null(BaseType):
         :param value: Value of the object to check for none value.
         """
 
-        super().__init__(
-            value,
-        )  # TODO (ElBe): Find null type
+        super().__init__(value, None)
 
 
 class Str(BaseType):

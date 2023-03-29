@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 import platform
 import sys
 
-import Main
+from . import Main
 
 Main.parser.parse = lambda x: x
 
