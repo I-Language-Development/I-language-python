@@ -20,12 +20,23 @@ Have you thought about what could be possible with the best sides of different l
 Here is the power of some of the best languages combined.
 
 ## Installing
-COMING SOON
+### Download from releases
+Navigate to the releases tab and select the newest release. Download the version fitting your OS and run the installer.
 
-## Syntax
-You can write your own I program with only 1 line of code, and it's very easy.
-```
-output("Hello World!")
-```
+### Pip
+To install the package via pip, run `pip install ilanguage` (The `pip` command might be called differently depending on
+your OS). The installer will be executed automatically. If you use pip to install the package, you will be able to use
+`python -m ilanguage ARGUMENTS` just like `ilanguage ARGUMENTS`.
+
+### Git
+To clone the repository locally using git run `git clone https://github.com/I-Language-Development/I-language.git`.
+
+## Your first program
+To make a simple hello world program follow the instructions below:
+1. Create a file ending with `.ilang`.
+2. Open the file and write `output("Hello world!")` to it.
+3. Open the path of the file in your terminal and type `ilanguage FILE` where `FILE` is the name of the file including 
+the `.ilang` file extension.
+4. You should see "Hello world!" in your terminal.
 
 That's it! It's literally so easy.
