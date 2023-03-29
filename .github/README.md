@@ -1,14 +1,17 @@
-<div style="text-align: center;">
-<img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png" height="300px">
+<p align="center">
+    <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png" height="100px">
+</p>
+<h3 align="center">
+    The I programming language is a high level programming language written in pure python.
+</h3>
+<p align="center">
+    <img src="https://www.codefactor.io/repository/github/i-language-development/i-language/badge">
+    <img src="https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml/badge.svg">
+    <img src="https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml/badge.svg">
+    <img src="https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml/badge.svg">
+    <img src="https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml/badge.svg">
+</p>
 
-The I programming language is a high level programming language written in pure python.
-
-[![CodeFactor](https://www.codefactor.io/repository/github/i-language-development/i-language/badge)](https://www.codefactor.io/repository/github/i-language-development/i-language)
-[![Pylint](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml)
-[![Ruff](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml)
-[![Bandit](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml)
-[![Pytest](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml)
-</div>
 <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
 
 ## About this project
