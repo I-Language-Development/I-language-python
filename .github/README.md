@@ -1,13 +1,15 @@
-# I language
+<div style="text-align: center;">
+<img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png">
+
+The I programming language is a high level programming language written in pure python.
+
 [![CodeFactor](https://www.codefactor.io/repository/github/i-language-development/i-language/badge)](https://www.codefactor.io/repository/github/i-language-development/i-language)
 [![Pylint](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml)
 [![Ruff](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml)
 [![Bandit](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml)
 [![Pytest](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml/badge.svg)](https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml)
-
+</div>
 <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
-
-The I programming language is a high level programming language written in pure python. 
 
 ## About this project
 Have you been dreaming about coding in your perfect programming language?
