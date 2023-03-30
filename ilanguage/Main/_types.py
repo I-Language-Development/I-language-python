@@ -23,6 +23,12 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+##########
+# LINTER #
+##########
+
+# pylint: disable=R0903
+
 
 ###########
 # IMPORTS #
@@ -37,7 +43,6 @@ from typing import (
 
 from typing_extensions import (
     Any as _Any,
-    final,
     Self,
     Type,
 )
@@ -96,7 +101,6 @@ class Any(BaseType):
         super().__init__(value, _Any)
 
 
-@final
 class Bool(BaseType):
     """
     Bool type.
@@ -111,7 +115,6 @@ class Bool(BaseType):
         super().__init__(value, builtins.bool)
 
 
-@final
 class Complex(BaseType):
     """
     Complex integer type.
@@ -140,21 +143,18 @@ class Dict(BaseType):
         super().__init__(value, builtins.dict)
 
 
-@final
 class Dictionary(Dict):
     """
     Dictionary type.
     """
 
 
-@final
 class Dynamic(Any):
     """
     Dynamic type.
     """
 
 
-@final
 class Float(BaseType):
     """
     Float type.
@@ -183,14 +183,12 @@ class Int(BaseType):
         super().__init__(value, builtins.int)
 
 
-@final
 class Integer(Int):
     """
     Integer type.
     """
 
 
-@final
 class List(BaseType):
     """
     List type.
@@ -233,15 +231,13 @@ class Str(BaseType):
         super().__init__(value, builtins.str)
 
 
-@final
 class String(Str):
     """
     String type.
     """
 
 
-@final
-class mdarray(BaseType):  # pylint: disable=C0103
+class mdarray(BaseType):
     """
     Multi-dimensional array type.
     """
