@@ -24,6 +24,13 @@ DEALINGS IN THE SOFTWARE.
 """
 
 
+##########
+# LINTER #
+##########
+
+# pylint: disable=R0903
+
+
 ###########
 # IMPORTS #
 ###########

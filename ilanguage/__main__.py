@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 import platform
 import sys
 
-from . import Main
+from . import Main  # pylint: disable=W0611
 
 
 #########
