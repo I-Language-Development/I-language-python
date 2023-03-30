@@ -65,7 +65,7 @@ def randint(minimum: int, maximum: int) -> int:
 ###########
 
 
-def choices(iterable: List, choices: int = 1) -> Any:
+def choices(iterable: List, _choices: int = 1) -> Any:
     """Returns a random value from a given list.
 
     IMPORTANT SECURITY NOTE:
@@ -74,15 +74,16 @@ def choices(iterable: List, choices: int = 1) -> Any:
 
     Args:
         iterable (list): List to return a random value from.
-        choices (int): Number of choices to return form the iterable. If choices is bigger than the iterable, the
-                       remaining values will be skipped.
+        _choices (int): Number of choices to return form the iterable.
+                        If choices is bigger than the iterable, the
+                        remaining values will be skipped.
 
     Returns:
         Random value(s) from iterable.
     """
 
     return random.choices(
-        iterable, k=choices if choices <= len(iterable) else len(iterable)
+        iterable, k=_choices if _choices <= len(iterable) else len(iterable)
     )
 
 

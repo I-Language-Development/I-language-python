@@ -121,12 +121,14 @@ def main() -> None:
     commands = register_command("exit", exit_command, commands)
     commands = register_command("help", help_command, commands)
 
+    copyright_text = "Copyright (c) 2023-present I Language Development."
+
     print(
-        r"""
+        rf"""
  _____   _                                              
 |_   _| | |                                             
   | |   | |     __ _ _ __   __ _ _   _  __ _  __ _  ___      I language shell   
-  | |   | |    / _` | '_ \ / _` | | | |/ _` |/ _` |/ _ \     Copyright (c) 2023-present I Language Development.
+  | |   | |    / _` | '_ \ / _` | | | |/ _` |/ _` |/ _ \     {copyright_text}
  _| |_  | |___| (_| | | | | (_| | |_| | (_| | (_| |  __/
 |_____| |______\__,_|_| |_|\__, |\__,_|\__,_|\__, |\___|
                             __/ |             __/ |     

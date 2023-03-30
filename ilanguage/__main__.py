@@ -34,8 +34,6 @@ import sys
 
 from . import Main
 
-Main.parser.parse = lambda x: x
-
 
 #########
 # SETUP #
@@ -59,7 +57,7 @@ if (
 if len(sys.argv[1:]) > 0:
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-            Main.parser.parse(file.read())
+            pass
     except FileNotFoundError:
         print("Error: The specified file does not exist.")
     except UnicodeEncodeError:

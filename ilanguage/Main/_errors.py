@@ -75,3 +75,46 @@ class Unspecified(Error):
         """
 
         super().__init__(description, line, column)
+
+
+####################
+# HELPER FUNCTIONS #
+####################
+
+def description_from_message(message: str) -> str:
+    """Returns the error description from a message.
+
+    Args:
+        message (str): The error message.
+
+    Returns:
+        (str): The error description.
+    """
+
+    return " ".join(message.split(",")[0].split(" ")[1:])
+
+
+def line_from_message(message: str) -> int:
+    """Returns the line number from a message.
+
+    Args:
+        message (str): The error message.
+
+    Returns:
+        (int): The line number.
+    """
+
+    return int(message.split(",")[1].split(" ")[3])
+
+
+def column_from_message(message: str) -> int:
+    """Returns the column number from a message.
+
+    Args:
+        message (str): The error message.
+
+    Returns:
+        (int): The column number.
+    """
+
+    return int(message.split(",")[1].split(" ")[5])
