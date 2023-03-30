@@ -146,28 +146,12 @@ class Dictionary(Dict):
     Dictionary type.
     """
 
-    def __init__(self, value: str) -> None:
-        """Initializes a dictionary type.
-
-        :param value: Value of the object to check for dictionary value.
-        """
-
-        super().__init__(value)
-
 
 @final
 class Dynamic(Any):
     """
     Dynamic type.
     """
-
-    def __init__(self, value: str) -> None:
-        """Initializes a dynamic type.
-
-        :param value: Value of the object to check for dynamic value.
-        """
-
-        super().__init__(value)
 
 
 @final
@@ -204,14 +188,6 @@ class Integer(Int):
     """
     Integer type.
     """
-
-    def __init__(self, value: str) -> None:
-        """Initializes an integer type.
-
-        :param value: Value of the object to check for integer value.
-        """
-
-        super().__init__(value)
 
 
 @final
@@ -262,14 +238,6 @@ class String(Str):
     """
     String type.
     """
-
-    def __init__(self, value: str) -> None:
-        """Initializes a string type.
-
-        :param value: Value of the object to check for string value.
-        """
-
-        super().__init__(value)
 
 
 @final
