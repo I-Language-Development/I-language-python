@@ -48,6 +48,7 @@ dev = [
     "build==0.10.0",
     "pipreqs==0.4.11",
     "pylint_runner==0.6.0",
+    "pylint-secure-coding-standard==1.4.1",
     "pytest==7.2.2",
     "pytest-cov==4.0.0",
     "pytest-picked==0.4.6",
@@ -63,12 +64,19 @@ docs = [
 
 [tool.black]
 line-lenghth = 100
+target-version = ["py37", 'py38','py39','py310', "py311"]
 
 [tool.pylint.main]
 exit-zero = true
+ignore-patterns = ['__init__.py']
+load-plugins = ["pylint_secure_coding_standard"]
+py-version = "3.7"
 
 [tool.pylint.format]
 max-line-length = 100
+
+[tool.pylint."messages control"]
+disable = ["C0103"]
 
 [tool.pytest.ini_options]
 testpaths = [
