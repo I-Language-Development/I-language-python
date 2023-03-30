@@ -273,16 +273,16 @@ class String(Str):
 
 
 @final
-class mdarray(BaseType):
+class mdarray(BaseType):  # pylint: disable=C0103
     """
     Multi-dimensional array type.
     """
 
-    def __init__(self, value: _Any) -> None:
-        """Initializes a multi-dimensional array type.
+    def __init__(self, value: str) -> None:
+        """Initializes a multidimensional array type.
 
         Args:
-            value (mdarray): Value of the object to check for multi-dimensional array value.
+            value (mdarray): Value of the object to check for multidimensional array value.
         """
 
         super().__init__(value, _Any)  # TODO (ElBe): Add python type
