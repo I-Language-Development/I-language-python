@@ -217,7 +217,7 @@ def validate_integer(string: str) -> bool:
     return True
 
 
-def gettoken(  # pylint: disable=R1710, R1260
+def gettoken(  # pylint: disable=R1710
     string: str, line: int, column: int
 ) -> Optional[LexerToken]:
     """Returns a token from the specified string.
@@ -274,7 +274,7 @@ def gettoken(  # pylint: disable=R1710, R1260
 ##############
 
 
-def lex(  # pylint: disable=R0912, R0915, R1260
+def lex(  # pylint: disable=R0912, R0915
     text: Optional[str] = None,
 ) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
@@ -297,7 +297,7 @@ def lex(  # pylint: disable=R0912, R0915, R1260
 
     buffer = io.StringIO()
 
-    try:
+    try:  # pylint: disable=R1702
         for index, character in enumerate(text):
             helper -= 1
 
