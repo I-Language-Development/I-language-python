@@ -1,6 +1,6 @@
 """
 I Language AST.
-Version: 0.1.1
+Version: 0.1.2
 
 Copyright (c) 2023-present I Language Development.
 
@@ -23,20 +23,30 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-# TODO (ElBe): Add docstrings, tests and extend the modulesssss
+# TODO (MasterOktagon): Explain this and extend it.
 
 
 known_vars = {}
 known_funcs = {}
 
 
-def delete_locals(local):
+def delete_locals(local: int) -> None:
+    """Deletes all local variables where local is bigger or equal to the variables local.
+
+    Args:
+        local (int): The variables local.
+    """
+
     for value in list(known_vars):
         if value.local >= local:
             known_vars.popitem(value)
 
 
 class AST:
+    """
+    Base AST node class.
+    """
+
     def __str__(self):
         return "<Empty AST Node>"
 
@@ -45,6 +55,10 @@ class AST:
 
 
 class Main(AST):
+    """
+    Main program node.
+    """
+
     def __init__(self, name="Main"):
         self.next_task = AST()
         self.name = name
@@ -53,30 +67,42 @@ class Main(AST):
         return "<Main Program '" + self.name + "'>\n" + str(self.next_task)
 
 
-class DefineVariableNovalue(AST):
-    def __init__(self, name, _type, _list, indef):
+class DefineVariableEmpty(AST):
+    """
+    Empty variable node.
+    """
+
+    def __init__(self, name, _type, _list, in_def):
         self.name = name
         self.type = _type
         self.list = _list
-        self.indef = indef
+        self.indef = in_def
         self.nexttask = AST()
 
 
 class DefineVariable(AST):
-    def __init__(self, name, _type, _list, indef, value):
+    """
+    Variable node.
+    """
+
+    def __init__(self, name, _type, _list, in_def, value):
         self.name = name
         self.type = _type
         self.list = _list
-        self.indef = indef  # What is this used for?
+        self.in_def = in_def  # What is this used for?
         self.next_task = AST()
         self.value: AST = value
 
 
 class Variable:
-    def __init__(self, name, _type, local=0, _list=0, line=None, indef=False):
+    """
+    Variable access node.
+    """
+
+    def __init__(self, name, _type, local=0, _list=0, line=None, in_def=False):
         self.name = name
         self.type = _type
-        self.indef = indef  # What is this?
+        self.in_def = in_def
         self.list = _list
         self.local = local
         self.line = line
