@@ -1,6 +1,6 @@
 autopep8==2.0.2
 bandit==1.7.5
-black==23.1.0
+black==23.3.0
 build==0.10.0
 pipreqs==0.4.11
 pylint_runner==0.6.0
