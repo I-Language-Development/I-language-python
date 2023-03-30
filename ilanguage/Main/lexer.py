@@ -212,16 +212,14 @@ def validate_integer(string: str) -> bool:
     for character in string:
         if character in DIGITS_AS_STRINGS:
             continue
-        elif character == ".":
-            return False
         return False
 
     return True
 
 
-def gettoken(
+def gettoken(  # pylint: disable=R1710, R1260
     string: str, line: int, column: int
-) -> Optional[LexerToken]:  # pylint: disable=R1710
+) -> Optional[LexerToken]:
     """Returns a token from the specified string.
 
     Args:
@@ -276,7 +274,7 @@ def gettoken(
 ##############
 
 
-def lex(  # pylint: disable=R0912, R0915
+def lex(  # pylint: disable=R0912, R0915, R1260
     text: Optional[str] = None,
 ) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
@@ -457,13 +455,13 @@ if __name__ == "__main__":
         """
 
     if options["types"] and not options["values"]:
-        result = [str(token.type) for token in lex(DATA)]
+        RESULT = [str(token.type) for token in lex(DATA)]
     elif options["values"] and not options["types"]:
-        result = [str(token.value) for token in lex(DATA)]
+        RESULT = [str(token.value) for token in lex(DATA)]
     else:
-        result = [str(token) for token in lex(DATA)]
+        RESULT = [str(token) for token in lex(DATA)]
 
     if not options["no-split"]:
-        result = "\n".join(result)
+        RESULT = "\n".join(RESULT)
 
-    print(result)
+    print(RESULT)
