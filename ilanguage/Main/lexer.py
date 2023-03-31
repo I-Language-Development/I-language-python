@@ -226,31 +226,33 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
         column (int): Column number of the token.
 
     Returns:
-        Token from the specified string.
+        LexerToken: Token from the specified string.
     """
 
+    result = None
+
     if string in list(KEYWORDS):
-        return LexerToken(KEYWORDS[string], string)
+        result = LexerToken(KEYWORDS[string], string)
 
     if len(string) > 1 and string[0] == "_":
-        return LexerToken("BUILTIN_CONST", string)
+        result = LexerToken("BUILTIN_CONST", string)
 
     if string in ["true", "false"]:
-        return LexerToken("BOOL", string)
+        result = LexerToken("BOOL", string)
 
     if string in BASE_TYPES:
-        return LexerToken("BASETYPE", string)
+        result = LexerToken("BASETYPE", string)
 
     if validate_integer(string) and len(string) > 0:
-        return LexerToken("INT", string)
+        result = LexerToken("INT", string)
 
     if string[0] not in DIGITS_AS_STRINGS and len(string) > 0:
-        return LexerToken("NAME", string)
+        result = LexerToken("NAME", string)
 
     if not len(string) > 0:
         LexerError(f"Unrecognized Pattern: {string!r}", line, column)
 
-    return None
+    return result
 
 
 ##############
