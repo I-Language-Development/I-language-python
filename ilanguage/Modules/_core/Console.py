@@ -86,67 +86,41 @@ class Table:
         with io.StringIO() as result:
             if isinstance(self.data, Dict):
                 length = 5, 7
-
-                for key, value in self.data.items():
-                    if len(str(key)) > length[0]:
-                        length = len(str(key)), length[1]
-                    if len(str(value)) > length[1]:
-                        length = length[0], len(str(value))
-
-                result.write(
-                    f"┌{'─' * (length[0] + 2)}" + f"┬{'─' * (length[1] + 2)}" + "┐\n"
-                )
-                result.write(
-                    f"│ {'Key'.center(length[0])} │ "
-                    + f"{'Value'.center(length[1])} │\n"
-                )
-                result.write(
-                    f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n"
-                )
-
-                for key, value in self.data.items():
-                    result.write(
-                        f"│ {str(key).center(length[0])} │ "
-                        + f"{str(value).center(length[1])} │\n"
-                    )
-
-                result.write(
-                    f"└{'─' * (length[0] + 2)}" + f"┴{'─' * (length[1] + 2)}" + "┘\n"
-                )
-
-            elif isinstance(self.data, (List, Set, Tuple)):
+                header_column_1 = "Key"
+                iterator = self.data.items()
+            else:
                 length = 7, 7
+                header_column_1 = "Index"
+                iterator = enumerate(self.data)
 
-                for index, value in enumerate(self.data):
-                    if len(str(index)) > length[0]:
-                        length = len(str(index)), length[1]
-                    if len(str(value)) > length[1]:
-                        length = length[0], len(str(value))
+            for key, value in iterator:
+                if len(str(key)) > length[0]:
+                    length = len(str(key)), length[1]
+                if len(str(value)) > length[1]:
+                    length = length[0], len(str(value))
 
-                result.write(
-                    f"┌{'─' * (length[0] + 2)}" + f"┬{'─' * (length[1] + 2)}" + "┐\n"
-                )
-                result.write(
-                    f"│ {'Index'.center(length[0])} │ "
-                    + f"{'Value'.center(length[1])} │\n"
-                )
-                result.write(
-                    f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n"
-                )
+            result.write(
+                f"┌{'─' * (length[0] + 2)}" + f"┬{'─' * (length[1] + 2)}" + "┐\n"
+            )
+            result.write(
+                f"│ {header_column_1.center(length[0])} │ "
+                + f"{'Value'.center(length[1])} │\n"
+            )
+            result.write(
+                f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n"
+            )
 
-                for index, value in enumerate(self.data):
-                    result.write(
-                        f"│ {str(index).center(length[0])} │ "
-                        + f"{str(value).center(length[1])} │\n"
-                    )
-
+            for key, value in self.data.items():
                 result.write(
-                    f"└{'─' * (length[0] + 2)}" + f"┴{'─' * (length[1] + 2)}" + "┘\n"
+                    f"│ {str(key).center(length[0])} │ "
+                    + f"{str(value).center(length[1])} │\n"
                 )
 
-            result = result.getvalue()
+            result.write(
+                f"└{'─' * (length[0] + 2)}" + f"┴{'─' * (length[1] + 2)}" + "┘\n"
+            )
 
-        return result
+            return result.getvalue()
 
     def __repr__(self) -> str:
         """Returns the representation of the table.
