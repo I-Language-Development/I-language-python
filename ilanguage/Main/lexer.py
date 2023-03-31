@@ -274,7 +274,7 @@ def gettoken(  # pylint: disable=R1710
 ##############
 
 
-def lex(  # pylint: disable=R0912, R0915
+def lex(  # pylint: disable=R0912, R0915, R1260
     text: Optional[str] = None,
 ) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
@@ -402,7 +402,7 @@ def lex(  # pylint: disable=R0912, R0915
     return tokens
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pylint: disable=R1260
     options: Dict[str, bool] = {
         "types": False,
         "values": False,
