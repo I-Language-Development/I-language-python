@@ -232,21 +232,22 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
     if string in list(KEYWORDS):
         return LexerToken(KEYWORDS[string], string)
 
-    elif len(string) > 1 and string[0] == "_":
+    if len(string) > 1 and string[0] == "_":
         return LexerToken("BUILTIN_CONST", string)
 
-    elif string in ["true", "false"]:
+    if string in ["true", "false"]:
         return LexerToken("BOOL", string)
 
-    elif string in BASE_TYPES:
+    if string in BASE_TYPES:
         return LexerToken("BASETYPE", string)
 
-    elif validate_integer(string) and len(string) > 0:
+    if validate_integer(string) and len(string) > 0:
         return LexerToken("INT", string)
 
-    elif len(string) > 0 and string[0] not in DIGITS_AS_STRINGS and len(string) > 0:
+    if string[0] not in DIGITS_AS_STRINGS and len(string) > 0:
         return LexerToken("NAME", string)
-    else:
+
+    if not len(string) > 0:
         LexerError(f"Unrecognized Pattern: {string!r}", line, column)
 
     return None
