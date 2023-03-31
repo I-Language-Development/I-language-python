@@ -88,6 +88,7 @@ class Unspecified(Error):
 # HELPER FUNCTIONS #
 ####################
 
+
 def description_from_message(message: str) -> str:
     """Returns the error description from a message.
 
