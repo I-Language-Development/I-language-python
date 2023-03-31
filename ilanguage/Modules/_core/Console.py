@@ -106,9 +106,7 @@ class Table:
                 f"│ {header_column_1.center(length[0])} │ "
                 + f"{'Value'.center(length[1])} │\n"
             )
-            result.write(
-                f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n"
-            )
+            result.write(f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n")
 
             for key, value in self.data.items():
                 result.write(
