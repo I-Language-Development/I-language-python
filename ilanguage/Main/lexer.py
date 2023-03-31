@@ -217,9 +217,7 @@ def validate_integer(string: str) -> bool:
     return True
 
 
-def gettoken(
-    string: str, line: int, column: int
-) -> Optional[LexerToken]:
+def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
     """Returns a token from the specified string.
 
     Args:
@@ -243,15 +241,10 @@ def gettoken(
     elif string in BASE_TYPES:
         return LexerToken("BASETYPE", string)
 
-    elif len(string) == 0:
-        return None
-
-    elif validate_integer(string):
+    elif validate_integer(string) and len(string) > 0:
         return LexerToken("INT", string)
 
-    elif (
-        len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
-    ):
+    elif len(string) > 0 and string[0] not in DIGITS_AS_STRINGS and len(string) > 0:
         return LexerToken("NAME", string)
     else:
         LexerError(f"Unrecognized Pattern: {string!r}", line, column)
