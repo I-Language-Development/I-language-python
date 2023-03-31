@@ -69,7 +69,7 @@ target-version = ["py37", 'py38','py39','py310', "py311"]
 [tool.pylint.main]
 exit-zero = true
 ignore-patterns = ['__init__.py']
-load-plugins = ["pylint_secure_coding_standard"]
+load-plugins = ["pylint.extensions.mccabe", "pylint_secure_coding_standard"]
 py-version = "3.7"
 
 [tool.pylint.format]
