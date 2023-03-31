@@ -217,7 +217,7 @@ def validate_integer(string: str) -> bool:
     return True
 
 
-def gettoken(  # pylint: disable=R1710
+def gettoken(
     string: str, line: int, column: int
 ) -> Optional[LexerToken]:
     """Returns a token from the specified string.
@@ -231,42 +231,32 @@ def gettoken(  # pylint: disable=R1710
         Token from the specified string.
     """
 
-    already_tokenized = False
-    result = None
+    if string in list(KEYWORDS):
+        return LexerToken(KEYWORDS[string], string)
 
-    if string in list(KEYWORDS) and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken(KEYWORDS[string], string)
+    elif len(string) > 1 and string[0] == "_":
+        return LexerToken("BUILTIN_CONST", string)
 
-    elif (len(string) > 1 and string[0] == "_") and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken("BUILTIN_CONST", string)
+    elif string in ["true", "false"]:
+        return LexerToken("BOOL", string)
 
-    elif string in ["true", "false"] and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken("BOOL", string)
+    elif string in BASE_TYPES:
+        return LexerToken("BASETYPE", string)
 
-    elif string in BASE_TYPES and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken("BASETYPE", string)
+    elif len(string) == 0:
+        return None
 
-    elif len(string) == 0 and not already_tokenized:
-        already_tokenized = True
-        result = None
-
-    elif validate_integer(string) and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken("INT", string)
+    elif validate_integer(string):
+        return LexerToken("INT", string)
 
     elif (
         len(string) > 0 and string[0] not in DIGITS_AS_STRINGS
-    ) and not already_tokenized:
-        already_tokenized = True
-        result = LexerToken("NAME", string)
+    ):
+        return LexerToken("NAME", string)
     else:
         LexerError(f"Unrecognized Pattern: {string!r}", line, column)
 
-    return result
+    return None
 
 
 ##############
@@ -274,7 +264,7 @@ def gettoken(  # pylint: disable=R1710
 ##############
 
 
-def lex(  # pylint: disable=R0912, R0915, R1260
+def lex(  # pylint: disable=R0912, R0915
     text: Optional[str] = None,
 ) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
