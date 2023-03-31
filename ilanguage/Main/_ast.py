@@ -23,8 +23,20 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
+##########
+# LINTER #
+##########
+
+# pylint: disable=R0903
+
+
 # TODO (MasterOktagon): Explain this and extend it.
 
+
+#############
+# VARIABLES #
+#############
 
 known_vars = {}
 known_funcs = {}
