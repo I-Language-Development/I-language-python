@@ -91,7 +91,7 @@ class Table:
             else:
                 length = 7, 7
                 header_column_1 = "Index"
-                iterator = enumerate(self.data)
+                iterator = tuple(enumerate(self.data))
 
             for key, value in iterator:
                 if len(str(key)) > length[0]:
@@ -108,7 +108,7 @@ class Table:
             )
             result.write(f"├{'─' * (length[0] + 2)}┼" + f"{'─' * (length[1] + 2)}┤\n")
 
-            for key, value in self.data.items():
+            for key, value in iterator:
                 result.write(
                     f"│ {str(key).center(length[0])} │ "
                     + f"{str(value).center(length[1])} │\n"
