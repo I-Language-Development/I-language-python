@@ -264,7 +264,7 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
 
 
 def lex(  # pylint: disable=R0912, R0915, R1260
-    text: Optional[str] = None,
+    text: str,
 ) -> Optional[List[LexerToken]]:
     """Lexes the specified string.
 
