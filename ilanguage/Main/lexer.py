@@ -229,28 +229,31 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
         LexerToken: Token from the specified string.
     """
 
-    result = None
+    try:
+        result = None
 
-    if string in list(KEYWORDS):
-        result = LexerToken(KEYWORDS[string], string)
+        if string in list(KEYWORDS):
+            result = LexerToken(KEYWORDS[string], string)
 
-    if len(string) > 1 and string[0] == "_":
-        result = LexerToken("BUILTIN_CONST", string)
+        if len(string) > 1 and string[0] == "_" and result is None:
+            result = LexerToken("BUILTIN_CONST", string)
 
-    if string in ["true", "false"]:
-        result = LexerToken("BOOL", string)
+        if string in ["true", "false"] and result is None:
+            result = LexerToken("BOOL", string)
 
-    if string in BASE_TYPES:
-        result = LexerToken("BASETYPE", string)
+        if string in BASE_TYPES and result is None:
+            result = LexerToken("BASETYPE", string)
 
-    if validate_integer(string) and len(string) > 0:
-        result = LexerToken("INT", string)
+        if validate_integer(string) and result is None:
+            result = LexerToken("INT", string)
 
-    if string[0] not in DIGITS_AS_STRINGS and len(string) > 0:
-        result = LexerToken("NAME", string)
+        if string[0] not in DIGITS_AS_STRINGS and result is None:
+            result = LexerToken("NAME", string)
 
-    if not len(string) > 0:
-        LexerError(f"Unrecognized Pattern: {string!r}", line, column)
+        if not len(string) > 0 and result is None:
+            LexerError(f"Unrecognized Pattern: {string!r}", line, column)
+    except IndexError:
+        pass
 
     return result
 
@@ -258,7 +261,6 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
 ##############
 # MAIN LEXER #
 ##############
-
 
 def lex(  # pylint: disable=R0912, R0915, R1260
     text: Optional[str] = None,
@@ -269,7 +271,7 @@ def lex(  # pylint: disable=R0912, R0915, R1260
          text (str): Text to lex.
 
     Returns:
-        List of lexed tokens.
+        List[LexerToken]: List of lexed tokens.
     """
 
     tokens = []
@@ -346,19 +348,24 @@ def lex(  # pylint: disable=R0912, R0915, R1260
                             helper = 2
 
                         elif character in list(MARKS):
-                            tokens.append(gettoken(buffer.getvalue(), line, column))
+                            if gettoken(buffer.getvalue(), line, column) is not None:
+                                tokens.append(gettoken(buffer.getvalue(), line, column))
                             tokens.append(LexerToken(MARKS[character], character))
                             buffer.close()
                             buffer = io.StringIO()
 
                         else:
                             buffer.write(character)
+
                         if append_newline:
                             append_newline = False
                             tokens.append(LexerToken("NEWLINE", "\n"))
 
                     except IndexError:
                         pass
+
+        if buffer.getvalue():
+            tokens.append(gettoken(buffer.getvalue(), line, column))
     finally:
         buffer.close()
 
