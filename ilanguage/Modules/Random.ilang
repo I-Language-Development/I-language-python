@@ -28,7 +28,7 @@
 // IMPORTS //
 /////////////
 
-import _core
+import _core;
 
 
 ////////////////////
@@ -50,8 +50,7 @@ import _core
 * Int: Random integer.
 */
 int randint(int minimum, int maximum) {
-
-    return _core.Random.randint(minimum, maximum)
+    return _core.Random.randint(minimum, maximum);
 }
 
 
@@ -75,7 +74,7 @@ int randint(int minimum, int maximum) {
 * Any: Chosen object(s) from the iterable.
 */
 function choices(list iterable, int choices = 1) {
-    return _core.Random.choices(iterable, choices)
+    return _core.Random.choices(iterable, choices);
 }
 
 
@@ -97,5 +96,5 @@ function choices(list iterable, int choices = 1) {
 * list: Shuffled list.
 */
 list shuffle(list iterable) {
-    return _code.Random.shuffle(iterable)
+    return _code.Random.shuffle(iterable);
 }

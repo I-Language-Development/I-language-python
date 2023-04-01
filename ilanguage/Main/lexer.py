@@ -57,7 +57,7 @@ from typing_extensions import (
 
 DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
-# TODO (ElBe): Add grammar instead of this
+# TODO (ElBe): Add grammar instead of this (scheduled for version 0.0.10)
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
 DOUBLE_MARKS: Final[Dict[str, str]] = {
     "==": "EQUAL",
@@ -177,7 +177,7 @@ def validate_float(string: str) -> bool:
         string (str): Text to validate.
 
     Returns:
-        True if the string is a valid float, False otherwise.
+        bool: True if the string is a valid float, False otherwise.
     """
 
     string = string.replace(" ", "")
@@ -202,7 +202,7 @@ def validate_integer(string: str) -> bool:
         string (str): Text to validate.
 
     Returns:
-        True if the string is a valid integer, False otherwise.
+        bool: True if the string is a valid integer, False otherwise.
     """
 
     string = string.replace(" ", "")
@@ -444,8 +444,7 @@ if __name__ == "__main__":  # pylint: disable=R1260
             DATA = file.read()
     except (IndexError, FileNotFoundError):
         DATA = """
-        int i   = 1234
-        float f = 12.34
+        // Code goes here
         """
 
     if options["types"] and not options["values"]:
