@@ -57,7 +57,7 @@ if (
 if len(sys.argv[1:]) > 0:
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-            pass
+            print("\n".join([str(token) for token in Main.lexer.lex(file.read())]))
     except FileNotFoundError:
         print("Error: The specified file does not exist.")
     except UnicodeEncodeError:
