@@ -147,8 +147,8 @@ class OSError(Error):
     def __init__(self, line: int, column: int) -> None:
         super().__init__(
             "OS Error",
-            long_description="This error can be caused by anything." + \
-                             "\nPlease report this errors to the bug tracker, if you need more help.",
+            long_description="This error can be caused by anything."
+            + "\nPlease report this errors to the bug tracker, if you need more help.",
             line=line,
             column=column,
             exit_code=5,
