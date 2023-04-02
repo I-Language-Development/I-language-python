@@ -1,6 +1,6 @@
 [project]
 name = "I-Language"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
     { name="ElBe-Plaq", email="elbe.dev.plaq@gmail.com" },
     { name="MasterOktagon" }
