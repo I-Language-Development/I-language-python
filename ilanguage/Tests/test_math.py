@@ -1,6 +1,6 @@
 """
 I Language math test.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -28,17 +28,13 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-
 import pathlib
 import sys
-from typing import (
-    Iterable,
-)
 
 import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from Modules._core import Math
+from Modules._core import Math  # pylint: disable=E0401, C0413
 
 
 #################
@@ -73,4 +69,4 @@ def test_round(data: float, expected: int) -> None:
         expected (int): Expected result.
     """
 
-    assert Math._round(data) == expected
+    assert Math._round(data) == expected  # pylint: disable=W0212

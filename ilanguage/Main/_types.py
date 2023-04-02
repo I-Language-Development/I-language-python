@@ -2,7 +2,7 @@
 I Language types.
 Version: 0.1.2
 
-Copyright (c) 2023-present ElBe Development.
+Copyright (c) 2023-present I Language Development.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the 'Software'),
@@ -23,6 +23,12 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+##########
+# LINTER #
+##########
+
+# pylint: disable=R0903
+
 
 ###########
 # IMPORTS #
@@ -32,11 +38,11 @@ import ast
 import builtins
 from typing import (
     List as _List,
+    Optional,
 )
 
 from typing_extensions import (
     Any as _Any,
-    final,
     Self,
     Type,
 )
@@ -54,11 +60,12 @@ class BaseType:
 
     types: _List[Self] = []
 
-    def __init__(self, value: str, python_type: Type) -> None:
+    def __init__(self, value: str, python_type: Optional[Type]) -> None:
         """Initializes a new type.
 
-        :param value: Value of the type.
-        :param python_type: Python base type representing this type.
+        Args:
+            value (str): Value of the type.
+            python_type (Optional[Type]): Python base type representing this type.
         """
 
         self.value = value
@@ -71,7 +78,8 @@ class BaseType:
         Validates the value with the type.
         """
 
-        self.python_type(ast.literal_eval(self.value))
+        if self.python_type is not None:
+            self.python_type(ast.literal_eval(self.value))
 
 
 #########
@@ -93,7 +101,6 @@ class Any(BaseType):
         super().__init__(value, _Any)
 
 
-@final
 class Bool(BaseType):
     """
     Bool type.
@@ -108,7 +115,6 @@ class Bool(BaseType):
         super().__init__(value, builtins.bool)
 
 
-@final
 class Complex(BaseType):
     """
     Complex integer type.
@@ -137,37 +143,18 @@ class Dict(BaseType):
         super().__init__(value, builtins.dict)
 
 
-@final
 class Dictionary(Dict):
     """
     Dictionary type.
     """
 
-    def __init__(self, value: str) -> None:
-        """Initializes a dictionary type.
 
-        :param value: Value of the object to check for dictionary value.
-        """
-
-        super().__init__(value)
-
-
-@final
 class Dynamic(Any):
     """
     Dynamic type.
     """
 
-    def __init__(self, value: str) -> None:
-        """Initializes a dynamic type.
 
-        :param value: Value of the object to check for dynamic value.
-        """
-
-        super().__init__(value)
-
-
-@final
 class Float(BaseType):
     """
     Float type.
@@ -196,22 +183,12 @@ class Int(BaseType):
         super().__init__(value, builtins.int)
 
 
-@final
 class Integer(Int):
     """
     Integer type.
     """
 
-    def __init__(self, value: str) -> None:
-        """Initializes an integer type.
 
-        :param value: Value of the object to check for integer value.
-        """
-
-        super().__init__(value)
-
-
-@final
 class List(BaseType):
     """
     List type.
@@ -237,7 +214,7 @@ class Null(BaseType):
         :param value: Value of the object to check for none value.
         """
 
-        super().__init__(value)  # TODO (ElBe): Find null type
+        super().__init__(value, None)
 
 
 class Str(BaseType):
@@ -254,16 +231,22 @@ class Str(BaseType):
         super().__init__(value, builtins.str)
 
 
-@final
 class String(Str):
     """
     String type.
     """
 
-    def __init__(self, value: str) -> None:
-        """Initializes a string type.
 
-        :param value: Value of the object to check for string value.
+class mdarray(BaseType):
+    """
+    Multi-dimensional array type.
+    """
+
+    def __init__(self, value: str) -> None:
+        """Initializes a multidimensional array type.
+
+        Args:
+            value (mdarray): Value of the object to check for multidimensional array value.
         """
 
-        super().__init__(value)
+        super().__init__(value, _Any)  # TODO (ElBe): Add python type

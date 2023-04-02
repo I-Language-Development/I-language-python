@@ -1,23 +1,23 @@
 # Global owners
-*               @ElBe-Plaq @MasterOktagon
+*                   @ElBe-Plaq @MasterOktagon
 
 # .github
-/.github/       @ElBe-Plaq
+/.github/           @ElBe-Plaq
 
 # Docs
-/Docs/          @ElBe-Plaq
+/Docs/              @ElBe-Plaq
 
 # Main normal files
-/Main/*.py      @ElBe-Plaq @MasterOktagon
+/Main/*.py          @ElBe-Plaq @MasterOktagon
+
+# Error file
+/Main/_errors.py    @Ranastra
 
 # Main underscored files
-/Main/_*.py     @ElBe-Plaq
+/Main/_*.py         @ElBe-Plaq
 
 # Modules
-/Modules/       @ElBe-Plaq
+/Modules/           @ElBe-Plaq
 
 # Tools
-/Tools/         @ElBe-Plaq
-
-# Readme
-README.md       @ElBe-Plaq
+/Tools/             @ElBe-Plaq

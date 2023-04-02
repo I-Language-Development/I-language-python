@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 """
-I Language python package runner.
+I Language core.
 Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
@@ -24,31 +23,10 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-
 ###########
 # IMPORTS #
 ###########
 
-import sys
-
-import Main
-
-Main.parser.parse = lambda x: x
-
-
-###########
-# EXECUTE #
-###########
-
-if len(sys.argv[1:]) > 0:
-    try:
-        with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
-            Main.parser.parse(file.read())
-    except FileNotFoundError:
-        print("Error: The specified file does not exist.")
-    except UnicodeEncodeError:
-        print("Error: Can not read the specified file.")
-
-else:
-    print("Error: No file was specified.")
-    sys.exit(1)
+from . import (
+    lexer,
+)

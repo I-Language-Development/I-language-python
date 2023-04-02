@@ -1,5 +1,5 @@
 """
-I Language core.
+I Language setup program.
 Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
@@ -27,8 +27,11 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-from . import (
-    Console,
-    Math,
-    Random,
-)
+from setuptools import setup
+
+
+#########
+# SETUP #
+#########
+
+setup()

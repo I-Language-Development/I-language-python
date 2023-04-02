@@ -1,6 +1,6 @@
 """
 I Language lexer test.
-Version: 0.1.0
+Version: 0.1.1
 
 Copyright (c) 2023-present I Language Development.
 
@@ -28,7 +28,6 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-
 import pathlib
 import sys
 from typing import (
@@ -38,7 +37,7 @@ from typing import (
 import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from Main import lexer
+from Main import lexer  # pylint: disable=E0401, C0413
 
 
 ####################
@@ -201,7 +200,7 @@ def test_lex(data: str, expected: List[lexer.LexerToken]) -> None:
         expected (list[lexer.LexerToken]): Expected tokens.
     """
 
-    assert [str(token) for token in lexer.Lexer(data).lex()] == [
+    assert [str(token) for token in lexer.lex(data)] == [
         str(token) for token in expected
     ]
 

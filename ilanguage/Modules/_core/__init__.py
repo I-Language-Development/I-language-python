@@ -1,6 +1,6 @@
 """
-I Language Main program.
-Version: 0.0.8
+I Language core modules.
+Version: 0.1.0
 
 Copyright (c) 2023-present I Language Development.
 
@@ -23,7 +23,12 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-__author__ = "I Language Development"
-__version__ = "0.0.8"
-__license__ = "MIT"
-__copyright__ = "Copyright 2023-present I Language Development"
+###########
+# IMPORTS #
+###########
+
+from . import (
+    Console,
+    Math,
+    Random,
+)
