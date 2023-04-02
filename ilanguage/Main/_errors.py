@@ -1,6 +1,6 @@
 """
 I Language errors.
-Version: 0.1.0
+Version: 0.1.2
 
 Copyright (c) 2023-present I Language Development.
 
@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 # LINTER #
 ##########
 
-# pylint: disable=R0903
+# pylint: disable=R0903, W0622
 
 
 ###########
@@ -49,18 +49,29 @@ class Error:
     """
 
     def __init__(
-        self, text: str, line: int = 0, column: int = 0, exit_code: int = 1
+        self,
+        description: str,
+        *,
+        long_description: str = "",
+        line: int = 0,
+        column: int = 0,
+        exit_code: int = 1,
     ) -> None:
-        """Initializes a new type.
+        """Initializes a new error.
 
-        :param text: Error text
-        :param line: Line the error occurred on.
-        :param column: Column the error occurred on.
-        :param exit_code: Code to use when exiting. If code is 0, there won't be an exit.
+        Args:
+            description (str): Error text.
+            long_description (str, keyword only): Long, more detailed error text.
+            line (int, keyword only): Line the error occurred on.
+            column (int, keyword only): Column the error occurred on.
+            exit_code (int, keyword only): Code to use when exiting. If code is 0, there won't be an exit.
         """
 
-        print(f"Error: {text}, in line {line} column {column}.")
-        sys.exit(exit_code)
+        print(
+            f"Error: {description}, in line {line} column {column}.{long_description}"
+        )
+        if exit_code != 0:
+            sys.exit(exit_code)
 
 
 ##########
@@ -70,147 +81,343 @@ class Error:
 
 class Unspecified(Error):
     """
-    Represents a unspecified error.
+    Represents an unspecified error.
     """
 
-    def __init__(self, description: str, line: int = 0, column: int = 0, exit_code=2) -> None:
-        """Initialize a new unspecified error.
-        :param description: Description of the error.
-        :param line: Line the error occurred on.
-        :param column: Column the error occurred on.
-        """
+    def __init__(
+        self,
+        description: str,
+        line: int = 0,
+        column: int = 0,
+    ) -> None:
+        super().__init__(
+            description,
+            line=line,
+            column=column,
+            exit_code=2,
+        )
 
-        super().__init__(text=description, line=line, column=column, exit_code=exit_code)
 
 class UnknownError(Error):
-    def __init__(self, line: int, column: int):
-        super().__init__(description="Don't you dare trying to break this stuff", line=line, column=column)
+    """
+    Represents an unknown error.
+    """
 
-
-class SyntaxError(Error):
-    def __init__(self, line: int, column: int, text="Syntax Error", hint: str = "", exit_code=3):
-        if hint: print(hint)
-        super().__init__(text=text, line=line, column=column, exit_code=exit_code)
-
-
-class TypeError(SyntaxError):
-    def __init__(self, line: int, column: int, type_expected, type_got, text="Type Error", exit_code=4):
-        hint = f"expected {type_expected} got {type_got}"
-        super().__init__(text=text, line=line, column=column, exit_code=exit_code, hint=hint)
-
-
-class InvalidAssignmentError(TypeError):
-    def __init__(self, line: int, column: int, type_expected, type_got):
-        super().__init__(line=line, column=column, text="Invalid Assignment", exit_code=5, type_expected=type_expected, type_got=type_got)
-
-
-class EmptyAssignmentError(TypeError):
-    def __init__(self, line: int, column: int, type_expected):
-        super().__init__(line=line, column=column, text="Empty Assignment", exit_code=6, type_expected=type_expected, type_got=None)
-
-
-class UnclosedError(SyntaxError):
-    def __init__(self, line: int, column: int, delimiter: str):
-        super().__init__(line=line, column=column, exit_code=7, hint=f"Expected: {delimiter}")
-
-
-class RuntimeError(Error):
-    def __init__(self, line: int, column: int, exit_code=8, text="Runtime Error"):
-        super().__init__(text=text, line=line, column=column, exit_code=exit_code)
-
-
-class PythonError(RuntimeError):
-    def __init__(self, line: int, column: int, python_error: BaseException):
-        print(python_error)
-        super().__init__(text="Python Error", line=line, column=column, exit_code=9)
+    def __init__(self, long_description: str, line: int = 0, column: int = 0) -> None:
+        super().__init__(
+            "Unknown error",
+            long_description=long_description,
+            line=line,
+            column=column,
+            exit_code=2,
+        )
 
 
 class EncodingError(Error):
-    def __init__(self, line: int, column: int, text="Encoding Error"):
-        super().__init__(text=text, line=line, column=column, exit_code=10)
+    """
+    Represents an encoding error.
+    """
+
+    def __init__(
+        self, filename: str, encoding: str = "UTF-8", line: int = 0, column: int = 0
+    ) -> None:
+        super().__init__(
+            "Encoding error",
+            long_description=f"Tried to open file {filename} with the {encoding} encoding",
+            line=line,
+            column=column,
+            exit_code=3,
+        )
+
+
+class KeyboardInterrupt(Error):
+    """
+    Represents a keyboard interrupt.
+    """
+
+    def __init__(self, line: int, column: int) -> None:
+        super().__init__("Keyboard Interrupt", line=line, column=column, exit_code=4)
+
+
+class OSError(Error):
+    """
+    Represents an operating system error.
+    """
+
+    def __init__(self, line: int, column: int) -> None:
+        super().__init__(
+            "OS Error",
+            long_description="This error can be caused by anything." + \
+                             "\nPlease report this errors to the bug tracker, if you need more help.",
+            line=line,
+            column=column,
+            exit_code=5,
+        )
+
+
+class SyntaxError(Error):
+    """
+    Represents a syntax error.
+    """
+
+    def __init__(
+        self,
+        description: str = "Syntax error",
+        *,
+        long_description: str = "",
+        line: int = 0,
+        column: int = 0,
+        exit_code: int = 3,
+    ) -> None:
+        super().__init__(
+            description,
+            long_description=long_description,
+            line=line,
+            column=column,
+            exit_code=exit_code,
+        )
+
+
+class TypeError(SyntaxError):
+    """
+    Represents a type error.
+    """
+
+    def __init__(
+        self,
+        description: str = "Type error",
+        *,
+        line: int = 0,
+        column: int = 0,
+        expected: str = "",
+        got: str = "",
+        exit_code=4,
+    ) -> None:
+        expected = "type " + expected if "assignment" not in expected else expected
+        got = "type " + got if "nothing" not in got else got
+
+        super().__init__(
+            description,
+            long_description=f"Expected {expected} got {got}",
+            line=line,
+            column=column,
+            exit_code=exit_code,
+        )
+
+
+class InvalidAssignmentError(TypeError):
+    """
+    Represents an invalid assignment error.
+    """
+
+    def __init__(self, *, got: str, line: int = 0, column: int = 0) -> None:
+        super().__init__(
+            "Invalid assignment error",
+            line=line,
+            column=column,
+            expected="no assignment",
+            got=got,
+            exit_code=5,
+        )
+
+
+class EmptyAssignmentError(TypeError):
+    """
+    Represents an empty assignment error.
+    """
+
+    def __init__(self, *, expected: str, line: int = 0, column: int = 0) -> None:
+        super().__init__(
+            "Empty assignment error",
+            line=line,
+            column=column,
+            expected=expected,
+            got="nothing",
+            exit_code=6,
+        )
+
+
+class UnclosedError(SyntaxError):
+    """
+    Represents an unclosed error.
+    """
+
+    def __init__(self, delimiter: str, line: int = 0, column: int = 0) -> None:
+        super().__init__(
+            "Unclosed error",
+            long_description=f"Expected: {delimiter}",
+            line=line,
+            column=column,
+            exit_code=7,
+        )
+
+
+class RuntimeError(Error):
+    """
+    Represents a runtime error.
+    """
+
+    def __init__(
+        self,
+        description: str = "Runtime error",
+        *,
+        long_description: str = "",
+        line: int = 0,
+        column: int = 0,
+        exit_code: int = 8,
+    ) -> None:
+        super().__init__(
+            description,
+            long_description=long_description,
+            line=line,
+            column=column,
+            exit_code=exit_code,
+        )
+
+
+class PythonError(RuntimeError):
+    """
+    Represents a python error.
+    """
+
+    def __init__(self, error: BaseException, line: int = 0, column: int = 0):
+        super().__init__(
+            description="Python Error",
+            long_description=str(error),
+            line=line,
+            column=column,
+            exit_code=9,
+        )
 
 
 class ValueError(Error):
     def __init__(self, line: int, column: int, obj, function_name: str):
         print(f"invalid argument {obj} for function {function_name}")
-        super().__init__(text="Value Error", line=line, column=column, exit_code=11)
+        super().__init__(
+            description="Value Error", line=line, column=column, exit_code=11
+        )
 
 
 class MemoryError(RuntimeError):
-    def __init__(self, line: int, column: int, exit_code=12, hint: str = "", text="Memory Error"):
-        if hint: print(hint)
-        super().__init__(text=text, line=line, column=column, exit_code=exit_code)
+    def __init__(
+        self,
+        line: int,
+        column: int,
+        exit_code=12,
+        hint: str = "",
+        description="Memory Error",
+    ):
+        if hint:
+            print(hint)
+        super().__init__(
+            description=text, line=line, column=column, exit_code=exit_code
+        )
 
 
 class NameError(MemoryError):
     def __init__(self, line: int, column: int, name: str):
         hint = f"name {name} is not defined"
-        super().__init__(text="Name Error", line=line, column=column, exit_code=13, hint=hint)
+        super().__init__(
+            description="Name Error", line=line, column=column, exit_code=13, hint=hint
+        )
 
 
 class KeyError(MemoryError):
     def __init__(self, line: int, column: int, key: str):
         hint = f"key {key} is not valid"
-        super().__init__(text="Key Error", line=line, column=column, exit_code=14, hint=hint)
+        super().__init__(
+            description="Key Error", line=line, column=column, exit_code=14, hint=hint
+        )
+
 
 class IndexError(MemoryError):
     def __init__(self, line: int, column: int, index: int):
         hint = f"Index {index} out of range"
-        super().__init__(text="Index Error", line=line, column=column, exit_code=15, hint=hint)
+        super().__init__(
+            description="Index Error", line=line, column=column, exit_code=15, hint=hint
+        )
 
 
 class ArithmeticError(RuntimeError):
     def __init__(self, line: int, column: int, exit_code=16, hint=""):
-        if hint: print(hint)
-        super().__init__(text="Arithmetic Error", line=line, column=column, exit_code=exit_code)
+        if hint:
+            print(hint)
+        super().__init__(
+            description="Arithmetic Error",
+            line=line,
+            column=column,
+            exit_code=exit_code,
+        )
 
 
 class DivisionByZeroError(ArithmeticError):
     def __init__(self, line: int, column: int):
-        super().__init__(line=line, column=column, exit_code=17, hint="Division by Zero")
+        super().__init__(
+            line=line, column=column, exit_code=17, hint="Division by Zero"
+        )
 
 
 class FloatingPointError(ArithmeticError):
     def __init__(self, line: int, column: int):
-        super().__init__(line=line, column=column, exit_code=18, hint="Floating Point Error")
+        super().__init__(
+            line=line, column=column, exit_code=18, hint="Floating Point Error"
+        )
 
 
 class TestError(RuntimeError):
     def __init__(self, line: int, column: int, test_number: int):
-        super().__init__(text=f"Test {test_number} failed", line=line, column=column, exit_code=19)
-
-
-class OSError(Error):
-    def __init__(self, line: int, column: int, function_name: str):
-        print(f"there was an Error in function {function_name}")
-        super().__init__(text="OS Error", line=line, column=column, exit_code=20)
-
-
-class KeyboardInterrupt(Error):
-    def __init__(self, line: int, column: int):
-        super().__init__(text="Keyboard Interrupt", line=line, column=column, exit_code=21)
+        super().__init__(
+            description=f"Test {test_number} failed",
+            line=line,
+            column=column,
+            exit_code=19,
+        )
 
 
 class OverflowError(Error):
-    def __init__(self, line: int, column: int, exit_code=22, text="Overflow Error", hint=""):
-        if hint: print(hint)
-        super().__init__(text=text, line=line, column=column, exit_code=exit_code)
+    def __init__(
+        self,
+        line: int,
+        column: int,
+        exit_code=22,
+        description="Overflow Error",
+        hint="",
+    ):
+        if hint:
+            print(hint)
+        super().__init__(
+            description=text, line=line, column=column, exit_code=exit_code
+        )
 
 
 class RecursionError(OverflowError):
     def __init__(self, line: int, column: int, depth: int):
-        super().__init__(line=line, column=column, exit_code=23, text="Recursion Error", hint=f"Max recursion depth {depth} reached")
+        super().__init__(
+            line=line,
+            column=column,
+            exit_code=23,
+            description="Recursion Error",
+            hint=f"Max recursion depth {depth} reached",
+        )
 
 
 class NumberOverflow(OverflowError):
-    def __init__(self, line: int, column: int, type):
-        hint = f"Number Overflow for Type {type}"
-        super().__init__(line=line, column=column, exit_code=24, text="Number Overflow", hint=hint)
+    def __init__(self, line: int, column: int, _type: str):
+        hint = f"Number Overflow for type {_type}"
+        super().__init__(
+            line=line,
+            column=column,
+            exit_code=24,
+            description="Number Overflow",
+            hint=hint,
+        )
 
 
 class BufferError(RuntimeError):
     def __init__(self, line: int, column: int):
-        super().__init__(text="Buffer Error", line=line, column=column, exit_code=25)
+        super().__init__(
+            description="Buffer Error", line=line, column=column, exit_code=25
+        )
 
 
 ####################
