@@ -2,7 +2,7 @@
 name = "I-Language"
 version = "0.0.9"
 authors = [
-    { name="ElBe-Plaq", email="elbe.dev.plaq@gmail.com" },
+    { name="ElBe Plaq", email="elbe.dev.plaq@gmail.com" },
     { name="MasterOktagon" }
 ]
 description = "The I programming language is a high level programming language written in pure python."
@@ -58,7 +58,7 @@ dev = [
 ]
 docs = [
     "mkdocstrings[python]==0.20.0",
-    "mkdocs-material==9.1.4",
+    "mkdocs-material==9.1.5",
     "mkdocs-section-index==0.3.5",
 ]
 
