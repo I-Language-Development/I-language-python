@@ -7,6 +7,7 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: wow-actions/auto-assign@v1
         with:
