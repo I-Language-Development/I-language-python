@@ -68,6 +68,10 @@ docs = [
 line-lenghth = 100
 target-version = ["py37", 'py38','py39','py310', "py311"]
 
+[tool.mypy]
+check_untyped_defs = true
+python_version = "3.7"
+
 [tool.pylint.main]
 exit-zero = true
 ignore-patterns = ['__init__.py']
