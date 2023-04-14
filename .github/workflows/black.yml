@@ -1,10 +1,10 @@
 name: Black
 on:
   push:
-    paths: ["*.py"]
+    paths: ["**.py"]
 
   pull_request:
-    paths: ["*.py"]
+    paths: ["**.py"]
 
 
 jobs:
