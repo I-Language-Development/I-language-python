@@ -1,12 +1,3 @@
----
-name: "Update"
-description: "Update from the latest version to the latest dev version."
-title: "[UPDATE] VERSION"
-labels: Update
-assignees: ElBe-Plaq
-
----
-
 # Description
 Summary of all the changes made.
 
@@ -22,6 +13,7 @@ Please delete options that are not relevant.
 - [ ] Something else
 
 # Checklist:
+
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -30,4 +22,3 @@ Please delete options that are not relevant.
 - [ ] My changes generate no problems with other code
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing tests passed locally with my changes
-
