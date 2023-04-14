@@ -1,3 +1,12 @@
+---
+name: "Update"
+description: "Update from the latest version to the latest dev version."
+title: "[UPDATE] VERSION"
+labels: Update
+assignees: ElBe-Plaq
+
+---
+
 # Description
 Summary of all the changes made.
 
