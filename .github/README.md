@@ -6,10 +6,12 @@
 </h3>
 <p align="center">
     <img src="https://www.codefactor.io/repository/github/i-language-development/i-language/badge">
+    <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit">
     <img src="https://github.com/I-Language-Development/I-language/actions/workflows/pylint.yml/badge.svg">
     <img src="https://github.com/I-Language-Development/I-language/actions/workflows/ruff.yml/badge.svg">
     <img src="https://github.com/I-Language-Development/I-language/actions/workflows/bandit.yml/badge.svg">
     <img src="https://github.com/I-Language-Development/I-language/actions/workflows/pytest.yml/badge.svg">
+    <img src="https://github.com/I-Language-Development/I-language/actions/workflows/mypy.yml/badge.svg">
 </p>
 
 <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/example-syntax.png?raw=true" width="500px"/>
