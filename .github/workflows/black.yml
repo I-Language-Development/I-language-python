@@ -1,8 +1,6 @@
-name: Lint and reformat with black
-
+name: Black
 on:
   push:
-    branches: [main]
     paths: ["*.py"]
 
   pull_request:
