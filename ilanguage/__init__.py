@@ -23,17 +23,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-__author__ = 'I Language Development'
-__version__ = '0.0.9'
-__license__ = 'MIT'
-__copyright__ = 'Copyright 2023-present I Language Development'
-
-
-
-
-
-
-list = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-
-
-
+__author__ = "I Language Development"
+__version__ = "0.0.9"
+__license__ = "MIT"
+__copyright__ = "Copyright 2023-present I Language Development"
