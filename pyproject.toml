@@ -49,6 +49,7 @@ dev = [
     "build==0.10.0",
     "mypy==1.2.0",
     "pipreqs==0.4.12",
+    "pre-commit==3.2.2",
     "pylint_runner==0.6.0",
     "pylint-secure-coding-standard==1.4.1",
     "pytest==7.3.0",
