@@ -37,6 +37,8 @@ DEALINGS IN THE SOFTWARE.
 
 import sys
 
+from options import Options
+
 
 #########
 # ERROR #
@@ -70,8 +72,8 @@ class Error:
         print(
             f"Error: {description}, in line {line} column {column}.{long_description}"
         )
-        if exit_code != 0:
-            sys.exit(exit_code)
+        if exit_code != 0 or Options.exit_zero:
+            sys.exit(0 if Options.exit_zero else exit_code)
 
 
 ##########
