@@ -1,4 +1,5 @@
-
+import termcolor
+import sys
 import iast as ast
 class ParserError(BaseException):
     def __init__(self,name,help,line,errcode=0):
@@ -7,8 +8,13 @@ class ParserError(BaseException):
         self.line = line+1
         self.errcode = errcode
 
-    def __str__(self):
-        return "Parser error: " + self.name.upper() + "(errno " + str(self.errcode) + ") - (line " + str(self.line) + "):\n" + self.help
+        print(termcolor.colored(
+            "\nParser error: " + self.name.upper() + "(errno " + str(self.errcode) + ") - (line " + str(
+                self.line) + "):\n" + self.help, "red"))
+        sys.exit(self.errcode)
+
+
+
 
 
 
@@ -37,15 +43,33 @@ class Parser:
             else: tl[i].append(t)
         return tl
 
+    def parse_var_call(self, tokens, line, local):
+        #print("vars:", ast.known_vars)
+        if tokens[0].type == "NAME" and len(tokens) == 1:
+            #print(ast.known_vars[tokens[0].value])
+            if tokens[0].value in list(ast.known_vars.keys()):
+                v: ast.Variable = ast.known_vars[tokens[0].value]
+                return ast.CallVariable(tokens[0].value, v.type)
+
+
     def parse_function_definition(self,tokens,line,local):
         if tokens[0].type == "BASETYPE":
             if tokens[1].type == "NAME":
-                split = self.splittokens(tokens,"CLAMP_CLOSE")
-                if len(split)==2:
-                    split[0] = split[0][1:]
-                    if tokens[3].type == "CLAMP_OPEN":
-                        pass
-
+                if tokens[3].type == "CLAMP_OPEN":
+                    tok = self.splittokens(tokens,"BLOCK_OPEN")
+                    if len(tok) == 2:
+                        if tok[0][-1].type == "CLAMP_CLOSE":
+                            if tok[1][-1].type == "BLOCK_CLOSE":
+                                pass
+                                ##############
+                                # Add: Arguments and parse of do
+                                ##############
+                            else:
+                                raise ParserError("unclosedblock",
+                                                  "The block opened here were not closed",
+                                                  line)
+                        else:
+                            raise ParserError("unclosedclamp","The clamp of this function definition was not closed in the right position (after all arguments)",line)
 
 
     def parse_value(self,tokens,line,local,list=0):
@@ -63,7 +87,7 @@ class Parser:
                 lis.type = typ
                 return lis
             for buf in self.splittokens(tokens[1:-1],"SEPERATOR"):
-                tree = self.parseoneof(buf,line,local,[self.parse_value])
+                tree = self.parseoneof(buf,line,local,[self.parse_value, self.parse_var_call])
                 if typ is None: typ = tree.type
                 if tree.type != typ: typ = "dynamic"
                 lis.values.append(tree)
@@ -93,7 +117,11 @@ class Parser:
                 block -= 1
                 ast.delete_locals(block+1)
             if block == 0 and tokens[index].type == "END_CMD":
-                tree = self.parseoneof(buffer,line,local + block,[self.parse_define_variable, self.parse_import])
+                tree = self.parseoneof(buffer,line,local + block,[
+                    self.parse_define_variable,
+                    self.parse_import,
+
+                ])
                 #if tree is None: pass
                 start.last().nexttask = tree
                 buffer = []
@@ -149,7 +177,7 @@ class Parser:
                                           line)
                     elif tl[-1] == "END_CMD":
                         #print(tokens[3:-1])
-                        tree = self.parseoneof(tokens[3:-1],line,local,[self.parse_value])
+                        tree = self.parseoneof(tokens[3:-1],line,local,[self.parse_var_call, self.parse_value, ])
                         if tree is not None and (tree.type == tokens[0].value or tokens[0].value == "dynamic" or (indef and tree.type == "null") or tree.type == "emptylist"):
                             if not tokens[1].value in ast.known_vars:
                                 ast.known_vars[tokens[1].value] = ast.Variable(tokens[1].value, tokens[0].value, local,

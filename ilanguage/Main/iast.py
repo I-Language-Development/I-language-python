@@ -85,6 +85,27 @@ class Main(AST):
     def __str__(self):
         return "<Main Program '" + self.name + "'>\n" + str(self.nexttask)
 
+class CallVariable(AST):
+    def __init__(self, name, type):
+        super().__init__()
+        self.name = name
+        self.type = type
+
+    def __str__(self):
+        return "<Call Variable '" + self.name + "'>"
+
+class DefineFunction (AST):
+    def __init__(self, name, _type, _list, indef, do=None):
+        super().__init__()
+        self.name = name
+        self.type = _type
+        self.list = _list
+        self.indef = indef  # What is this used for?
+        self.next_task = AST()
+        self.do = do
+    def __str__(self):
+        return "<Define '" + self.name + "' as '" + int(self.indef)*"?" + self.type + self.list*"[]" + "' do " + str(self.do).replace("\n","\t\n") + ">\n" + str(self.nexttask)
+
 
 class DefineVariableNovalue(AST):
     def __init__(self, name, _type, _list, indef):
@@ -120,6 +141,9 @@ class Variable:
         self.list = _list
         self.local = local
         self.line = line
+
+    def __repr__(self):
+        return str(self.type)
 
 
 if __name__ == "__main__":
