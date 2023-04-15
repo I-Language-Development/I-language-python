@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.
 # pylint: disable=R0903
 
 
-# TODO (MasterOktagon): Explain this and extend it.
+# TODO (ElBe): Extend this (#38)
 
 
 #############
