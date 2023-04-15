@@ -3,7 +3,8 @@ name = "I-Language"
 version = "0.0.9"
 authors = [
     { name="ElBe-Plaq", email="elbe.dev.plaq@gmail.com" },
-    { name="MasterOktagon" }
+    { name="MasterOktagon" },
+    { name="Ranastra" }
 ]
 description = "The I programming language is a high level programming language written in pure python."
 readme = ".github/README.md"
@@ -50,11 +51,10 @@ dev = [
     "mypy==1.2.0",
     "pipreqs==0.4.12",
     "pre-commit==2.21.0",
-    "pylint_runner==0.6.0",
+    "pylint==2.17.2",
     "pylint-secure-coding-standard==1.4.1",
     "pytest==7.3.0",
     "pytest-cov==4.0.0",
-    "pytest-picked==0.4.6",
     "pytest-pretty==1.2.0",
     "ruff==0.0.261",
     "twine==4.0.2",
@@ -86,7 +86,9 @@ load-plugins = [
     "pylint.extensions.typing",
     "pylint_secure_coding_standard"
 ]
+output-format="colorized"
 py-version = "3.7"
+recursive=true
 
 [tool.pylint.format]
 max-line-length = 100
