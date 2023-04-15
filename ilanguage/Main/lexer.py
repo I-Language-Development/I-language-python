@@ -134,7 +134,6 @@ BASE_TYPES: Final[List[str]] = [
     "string",
     "null",
     "mdarray",
-    "complex",  # Just for support thingy I guess idk lol
 ]
 
 
