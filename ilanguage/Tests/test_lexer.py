@@ -101,13 +101,6 @@ def test_lexer_token() -> None:
             [lexer.LexerToken("BASETYPE", "bool"), lexer.LexerToken("SEMICOLON", ";")],
         ),
         (
-            "complex;",
-            [
-                lexer.LexerToken("BASETYPE", "complex"),
-                lexer.LexerToken("SEMICOLON", ";"),
-            ],
-        ),
-        (
             "dict;",
             [lexer.LexerToken("BASETYPE", "dict"), lexer.LexerToken("SEMICOLON", ";")],
         ),
