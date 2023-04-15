@@ -39,8 +39,8 @@ from dataclasses import dataclass
 class Options:
     """Options, configured via configuration file or command line arguments."""
 
-    # Enable experimental features.
-    experimental_features: bool = False
-
     # Exit with exit code zero, even if errors occur.
     exit_zero: bool = False
+
+    # Enable experimental features.
+    experimental_features: bool = False
