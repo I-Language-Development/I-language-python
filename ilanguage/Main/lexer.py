@@ -44,12 +44,14 @@ from typing import (
     Dict,
     List,
     Optional,
+    Union,
 )
 
 from typing_extensions import (
     Final,
 )
 
+from .options import Options
 
 #############
 # CONSTANTS #
@@ -57,7 +59,7 @@ from typing_extensions import (
 
 DIGITS_AS_STRINGS: Final[List[str]] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
-# TODO (ElBe): Add grammar instead of this (scheduled for version 0.0.10)
+# TODO (ElBe): Add grammar instead of this (scheduled for version 0.0.11)
 SEPARATORS: Final[List[str]] = [" ", "\t", "\n"]
 DOUBLE_MARKS: Final[Dict[str, str]] = {
     "==": "EQUAL",
@@ -226,7 +228,7 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
         column (int): Column number of the token.
 
     Returns:
-        LexerToken: Token from the specified string.
+        Optional[LexerToken]: Token from the specified string.
     """
 
     try:
@@ -265,26 +267,26 @@ def gettoken(string: str, line: int, column: int) -> Optional[LexerToken]:
 
 def lex(  # pylint: disable=R0912, R0915, R1260
     text: str,
-) -> Optional[List[LexerToken]]:
+) -> List[Optional[LexerToken]]:
     """Lexes the specified string.
 
     Args:
          text (str): Text to lex.
 
     Returns:
-        List[LexerToken]: List of lexed tokens.
+        List[Optional[LexerToken]]: List of lexed tokens.
     """
 
-    tokens = []
-    line = 1
-    comment = False
-    multiline_comment = False
-    append_newline = False
-    helper = 0
-    column = 1
-    in_string = False
+    tokens: List[Union[LexerToken, None]] = []
+    line: int = 1
+    comment: bool = False
+    multiline_comment: bool = False
+    append_newline: bool = False
+    helper: int = 0
+    column: int = 1
+    in_string: bool = False
 
-    buffer = io.StringIO()
+    buffer = io.StringIO()  # Performance optimization
 
     try:  # pylint: disable=R1702
         for index, character in enumerate(text):
@@ -304,7 +306,7 @@ def lex(  # pylint: disable=R0912, R0915, R1260
 
             if not comment:
                 if len(text[index:]) > 1 and text[index : index + 2] == "//":
-                    comment = 1
+                    comment = True
 
                 if text[index : index + 2] == "/*":
                     multiline_comment = True
@@ -371,17 +373,17 @@ def lex(  # pylint: disable=R0912, R0915, R1260
         buffer.close()
 
     tokens = [token for token in tokens if token is not None]
-    modified_tokens = {}
+    modified_tokens: Dict[int, LexerToken] = {}
 
     for index, token in enumerate(tokens):
         try:
-            if token.type == "NEWLINE" and index == 0:
+            if token.type == "NEWLINE" and index == 0:  # type: ignore[union-attr]
                 tokens.pop(index)
                 index -= 1
-            if token.type == "INT" and tokens[index - 1].type == "DOT":
+            if token.type == "INT" and tokens[index - 1].type == "DOT":  # type: ignore[union-attr]
                 modified_tokens[index - 2] = LexerToken(
                     "FLOAT",
-                    f"{tokens[index-2].value}.{tokens[index].value}",
+                    f"{tokens[index-2].value}.{tokens[index].value}",  # type: ignore[union-attr]
                 )
 
                 tokens.pop(index)
@@ -437,24 +439,22 @@ if __name__ == "__main__":  # pylint: disable=R1260
                 print(
                     f"Error: Invalid argument: {argument!r}"
                 )  # TODO (Ranastra): Add errors
-                sys.exit(1)
+                if not Options.exit_zero:
+                    sys.exit(1)
 
     try:
         with open(sys.argv[1:][0], "r", encoding="utf-8") as file:
             DATA = file.read()
-    except (IndexError, FileNotFoundError):
+    except (IndexError, FileNotFoundError):  # No argument given / no file given
         DATA = """
         // Code goes here
         """
 
     if options["types"] and not options["values"]:
-        RESULT = [str(token.type) for token in lex(DATA)]
+        RESULT = [str(token.type) for token in lex(DATA)]  # type: ignore[union-attr]
     elif options["values"] and not options["types"]:
-        RESULT = [str(token.value) for token in lex(DATA)]
+        RESULT = [str(token.value) for token in lex(DATA)]  # type: ignore[union-attr]
     else:
         RESULT = [str(token) for token in lex(DATA)]
 
-    if not options["no-split"]:
-        RESULT = "\n".join(RESULT)
-
-    print(RESULT)
+    print(RESULT if options["no-split"] else "\n".join(RESULT))
