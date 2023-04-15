@@ -1,3 +1,8 @@
+"""DOCSTRING"""
+
+# noqa
+# pylint: disable
+
 import _ast as ast
 
 
