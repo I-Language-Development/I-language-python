@@ -37,7 +37,7 @@ To clone the repository locally using git run `git clone https://github.com/I-La
 To make a simple hello world program follow the instructions below:
 1. Create a file ending with `.ilang`.
 2. Open the file and write `output("Hello world!")` to it.
-3. Open the path of the file in your terminal and type `ilanguage FILE` where `FILE` is the name of the file including 
+3. Open the path of the file in your terminal and type `ilanguage FILE` where `FILE` is the name of the file including
 the `.ilang` file extension.
 4. You should see "Hello world!" in your terminal.
 
