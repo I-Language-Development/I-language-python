@@ -56,7 +56,7 @@ class Node:
     """Base class for all AST nodes."""
 
     name: str
-    type: str
+    _type: str
     value: Any
     level: int
     below: List[Optional[Node]] = field(default_factory=list)
