@@ -28,20 +28,23 @@ DEALINGS IN THE SOFTWARE.
 # IMPORTS #
 ###########
 
-from dataclasses import dataclass
-
+from typing import (
+    Any,
+    Dict,
+    List,
+    Union,
+)
 
 ###########
 # OPTIONS #
 ###########
 
-
-@dataclass
-class Options:
-    """Options, configured via configuration file or command line arguments."""
-
-    # Exit with exit code zero, even if errors occur.
-    exit_zero: bool = False
-
-    # Enable experimental features.
-    experimental_features: bool = False
+options: Dict[str, Union[bool, str, List[Any]]] = {
+    # Keep ordered
+    "enable_all_experimental_features": False,  # Enables all experimental features.
+    "enabled_experimental_features": [          # Enables listed experimental features.
+        # Possible values: "semicolon_not_required"
+    ],
+    "exit_zero": False,                         # Exits with exit code zero, even if errors occur.
+                                                # When an exit using the PyAPI is called, the exit can have non-zero exit codes tho.
+}
