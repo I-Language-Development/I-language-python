@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.
 
 import sys
 
-from options import Options
+from .options import options
 
 
 #########
@@ -66,14 +66,16 @@ class Error:
             long_description (str, keyword only): Long, more detailed error text.
             line (int, keyword only): Line the error occurred on.
             column (int, keyword only): Column the error occurred on.
-            exit_code (int, keyword only): Code to use when exiting. If code is 0, there won't be an exit.
+            exit_code (int, keyword only): Code to use when exiting. If code is 0, there won't be
+                                           an exit.
         """
 
+        long_description = "\n" + long_description if long_description else ""
         print(
             f"Error: {description}, in line {line} column {column}.{long_description}"
         )
-        if exit_code != 0 or Options.exit_zero:
-            sys.exit(0 if Options.exit_zero else exit_code)
+        if exit_code != 0 or options["exit_zero"]:
+            sys.exit(0 if options["exit_zero"] else exit_code)
 
 
 ##########
@@ -157,6 +159,44 @@ class OSError(Error):
         )
 
 
+class RuntimeError(Error):
+    """
+    Represents a runtime error.
+    """
+
+    def __init__(
+        self,
+        description: str = "Runtime error",
+        *,
+        long_description: str = "",
+        line: int = 0,
+        column: int = 0,
+        exit_code: int = 6,
+    ) -> None:
+        super().__init__(
+            description,
+            long_description=long_description,
+            line=line,
+            column=column,
+            exit_code=exit_code,
+        )
+
+
+class PythonError(RuntimeError):
+    """
+    Represents a python error.
+    """
+
+    def __init__(self, error: BaseException, line: int = 0, column: int = 0):
+        super().__init__(
+            description="Python Error",
+            long_description=str(error),
+            line=line,
+            column=column,
+            exit_code=7,
+        )
+
+
 class SyntaxError(Error):
     """
     Represents a syntax error.
@@ -169,7 +209,7 @@ class SyntaxError(Error):
         long_description: str = "",
         line: int = 0,
         column: int = 0,
-        exit_code: int = 3,
+        exit_code: int = 8,
     ) -> None:
         super().__init__(
             description,
@@ -193,7 +233,7 @@ class TypeError(SyntaxError):
         column: int = 0,
         expected: str = "",
         got: str = "",
-        exit_code=4,
+        exit_code=9,
     ) -> None:
         expected = "type " + expected if "assignment" not in expected else expected
         got = "type " + got if "nothing" not in got else got
@@ -219,23 +259,7 @@ class InvalidAssignmentError(TypeError):
             column=column,
             expected="no assignment",
             got=got,
-            exit_code=5,
-        )
-
-
-class EmptyAssignmentError(TypeError):
-    """
-    Represents an empty assignment error.
-    """
-
-    def __init__(self, *, expected: str, line: int = 0, column: int = 0) -> None:
-        super().__init__(
-            "Empty assignment error",
-            line=line,
-            column=column,
-            expected=expected,
-            got="nothing",
-            exit_code=6,
+            exit_code=10,
         )
 
 
@@ -250,53 +274,18 @@ class UnclosedError(SyntaxError):
             long_description=f"Expected: {delimiter}",
             line=line,
             column=column,
-            exit_code=7,
-        )
-
-
-class RuntimeError(Error):
-    """
-    Represents a runtime error.
-    """
-
-    def __init__(
-        self,
-        description: str = "Runtime error",
-        *,
-        long_description: str = "",
-        line: int = 0,
-        column: int = 0,
-        exit_code: int = 8,
-    ) -> None:
-        super().__init__(
-            description,
-            long_description=long_description,
-            line=line,
-            column=column,
-            exit_code=exit_code,
-        )
-
-
-class PythonError(RuntimeError):
-    """
-    Represents a python error.
-    """
-
-    def __init__(self, error: BaseException, line: int = 0, column: int = 0):
-        super().__init__(
-            description="Python Error",
-            long_description=str(error),
-            line=line,
-            column=column,
-            exit_code=9,
+            exit_code=11,
         )
 
 
 class ValueError(Error):
-    def __init__(self, line: int, column: int, obj, function_name: str):
-        print(f"invalid argument {obj} for function {function_name}")
+    def __init__(self, line: int, column: int, argument: str, function_name: str):
         super().__init__(
-            description="Value Error", line=line, column=column, exit_code=11
+            description="Value Error",
+            long_description=f"invalid argument {argument} for function {function_name}",
+            line=line,
+            column=column,
+            exit_code=12,
         )
 
 
@@ -312,7 +301,7 @@ class MemoryError(RuntimeError):
         if hint:
             print(hint)
         super().__init__(
-            description=text, line=line, column=column, exit_code=exit_code
+            description=description, line=line, column=column, exit_code=exit_code
         )
 
 

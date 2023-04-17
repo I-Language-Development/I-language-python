@@ -51,7 +51,7 @@ from typing_extensions import (
     Final,
 )
 
-from .options import Options
+from .options import options as global_options
 
 #############
 # CONSTANTS #
@@ -438,7 +438,7 @@ if __name__ == "__main__":  # pylint: disable=R1260
                 print(
                     f"Error: Invalid argument: {argument!r}"
                 )  # TODO (Ranastra): Add errors
-                if not Options.exit_zero:
+                if not global_options["exit-zero"]:
                     sys.exit(1)
 
     try:
