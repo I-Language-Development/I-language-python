@@ -61,17 +61,19 @@ class Option:
 class Version(Option):
     """Represents a version number."""
 
-    def __init__(self, major: int, minor: int, patch: int, release_type: str = "release") -> None:
+    def __init__(
+        self, major: int, minor: int, patch: int, release_type: str = "release"
+    ) -> None:
         self.major = major
         self.minor = minor
         self.patch = patch
         self.release_type = release_type
 
         super().__init__("version", (major, minor, patch, release_type), True)
-        
+
     def __repr__(self) -> str:
         return f"v{self.major}.{self.minor}.{self.patch}{'-' + self.release_type if self.release_type != 'release' else ''}"
-    
+
     def __str__(self) -> str:
         return repr(self)
 
