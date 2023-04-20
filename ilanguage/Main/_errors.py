@@ -282,7 +282,7 @@ class ValueError(Error):
     def __init__(self, line: int, column: int, argument: str, function_name: str):
         super().__init__(
             description="Value Error",
-            long_description=f"invalid argument {argument} for function {function_name}",
+            long_description=f"Invalid argument {argument} for function {function_name}",
             line=line,
             column=column,
             exit_code=12,
