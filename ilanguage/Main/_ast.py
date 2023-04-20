@@ -45,6 +45,8 @@ from typing import (
     Optional,
 )
 
+import _types
+
 
 #############
 # BASE NODE #
@@ -117,3 +119,38 @@ class Import(Node):
         self.arguments = arguments
 
         super().__init__(name, "Import", None, level, self.import_selectors, arguments)
+
+
+############
+# CONSTANT #
+############
+
+
+@dataclass(init=False)
+class Constant(Node):
+    """Constant node."""
+
+    def __init__(
+        self,
+        name: str,
+        value: Any,
+        level: int,
+        _type: _types.BaseType = _types.Dynamic,
+        conditions: Optional[List[str]] = None,
+        arguments: Optional[Dict[str, str]] = None,
+    ) -> None:
+        self.name = name
+        self.value = value
+        self.level = level
+        self.type = _type
+        self.conditions = conditions if conditions is not None else []
+        self.arguments = arguments
+
+        super().__init__(
+            name,
+            f"Constant type {_type.__class__.__name__}",
+            value,
+            level,
+            self.conditions,
+            arguments,
+        )
