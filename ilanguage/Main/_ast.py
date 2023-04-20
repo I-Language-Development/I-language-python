@@ -135,7 +135,46 @@ class Constant(Node):
         name: str,
         value: Any,
         level: int,
-        _type: _types.BaseType = _types.Dynamic,
+        _type: _types.BaseType = _types.Any,
+        conditions: Optional[List[str]] = None,
+        arguments: Optional[Dict[str, str]] = None,
+    ) -> None:
+        self.name = name
+        self.value = value
+        self.level = level
+        self.type = _type
+        self.conditions = conditions if conditions is not None else []
+        self.arguments = (
+            arguments.update({"frozen": True})
+            if isinstance(arguments, Dict)
+            else {"frozen": True}
+        )
+
+        super().__init__(
+            name,
+            f"{_type.__class__.__name__}@Constant",
+            value,
+            level,
+            self.conditions,
+            arguments,
+        )
+
+
+############
+# VARIABLE #
+############
+
+
+@dataclass(init=False)
+class Variable(Node):
+    """Variable node."""
+
+    def __init__(
+        self,
+        name: str,
+        value: Any,
+        level: int,
+        _type: _types.BaseType = _types.Any,
         conditions: Optional[List[str]] = None,
         arguments: Optional[Dict[str, str]] = None,
     ) -> None:
@@ -148,7 +187,7 @@ class Constant(Node):
 
         super().__init__(
             name,
-            f"Constant type {_type.__class__.__name__}",
+            f"{_type.__class__.__name__}@Variable",
             value,
             level,
             self.conditions,
