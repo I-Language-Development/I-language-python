@@ -1,7 +1,7 @@
 /*
 * SYNTAX EXAMPLE
 *
-* Version: 0.0.3
+* Version: 0.0.4
 *
 * NOTE:
 * This version is a in-development version and may be changed in the future
@@ -57,7 +57,7 @@ var NAME = EXPRESSION; // dynamic typing, also works as type "dynamic"
 // or with types assigned at start
 TYPE NAME = EXPRESSION;
 // as object of an Type
-var NAME = new TYPE(ARGUMENTS);
+var NAME = new TYPE(ARGUMENTS); // Not implemented yet
 
 // Constants:
 const [TYPE] NAME = EXPRESSION;

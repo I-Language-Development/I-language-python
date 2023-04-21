@@ -19,7 +19,7 @@ class Program(){
 			}
 		}
 		dynamic this_file = file.open();
-		for(int i; i<len(mydata);i++;){ // Syntax may change
+		for (int i; i<len(mydata);i++;){ // Syntax may change
 			this_file.write_string(mydata[i]);
 		}
 		this_file.close() // Context Managers
