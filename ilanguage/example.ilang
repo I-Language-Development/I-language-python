@@ -73,11 +73,11 @@ CODE;
 }
 
 // Functions:
-[private] RETURN_TYPE NAME(ARGUMENT_TYPE ARGUMENT_NAME [= DEFAULT_VALUE]) {
+[private] RETURN_TYPE NAME([ARGUMENT_TYPE] ARGUMENT_NAME [= DEFAULT_VALUE]) {
 CODE;
 }
 // or for dynamic types:
-[private] func[tion] NAME(ARGUMENT_TYPE ARGUMENT_NAME [= DEFAULT_VALUE]) {
+[private] func[tion] NAME([ARGUMENT_TYPE] ARGUMENT_NAME [= DEFAULT_VALUE]) {
 CODE;
 }
 
