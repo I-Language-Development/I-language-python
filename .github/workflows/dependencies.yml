@@ -1,4 +1,4 @@
-name: Check requirements
+name: Dependencies
 on:
   push:
     paths: ["*requirements.txt", "pyproject.toml"]
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  install-dependencies:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -35,3 +35,10 @@ jobs:
         pip install .
         pip install .[dev]
         pip install .[docs]
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
