@@ -25,7 +25,7 @@ pull_request_rules:
 
           Changed files:
           {% for file in files %}
-            - `{{file}}`
+            - '{{file}}'
           {% endfor %}
 
           Approved by: @{{ approved_reviews_by | join(', @') }}
@@ -61,7 +61,7 @@ pull_request_rules:
 
           Changed files:
           {% for file in files %}
-            - `{{file}}`
+            - '{{file}}'
           {% endfor %}
 
           Approved by: @{{ approved_reviews_by | join(', @') }}
