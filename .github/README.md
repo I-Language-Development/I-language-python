@@ -1,4 +1,7 @@
 <p align="center">
+This repository has been archived. The new repository is <a href="https://github.com/I-Language-Development/I-Language-Rust">here</a>. See <a href="https://github.com/I-Language-Development/I-language/discussions/52">this post</a> for why we have done this.
+</p>
+<p align="center">
     <img src="https://github.com/I-Language-Development/I-language/blob/main/.github/logo-with-text.png" height="100px">
 </p>
 <h3 align="center">
