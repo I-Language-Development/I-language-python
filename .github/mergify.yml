@@ -29,6 +29,8 @@ pull_request_rules:
           {% endfor %}
 
           Approved by: @{{ approved_reviews_by | join(', @') }}
+
+
           {% for commit in commits %}
           Co-authored-by: {{commit.author}} <{{commit.email_author}}>
           {% endfor %}
@@ -65,6 +67,8 @@ pull_request_rules:
           {% endfor %}
 
           Approved by: @{{ approved_reviews_by | join(', @') }}
+
+
           {% for commit in commits %}
           Co-authored-by: {{commit.author}} <{{commit.email_author}}>
           {% endfor %}
